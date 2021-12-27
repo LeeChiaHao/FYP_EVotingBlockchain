@@ -1,0 +1,29 @@
+{
+  "name": "e_voting",
+  "version": "1.0.0",
+  "description": "FYP",
+  "main": "truffle-config.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "lite-server"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/LeeChiaHao/FYP_EVotingBlockchain.git"
+  },
+  "author": "LeeChiaHao",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/LeeChiaHao/FYP_EVotingBlockchain/issues"
+  },
+  "homepage": "https://github.com/LeeChiaHao/FYP_EVotingBlockchain#readme",
+  "dependencies": {
+    "@truffle/contract": "^4.4.2",
+    "bootstrap": "^5.1.3",
+    "lite-server": "^2.6.1",
+    "truffle": "^5.4.26"
+  }
+}
