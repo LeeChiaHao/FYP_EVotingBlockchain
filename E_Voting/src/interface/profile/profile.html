@@ -7,12 +7,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
     <!-- Bootstrap CSS -->
+    <!-- <link rel="stylesheet" href="../.././vendor/bootstrap/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="../../css/style.css">
+    <script type="text/javascript" src="../.././vendor/bootstrap/dist/js/bootstrap.bundle.js"></script>
 
-    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script> -->
-    <!-- <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.1/dist/js.cookie.min.js"></script> -->
-    <!-- <script type="text/javascript" src="vendor/@truffle/contract/dist/truffle-contract.min.js"></script> -->
-    <script src="app.js"></script>
-    <title>Register</title>
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script type="text/javascript" src="../.././vendor/@truffle/contract/dist/truffle-contract.min.js"></script> -->
+    <script type="text/javascript" src="app.js"></script>
+    <title>Cast Vote</title>
 </head>
 
 <body>
@@ -42,27 +44,31 @@
         </div>
     </nav>
 
-    <div class="container mt-5">
-        <div class="row justify-content-center">
-            <div class="col-lg-6 col-md-12">
-                <div class="col-6 mx-auto p-3 bg-info text-center fw-bolder border-bottom border-3 border-dark">
-                    Register as Voter
+    <div class="container">
+        <div class="row justify-content-around">
+            <div class="col-10 mb-4">
+                <div class="title text-center m-3">
+                    <h2 class="fs-3 fw-bold">
+                        Profile
+                    </h2>
                 </div>
-                <form class="form bg-info p-5" onsubmit="App.register(); return false">
-                    <div class="input-group mb-3">
-                        <span class="input-group-text col-3" id="basic-addon1">UserID</span>
-                        <input type="text" class="form-control" placeholder="Username" aria-label="Username"
-                            aria-describedby="basic-addon1" id="userName">
-                    </div>
-                    <div class="input-group mb-3">
-                        <span class="input-group-text col-3" id="basic-addon1">Email</span>
-                        <input type="text" class="form-control" placeholder="Email address" aria-label="Email"
-                            aria-describedby="basic-addon1" id="email">
-                    </div>
-                    <div class="col-3 mx-auto">
-                        <button type="submit" class="btn btn-primary" id="registerForm">Register</button>
-                    </div>
-                </form>
+            </div>
+
+            <div class="col-10 p-3 mb-5">
+                <ul class="list-group list-group-horizontal historyList">
+                    <li class="list-group-item profile">Name:</li>
+                    <li class="list-group-item" id="profileName"></li>
+                </ul>
+
+                <ul class="list-group list-group-horizontal historyList">
+                    <li class="list-group-item profile">Email:</li>
+                    <li class="list-group-item historyContent" id="profileEmail">leechiahao0928@gmail.com</li>
+                </ul>
+
+                <ul class="list-group list-group-horizontal historyList">
+                    <li class="list-group-item profile">Metamask Account: </li>
+                    <li class="list-group-item historyContent" id="profileAddress">0xJ28dDC82e6240143893294723</li>
+                </ul>
             </div>
         </div>
     </div>
@@ -70,9 +76,9 @@
     <!-- Optional JavaScript; choose one of the two! -->
 
     <!-- Option 1: Bootstrap Bundle with Popper -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+    <!-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
-        crossorigin="anonymous"></script>
+        crossorigin="anonymous"></script> -->
 
     <!-- Option 2: Separate Popper and Bootstrap JS -->
     <!--

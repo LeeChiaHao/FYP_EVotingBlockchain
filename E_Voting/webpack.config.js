@@ -11,7 +11,8 @@ module.exports = {
     plugins: [
         new CopyWebpackPlugin([
             { from: "./src/index.html", to: "index.html" },
-            { from: "./build/contracts/User.json", to: "User.json" }
+            { from: "./build/contracts/User.json", to: "User.json" },
+            { from: "./src/interface/profile/profile.html", to: "profile.html" }
         ]),
     ],
     devServer: { contentBase: path.join(__dirname, "dist"), compress: true },
