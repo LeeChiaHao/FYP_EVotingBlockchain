@@ -1,39 +1,33 @@
 import 'bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import '../css/style.css'
-import $ from 'jQuery';
-import { ethers } from 'ethers';
-import UserArtifact from "../../build/contracts/User.json";
+import './style.css'
+import { getUserContrat, getAddress } from './global';
+
 
 const App = {
     contract: null,
-    account: null,
+    address: null,
     load: async () => {
-        // A Web3Provider wraps a standard Web3 provider, which is
-        // what MetaMask injects as window.ethereum into each page
-        const provider = new ethers.providers.Web3Provider(window.ethereum, "any");
-        // Prompt user for account connections
-        await provider.send("eth_requestAccounts", []);
-        console.log(provider)
-        // The MetaMask plugin also allows signing transactions to
-        // send ether and pay to change state within the blockchain.
-        // For this, you need the account signer...
-        const networkId = provider.provider.networkVersion
-        App.account = provider.getSigner()
-        const bytecode = UserArtifact.bytecode
-        const abi = UserArtifact.abi
-
-        // const factory = new ethers.ContractFactory(abi, bytecode, signer)
-        // const contract = await factory.deploy();
-        console.log(UserArtifact.networks[networkId].address)
-        App.contract = new ethers.Contract(UserArtifact.networks[networkId].address, abi, App.account)
+        App.contract = await getUserContrat()
+        App.address = await getAddress()
+        console.log(await App.contract.isRegister(App.address))
+        if (await App.contract.isRegister(App.address)) {
+            window.location.assign("profile.html")
+        }
     },
     register: async () => {
-        console.log($("#userName").val() + $("#email").val())
-        await App.contract.createVoter($("#userName").val(), $("#email").val(), { from: App.account.getAddress() })
-        console.log(await App.contract.voters(1))
-        window.location.assign("profile.html")
+        try {
+            console.log($("#userName").val() + $("#email").val())
+            await App.contract.createVoter($("#userName").val(), $("#email").val(), { from: App.address }).then(
+                (tx) => tx.wait().then(function () {
+                    window.location.assign("profile.html")
+                })
+            )
+            // console.log(await App.contract.voters(1))
 
+        } catch (e) {
+            console.log(e)
+        }
     }
 };
 

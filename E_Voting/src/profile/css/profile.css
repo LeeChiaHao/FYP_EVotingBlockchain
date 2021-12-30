@@ -1,0 +1,44 @@
+
+.history{
+    background-color: rgb(138, 224, 229); 
+}
+
+.historyTitle {
+    width: 30%;
+    padding: 1rem;
+}
+
+.historyContent {
+    width: 70%;
+}
+
+.historyList{
+    margin: 2rem;
+}
+
+.historyList li{
+    background-color: rgb(138, 224, 229);  
+    color: black;
+    font-weight: bold;
+    border: none;
+    border-bottom: 1px solid black;
+}
+
+.historyList input:disabled{
+    background-color: rgb(138, 224, 229);  
+    color: black;
+    font-weight: bold;
+    border: none;
+    border-bottom: 1px solid black;
+}
+
+.historyList input{
+    border: 2px solid black;
+    background-color: rgb(138, 250, 250);
+    border-left-width: 2px !important
+}
+
+
+#submitArea{
+    display:  none;
+}

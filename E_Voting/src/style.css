@@ -27,29 +27,6 @@
     width: 60%;
 }
 
-.history{
-    background-color: rgb(138, 224, 229);  
-}
-
-.historyTitle {
-    width: 30%;
-}
-
-.historyContent {
-    width: 70%;
-}
-
-.historyList{
-    margin: 2rem;
-}
-
-.historyList li{
-    background-color: rgb(138, 224, 229);  
-    color: black;
-    font-weight: bold;
-    border: none;
-    border-bottom: 1px solid black;
-}
 
 .profile{
     background-color: rgb(138, 224, 229);  

@@ -13,7 +13,7 @@
 
     <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <script type="text/javascript" src="../.././vendor/@truffle/contract/dist/truffle-contract.min.js"></script> -->
-    <script type="text/javascript" src="app.js"></script>
+    <script src="profile.js"></script>
     <title>Cast Vote</title>
 </head>
 
@@ -46,7 +46,7 @@
 
     <div class="container">
         <div class="row justify-content-around">
-            <div class="col-10 mb-4">
+            <div class="col-10">
                 <div class="title text-center m-3">
                     <h2 class="fs-3 fw-bold">
                         Profile
@@ -55,20 +55,68 @@
             </div>
 
             <div class="col-10 p-3 mb-5">
-                <ul class="list-group list-group-horizontal historyList">
-                    <li class="list-group-item profile">Name:</li>
-                    <li class="list-group-item" id="profileName"></li>
-                </ul>
+                <form>
+                    <ul class="list-group list-group-horizontal historyList">
+                        <li class="list-group-item historyTitle">Name:</li>
+                        <input class="list-group-item historyContent" id="profileName" disabled></input>
+                    </ul>
 
-                <ul class="list-group list-group-horizontal historyList">
-                    <li class="list-group-item profile">Email:</li>
-                    <li class="list-group-item historyContent" id="profileEmail">leechiahao0928@gmail.com</li>
-                </ul>
+                    <ul class="list-group list-group-horizontal historyList">
+                        <li class="list-group-item historyTitle">Email:</li>
+                        <input class="list-group-item historyContent" id="profileEmail" disabled></input>
+                    </ul>
 
-                <ul class="list-group list-group-horizontal historyList">
-                    <li class="list-group-item profile">Metamask Account: </li>
-                    <li class="list-group-item historyContent" id="profileAddress">0xJ28dDC82e6240143893294723</li>
-                </ul>
+                    <ul class="list-group list-group-horizontal historyList">
+                        <li class="list-group-item historyTitle">Metamask Account: </li>
+                        <input class="list-group-item historyContent" id="profileAddress" disabled></input>
+                    </ul>
+
+                    <div class="row justify-content-center" id="editArea">
+                        <div class="col-3">
+                            <button class="btn btn-primary w-100 fs-5" onclick="App.editProfile(); return false"
+                                id="editBtn">Edit</button>
+                        </div>
+                    </div>
+
+                    <div class="row justify-content-center" id="submitArea">
+                        <div class="col-3">
+                            <button type="submit" class="btn btn-primary w-100 fs-5" id="submitBtn"
+                                onclick="App.submitProfile(); return false">Submit</button>
+                        </div>
+                        <div class="col-3">
+                            <button type="submit" class="btn btn-primary w-100 fs-5" id="cancelBtn"
+                                onclick="App.cancelProfile(); return false">Cancel</button>
+                        </div>
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="profileModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="profileModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header d-none" id="modalClose">
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="d-flex justify-content-center m-5" id="modalLoad">
+                    <div class="spinner-border" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+
+                </div>
+                <img alt="Success" src="success.png" class="w-100 d-none" id="modalSuccess">
+                <div>
+                    <h3 class="text-center fs-bold" id="modalStatus">Making Transaction</h3>
+                </div>
+
+
+
             </div>
         </div>
     </div>
