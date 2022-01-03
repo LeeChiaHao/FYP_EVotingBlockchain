@@ -1,0 +1,14 @@
+.candidate-label{
+    font-size: large;
+    text-align: center;
+    font-weight: bold;
+}
+
+.addCandidate{
+    color: black;
+    font-weight: bold;
+}
+
+.addCandidate:hover{
+    color: rgb(219, 62, 62)
+}
