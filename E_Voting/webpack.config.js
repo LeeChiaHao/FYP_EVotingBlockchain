@@ -14,6 +14,7 @@ const webpack = require("webpack")
 module.exports = {
     mode: 'development',
     entry: {
+        create: "./src/create/js/create.js",
         index: "./src/index.js",
         profile: "./src/profile/js/profile.js",
     },
@@ -24,6 +25,11 @@ module.exports = {
     // },
     plugins: [
         new HtmlWebpackPlugin({
+            template: "./src/create/create.html",
+            filename: "create.html",
+            chunks: ['create']
+        }),
+        new HtmlWebpackPlugin({
             template: "./src/index.html",
             filename: "index.html",
             chunks: ['app']
@@ -31,7 +37,8 @@ module.exports = {
         new HtmlWebpackPlugin({
             template: "./src/profile/profile.html",
             filename: "profile.html",
-            chunks: ['profile']
+            chunks: ['profile'],
+            HTML_PATH: './src/commonHTML/'
         }),
         new webpack.ProvidePlugin({
             '$': 'jQuery',
@@ -39,7 +46,8 @@ module.exports = {
             'userJSON': "../build/contracts/User.json"
         }),
         new CopyWebpackPlugin([
-            { from: "./src/img/success.png", to: "success.png" }
+            { from: "./src/img/success.png", to: "success.png" },
+            { from: "./src/create/candidate.html", to: "candidate.html" }
         ])
 
     ],

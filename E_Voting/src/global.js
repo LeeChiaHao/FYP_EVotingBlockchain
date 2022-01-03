@@ -1,5 +1,4 @@
 import { ethers } from 'ethers';
-import detectEthereumProvider from '@metamask/detect-provider/dist/detect-provider';
 
 export async function getUserContrat() {
     // A Web3Provider wraps a standard Web3 provider, which is
