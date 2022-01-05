@@ -4,11 +4,13 @@
     font-weight: bold;
 }
 
-.addCandidate{
+.addCandidate, .delCandidate{
     color: black;
     font-weight: bold;
+    text-decoration: underline;
 }
 
-.addCandidate:hover{
-    color: rgb(219, 62, 62)
+.addCandidate:hover, .delCandidate:hover{
+    color: rgb(219, 62, 62);
+    cursor: pointer;
 }

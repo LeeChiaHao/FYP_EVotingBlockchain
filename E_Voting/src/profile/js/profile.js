@@ -17,7 +17,7 @@ const App = {
     submitArea: $("#submitArea"),
     load: async () => {
         App.contract = await solidity.getUserContrat()
-        App.address = await solidity.getAddress()
+        App.address = await solidity.getUserAddress()
 
         var loginBN = await App.contract.voterID(App.address)
         App.loginID = ethers.BigNumber.from(loginBN).toNumber()

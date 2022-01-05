@@ -36,7 +36,7 @@
                 <div class="col-6 mx-auto p-3 bg-info text-center fw-bolder border-bottom border-3 border-dark fs-4">
                     Create an election
                 </div>
-                <form class="form bg-info p-5" onsubmit="">
+                <form class="form bg-info p-5" onsubmit="App.submitForm(); return false;">
                     <div class="input-group mb-3">
                         <span class="input-group-text col-3" id="">Election Name</span>
                         <input type="text" class="form-control" placeholder="Election Name" aria-label="Username"
@@ -44,8 +44,12 @@
                     </div>
                     <div class="row">
                         <div class="col d-flex">
-                            <!-- Simple link -->
-                            <a class="addCandidate ms-auto" href="#!">Add Candidate</a>
+                            <div class="addCandidate ms-auto">Add New Candidate</div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col d-flex">
+                            <div class="delCandidate ms-auto d-none">Delete Candidate</div>
                         </div>
                     </div>
                     <div class="loadCandidate">
