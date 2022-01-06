@@ -26,7 +26,7 @@ const App = {
         App.name.val(voter.name)
         App.email.val(voter.email)
         $("#profileAddress").val(voter.account)
-        App.myModal = new Modal($("#profileModal"))
+        App.myModal = new Modal($("#popUpModal"))
     },
 
     editProfile: async () => {
@@ -42,19 +42,11 @@ const App = {
         try {
             App.contract.voters[App.loginID] = await App.contract.editVoter(App.name.val(), App.email.val(), App.loginID).then(
                 (tx) => tx.wait().then(function () {
-                    $("#modalStatus").text("Transaction Success")
-                    $("#modalClose").removeClass('d-none')
-                    $("#modalLoad").addClass('d-none')
-                    $("#modalSuccess").removeClass('d-none')
+                    solidity.txnSuccess()
                 })
             )
-
-
         } catch (e) {
-            $("#modalStatus").text("Transaction Fail")
-            $("#modalClose").removeClass('d-none')
-            $("#modalLoad").addClass('d-none')
-            $("#modalSuccess").removeClass('d-none')
+            solidity.txnFail()
             console.log(e)
         }
         $("#modalClose").on("click", function () {

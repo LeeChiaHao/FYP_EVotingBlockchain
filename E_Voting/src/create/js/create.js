@@ -2,36 +2,30 @@ import 'bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../../style.css'
 import '../css/create.css'
-import { bigNumberToNumber } from '../../global';
-
+import { Modal } from 'bootstrap';
 const App = {
+    forms: null,
     contract: null,
     address: null,
     totalCandidate: null,
+    popUpModal: null,
     delCandidate: $(".delCandidate"),
     load: async () => {
+        App.forms = document.querySelector('.validation')
+        // App.validateForm()
         App.contract = await solidity.getElectionContract()
         App.address = await solidity.getElectionAddress()
+        App.popUpModal = new Modal($("#popUpModal"))
         App.totalCandidate = 1;
         var divCandidate
         $(".addCandidate").on("click", async function () {
-            if (App.totalCandidate == 1) {
-                divCandidate = "loadCandidate" + App.totalCandidate
-                $("<div></div>").addClass(divCandidate).appendTo(".loadCandidate")
-                $("." + divCandidate).load("candidate.html", function () {
-                    App.loadClassName("." + divCandidate, App.totalCandidate)
-                })
-                App.totalCandidate++
-                App.delCandidate.removeClass("d-none")
-
-            } else {
-                divCandidate = "loadCandidate" + App.totalCandidate
-                $("<div></div>").addClass(divCandidate).appendTo(".loadCandidate" + (App.totalCandidate - 1))
-                $("." + divCandidate).load("candidate.html", function () {
-                    App.loadClassName("." + divCandidate, App.totalCandidate)
-                })
-                App.totalCandidate++
-            }
+            divCandidate = "loadCandidate" + App.totalCandidate
+            $("<div></div>").addClass(divCandidate).appendTo(".loadCandidate")
+            $("." + divCandidate).load("candidate.html", function () {
+                App.loadClassName("." + divCandidate, App.totalCandidate)
+            })
+            App.totalCandidate++
+            App.delCandidate.removeClass("d-none")
         })
 
         App.delCandidate.on("click", async function () {
@@ -90,42 +84,73 @@ const App = {
     },
 
     submitForm: async () => {
-        var allCandidates = []
-        console.log(App.totalCandidate)
-        var index = 0;
-        for (var i = 1; i < App.totalCandidate; i++) {
-            allCandidates[index] = $("#candidateName" + i).val()
-            index++;
-            allCandidates[index] = $("#age" + i).val()
-            index++;
-            allCandidates[index] = $("#partyName" + i).val()
-            index++;
-            allCandidates[index] = $("#slogan" + i).val()
-            index++;
+        // await App.validateForm()
+        App.forms.checkValidity()
+        App.forms.classList.add('was-validated')
+
+        if ($(".was-validated:invalid").length == 0) {
+            console.log(App.totalCandidate)
+            if (App.totalCandidate > 1) {
+                var allCandidates = []
+                console.log(App.totalCandidate)
+                var index = 0;
+                for (var i = 1; i < App.totalCandidate; i++) {
+                    allCandidates[index] = $("#candidateName" + i).val()
+                    index++;
+                    allCandidates[index] = $("#age" + i).val()
+                    index++;
+                    allCandidates[index] = $("#partyName" + i).val()
+                    index++;
+                    allCandidates[index] = $("#slogan" + i).val()
+                    index++;
+                }
+                console.log(allCandidates)
+                try {
+                    App.popUpModal.show()
+                    solidity.txnLoad()
+                    await App.contract.createElection($("#electionName").val(), allCandidates).then(
+                        (tx) => tx.wait().then(function () {
+                            solidity.txnSuccess()
+                        })
+                    )
+                } catch (e) {
+                    solidity.txnFail()
+                }
+
+                await App.contract.once("electionInfo", (e, c) => {
+                    console.log(e + " ==== " + c)
+                })
+            } else {
+                App.popUpModal.show()
+                solidity.customMsg(false, "Must have more than 1 candidate for an election")
+            }
         }
-        console.log(allCandidates)
-        App.contract.createElection($("#electionName").val(), allCandidates)
-        await App.contract.once("electionInfo", (e, c) => {
-            console.log(e + " ==== " + c)
-        })
 
-        var electionID = 0
-        var totalCandidate = await App.contract.totalCandidate(electionID)
-        console.log(totalCandidate)
-        for (var i = 0; i < bigNumberToNumber(totalCandidate); i++) {
-            var candidate = await App.contract.electionCandidate(electionID, i)
-            console.log(candidate.id)
-            console.log(candidate.name)
-            console.log(candidate.age)
-            console.log(candidate.party)
-            console.log(candidate.slogan)
-        }
-        // console.log(candidate)
 
-        // console.log(await App.contract.createCandidate(1, candidateID))
-        // console.log(await App.contract.electionCandidate(1, 1))
+        // var electionID = 0
+        // var totalCandidate = await App.contract.totalCandidate(electionID)
+        // console.log(totalCandidate)
+        // for (var i = 0; i < bigNumberToNumber(totalCandidate); i++) {
+        //     var candidate = await App.contract.electionCandidate(electionID, i)
+        //     console.log(candidate.id)
+        //     console.log(candidate.name)
+        //     console.log(candidate.age)
+        //     console.log(candidate.party)
+        //     console.log(candidate.slogan)
+        // }
 
-    }
+    },
+
+    // validateForm: async () => {
+    //     App.forms.addEventListener('submit', async function (event) {
+    //         event.preventDefault()
+    //         event.stopPropagation()
+    //         if (App.forms.checkValidity()) {
+    //             await App.submitForm()
+    //         }
+    //         App.forms.classList.add('was-validated')
+    //     }, false)
+    // }
 
 }
 

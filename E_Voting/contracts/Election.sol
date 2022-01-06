@@ -18,7 +18,7 @@ contract Election {
     mapping(uint256 => mapping(uint256 => Candidate)) public electionCandidate;
 
     mapping(uint256 => uint256) public totalCandidate;
-    uint256 totalElection = 0;
+    uint256 public totalElection = 0;
     event electionInfo(uint256 e, uint256 c);
 
     function createElection(string memory _name, string[] memory candidateInfo)

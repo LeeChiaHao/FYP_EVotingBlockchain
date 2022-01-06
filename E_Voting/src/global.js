@@ -51,3 +51,40 @@ export async function getElectionAddress() {
 export function bigNumberToNumber(bn) {
     return ethers.BigNumber.from(bn).toNumber()
 }
+
+export function txnLoad() {
+    $("#imgFail").addClass('d-none')
+    $("#imgSuccess").addClass('d-none')
+    $("#modalLoad").removeClass('d-none')
+    $("#modalClose").addClass('d-none')
+    $("#modalStatus").text('Making Transaction')
+
+}
+
+export function txnSuccess() {
+    $("#modalStatus").text("Transaction Success")
+    $("#modalClose").removeClass('d-none')
+    $("#modalLoad").addClass('d-none')
+    $("#imgSuccess").removeClass('d-none')
+}
+
+export function txnFail() {
+    $("#modalStatus").text("Transaction Fail")
+    $("#modalClose").removeClass('d-none')
+    $("#modalLoad").addClass('d-none')
+    $("#imgFail").removeClass('d-none')
+}
+
+export function customMsg(boolean, msg) {
+    $("#modalClose").removeClass('d-none')
+    $("#modalLoad").addClass('d-none')
+
+    if (boolean) {
+        $("#imgSuccess").removeClass('d-none')
+        $("#modalStatus").text(msg)
+    } else {
+        $("#imgFail").removeClass('d-none')
+        $("#modalStatus").text(msg)
+
+    }
+}

@@ -32,3 +32,14 @@
     background-color: rgb(138, 224, 229);  
 }
 
+.valid-feedback{
+    font-size: medium;
+    font-weight: bold;
+    text-align: end;
+}
+
+.invalid-feedback{
+    font-size: medium;
+    font-weight: bold;
+    text-align: end;
+}

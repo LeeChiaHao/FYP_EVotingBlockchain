@@ -17,6 +17,7 @@ module.exports = {
         create: "./src/create/js/create.js",
         index: "./src/index.js",
         profile: "./src/profile/js/profile.js",
+        election: "./src/election/js/election.js"
     },
     // resolve: {
     //     alias: {
@@ -27,7 +28,8 @@ module.exports = {
         new HtmlWebpackPlugin({
             template: "./src/create/create.html",
             filename: "create.html",
-            chunks: ['create']
+            chunks: ['create'],
+            HTML_PATH: './src/commonHTML/'
         }),
         new HtmlWebpackPlugin({
             template: "./src/index.html",
@@ -40,14 +42,26 @@ module.exports = {
             chunks: ['profile'],
             HTML_PATH: './src/commonHTML/'
         }),
+        new HtmlWebpackPlugin({
+            template: "./src/election/elections.html",
+            filename: "elections.html",
+            chunks: ['election'],
+            HTML_PATH: './src/commonHTML/'
+        }),
+        // global import in every js file
         new webpack.ProvidePlugin({
             '$': 'jQuery',
             'solidity': '../../global.js',
-            'userJSON': "../build/contracts/User.json"
+            'userJSON': "../build/contracts/User.json",
+            "electionJSON": "../build/contracts/Election.json"
         }),
         new CopyWebpackPlugin([
             { from: "./src/img/success.png", to: "success.png" },
-            { from: "./src/create/candidate.html", to: "candidate.html" }
+            { from: "./src/img/fail.png", to: "fail.png" },
+            { from: "./src/create/candidate.html", to: "candidate.html" },
+            { from: "./src/election/election.html", to: "election.html" },
+
+
         ])
 
     ],

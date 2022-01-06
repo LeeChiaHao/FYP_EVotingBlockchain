@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <!-- Bootstrap CSS -->
+    <!-- <script src="election.js"></script> -->
+    <title>Cast Vote</title>
+</head>
+
+<body>
+    <!-- header -->
+    <div id="header">
+        <%= require("fs").readFileSync(htmlWebpackPlugin.options.HTML_PATH + "header.html" ) %>
+    </div>
+
+
+    <div class="container ">
+        <div class="row justify-content-center">
+            <div class="col-10 mb-4">
+                <div class="title text-center m-3">
+                    <h2 class="fs-3 fw-bold">
+                        Select an election and cast your vote
+                    </h2>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="row gx-5 allElection">
+            <!-- <div class="col-lg-4 col-9 border-0 mb-5 electionCard election0">
+                <div class="card electionCard">
+                    <img src="https://picsum.photos/150/100">
+                    <div class="card-body">
+                        <h5 class="card-title electionTitle">Election 1</h5>
+                        <p class="card-text">
+                            End at: 20.00 2 Feb 2022
+                        </p>
+                    </div>
+                </div>
+            </div> -->
+
+        </div>
+    </div>
+</body>
+
+</html>

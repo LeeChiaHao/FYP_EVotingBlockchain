@@ -36,11 +36,17 @@
                 <div class="col-6 mx-auto p-3 bg-info text-center fw-bolder border-bottom border-3 border-dark fs-4">
                     Create an election
                 </div>
-                <form class="form bg-info p-5" onsubmit="App.submitForm(); return false;">
+                <form class="form bg-info p-5 validation" onsubmit="App.submitForm(); return false;" novalidate>
                     <div class="input-group mb-3">
                         <span class="input-group-text col-3" id="">Election Name</span>
                         <input type="text" class="form-control" placeholder="Election Name" aria-label="Username"
-                            aria-describedby="" id="electionName">
+                            aria-describedby="input" id="electionName" required>
+                        <div class="invalid-feedback">
+                            Fill in the name before submission
+                        </div>
+                        <div class="valid-feedback">
+                            Success
+                        </div>
                     </div>
                     <div class="row">
                         <div class="col d-flex">
@@ -63,9 +69,8 @@
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
-        crossorigin="anonymous"></script>
+    <!-- Modal -->
+    <%= require("fs").readFileSync(htmlWebpackPlugin.options.HTML_PATH + "modal.html" ) %>
 </body>
 
 </html>
