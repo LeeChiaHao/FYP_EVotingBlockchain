@@ -17,7 +17,8 @@ module.exports = {
         create: "./src/create/js/create.js",
         index: "./src/index.js",
         profile: "./src/profile/js/profile.js",
-        election: "./src/election/js/election.js"
+        election: "./src/election/js/election.js",
+        candidate: "./src/election/js/candidate.js"
     },
     // resolve: {
     //     alias: {
@@ -48,6 +49,12 @@ module.exports = {
             chunks: ['election'],
             HTML_PATH: './src/commonHTML/'
         }),
+        new HtmlWebpackPlugin({
+            template: "./src/election/candidates.html",
+            filename: "candidates.html",
+            chunks: ['candidate'],
+            HTML_PATH: './src/commonHTML/'
+        }),
         // global import in every js file
         new webpack.ProvidePlugin({
             '$': 'jQuery',
@@ -58,10 +65,9 @@ module.exports = {
         new CopyWebpackPlugin([
             { from: "./src/img/success.png", to: "success.png" },
             { from: "./src/img/fail.png", to: "fail.png" },
-            { from: "./src/create/candidate.html", to: "candidate.html" },
+            { from: "./src/create/createForm.html", to: "createForm.html" },
             { from: "./src/election/election.html", to: "election.html" },
-
-
+            { from: "./src/election/candidate.html", to: "candidate.html" },
         ])
 
     ],

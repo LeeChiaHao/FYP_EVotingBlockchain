@@ -21,7 +21,7 @@ const App = {
         $(".addCandidate").on("click", async function () {
             divCandidate = "loadCandidate" + App.totalCandidate
             $("<div></div>").addClass(divCandidate).appendTo(".loadCandidate")
-            $("." + divCandidate).load("candidate.html", function () {
+            $("." + divCandidate).load("createForm.html", function () {
                 App.loadClassName("." + divCandidate, App.totalCandidate)
             })
             App.totalCandidate++

@@ -2,11 +2,18 @@ import { ethers } from 'ethers';
 
 export async function getUserContrat() {
     try {
+
         const provider = new ethers.providers.Web3Provider(window.ethereum, "any")
         await provider.send("eth_requestAccounts", []);
-
+        ethereum.on("accountsChanged", function (a) {
+            console.log("hi")
+            window.location.replace("/")
+        })
+        console.log(provider)
         const networkId = provider.provider.networkVersion
         const signer = provider.getSigner()
+        console.log(signer)
+
         const abi = userJSON.abi
         var network = userJSON.networks[networkId]
         var contract = new ethers.Contract(network.address, abi, signer)
@@ -21,7 +28,10 @@ export async function getElectionContract() {
     try {
         const provider = new ethers.providers.Web3Provider(window.ethereum, "any")
         await provider.send("eth_requestAccounts", []);
-
+        ethereum.on("accountsChanged", function (a) {
+            console.log("hi")
+            window.location.replace("/")
+        })
         const networkId = provider.provider.networkVersion
         const signer = provider.getSigner()
         const abi = electionJSON.abi

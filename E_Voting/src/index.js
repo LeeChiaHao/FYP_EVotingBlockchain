@@ -1,18 +1,21 @@
 import 'bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './style.css'
-import { getUserContrat, getAddress } from './global';
+import { getUserContrat, getUserAddress } from './global';
 
 
 const App = {
     contract: null,
     address: null,
     load: async () => {
+        // window.location.assign('create.html')
+
         App.contract = await getUserContrat()
-        App.address = await getAddress()
+        App.address = await getUserAddress()
+        console.log(App.address)
         console.log(await App.contract.isRegister(App.address))
         if (await App.contract.isRegister(App.address)) {
-            window.location.assign("profile.html")
+            window.location.assign("create.html")
         }
     },
     register: async () => {

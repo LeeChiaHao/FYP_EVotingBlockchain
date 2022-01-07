@@ -20,24 +20,33 @@ const App = {
         var className = "col-lg-4 col-9 border-0 mb-5 electionCard"
         for (var x = 0; x < total; x++) {
             console.log(x)
-            $("<div></div>").addClass(className + " election" + x).appendTo(".allElection")
-            $(".election" + x).prop("id", "election" + x)
+            $("<div></div>").addClass(className + " election" + x).appendTo(".allElections")
+            $(".election" + x).prop("id", x)
             $(".election" + x).load("election.html", function () {
-                App.loadTitle(x)
+                // console.log(x)
+                // if (x == total) {
+                //     App.loadTitle(x)
+                // }
 
             })
+            if ((x + 1) == total) {
+                App.loadTitle(x)
+            }
         }
         // App.loadTitle(total)
     },
 
     loadTitle: async (num) => {
         // console.log($(".election" + num).find(".electionTitle").text("Elections " + (num++)))
-
-        for (var x = 0; x < num; x++) {
-            $(".election" + x).find("h5").text("Election " + (x + 1))
+        for (var x = 0; x <= num; x++) {
             $(".election" + x).on("click", function () {
                 console.log($(this).attr("id"))
                 localStorage.setItem("election", $(this).attr("id"))
+                window.location.assign("candidates.html")
+            })
+            await App.contract.elections(x).then((val) => {
+                $(".election" + x).find("h5").text("Elections " + (x + 1) + ": " + val)
+                console.log(val)
             })
         }
 
