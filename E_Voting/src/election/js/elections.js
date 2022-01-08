@@ -6,7 +6,11 @@ import '../css/election.css'
 const App = {
     contract: null,
     address: null,
-
+    checkAuth: async () => {
+        App.address = await solidity.getUserAddress()
+        var isAuth = await solidity.isAuth(App.address)
+        return isAuth
+    },
     load: async () => {
         App.contract = await solidity.getElectionContract()
         App.address = await solidity.getElectionAddress()
@@ -22,22 +26,14 @@ const App = {
             console.log(x)
             $("<div></div>").addClass(className + " election" + x).appendTo(".allElections")
             $(".election" + x).prop("id", x)
-            $(".election" + x).load("election.html", function () {
-                // console.log(x)
-                // if (x == total) {
-                //     App.loadTitle(x)
-                // }
-
-            })
+            $(".election" + x).load("election.html")
             if ((x + 1) == total) {
                 App.loadTitle(x)
             }
         }
-        // App.loadTitle(total)
     },
 
     loadTitle: async (num) => {
-        // console.log($(".election" + num).find(".electionTitle").text("Elections " + (num++)))
         for (var x = 0; x <= num; x++) {
             $(".election" + x).on("click", function () {
                 console.log($(this).attr("id"))
@@ -49,11 +45,18 @@ const App = {
                 console.log(val)
             })
         }
-
     }
 }
 
 window.App = App;
 window.addEventListener("load", async function () {
-    App.load()
+    App.checkAuth().then(function (result) {
+        if (!result) {
+            window.location.replace("/")
+        } else {
+            App.load()
+            $('body').removeClass('invisible')
+        }
+    })
 })
+

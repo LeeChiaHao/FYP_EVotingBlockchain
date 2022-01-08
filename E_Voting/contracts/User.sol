@@ -1,6 +1,7 @@
 pragma solidity >=0.4.22 <0.9.0;
 
 contract User {
+    address public admin;
     struct Voter {
         string name;
         string email;
@@ -11,6 +12,10 @@ contract User {
     mapping(address => bool) public isRegister;
     mapping(address => uint256) public voterID;
     uint256 voterCount = 0;
+
+    constructor() public {
+        admin = msg.sender;
+    }
 
     function createVoter(string memory _name, string memory _email) public {
         voterCount++;

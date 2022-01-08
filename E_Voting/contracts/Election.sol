@@ -2,6 +2,7 @@ pragma solidity >=0.4.22 <0.9.0;
 pragma experimental ABIEncoderV2;
 
 contract Election {
+    address public admin;
     string name;
     struct Candidate {
         uint256 id;
@@ -20,6 +21,10 @@ contract Election {
     mapping(uint256 => uint256) public totalCandidate;
     uint256 public totalElection = 0;
     event electionInfo(uint256 e, uint256 c);
+
+    constructor() public {
+        admin = msg.sender;
+    }
 
     function createElection(string memory _name, string[] memory candidateInfo)
         public

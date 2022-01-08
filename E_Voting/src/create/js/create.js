@@ -9,13 +9,24 @@ const App = {
     address: null,
     totalCandidate: null,
     popUpModal: null,
-    delCandidate: $(".delCandidate"),
+    delCandidate: null,
+    checkAuth: async () => {
+        App.contract = await solidity.getElectionContract()
+        App.address = await solidity.getUserAddress()
+        console.log(await App.contract.admin())
+        if (App.address == await App.contract.admin()) {
+            return true
+        } else {
+            return false
+        }
+    },
     load: async () => {
         App.forms = document.querySelector('.validation')
         // App.validateForm()
         App.contract = await solidity.getElectionContract()
         App.address = await solidity.getElectionAddress()
         App.popUpModal = new Modal($("#popUpModal"))
+        App.delCandidate = $('.delCandidate')
         App.totalCandidate = 1;
         var divCandidate
         $(".addCandidate").on("click", async function () {
@@ -25,6 +36,8 @@ const App = {
                 App.loadClassName("." + divCandidate, App.totalCandidate)
             })
             App.totalCandidate++
+            console.log(App.delCandidate)
+
             App.delCandidate.removeClass("d-none")
         })
 
@@ -140,22 +153,17 @@ const App = {
         // }
 
     },
-
-    // validateForm: async () => {
-    //     App.forms.addEventListener('submit', async function (event) {
-    //         event.preventDefault()
-    //         event.stopPropagation()
-    //         if (App.forms.checkValidity()) {
-    //             await App.submitForm()
-    //         }
-    //         App.forms.classList.add('was-validated')
-    //     }, false)
-    // }
-
 }
 
 
 window.App = App;
 window.addEventListener("load", async function () {
-    App.load()
+    App.checkAuth().then(function (result) {
+        if (!result) {
+            window.location.replace("/")
+        } else {
+            App.load()
+            $('body').removeClass('invisible')
+        }
+    })
 })

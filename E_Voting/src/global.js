@@ -2,17 +2,13 @@ import { ethers } from 'ethers';
 
 export async function getUserContrat() {
     try {
-
         const provider = new ethers.providers.Web3Provider(window.ethereum, "any")
         await provider.send("eth_requestAccounts", []);
         ethereum.on("accountsChanged", function (a) {
-            console.log("hi")
             window.location.replace("/")
         })
-        console.log(provider)
         const networkId = provider.provider.networkVersion
         const signer = provider.getSigner()
-        console.log(signer)
 
         const abi = userJSON.abi
         var network = userJSON.networks[networkId]
@@ -24,12 +20,21 @@ export async function getUserContrat() {
     }
 }
 
+export async function isAuth(user) {
+    var contract = await getUserContrat()
+    console.log(await contract.isRegister(user))
+    if (await contract.isRegister(user)) {
+        return true
+    } else {
+        return false
+    }
+}
+
 export async function getElectionContract() {
     try {
         const provider = new ethers.providers.Web3Provider(window.ethereum, "any")
         await provider.send("eth_requestAccounts", []);
         ethereum.on("accountsChanged", function (a) {
-            console.log("hi")
             window.location.replace("/")
         })
         const networkId = provider.provider.networkVersion
@@ -46,14 +51,12 @@ export async function getElectionContract() {
 
 export async function getUserAddress() {
     var contract = await getUserContrat()
-    console.log(contract)
     var address = contract.provider.getSigner().getAddress()
     return address
 }
 
 export async function getElectionAddress() {
     var contract = await getElectionContract()
-    console.log(contract)
     var address = contract.provider.getSigner().getAddress()
     return address
 }

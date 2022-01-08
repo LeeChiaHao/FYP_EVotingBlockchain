@@ -7,7 +7,11 @@ const App = {
     contract: null,
     address: null,
     electionID: null,
-
+    checkAuth: async () => {
+        App.address = await solidity.getUserAddress()
+        var isAuth = await solidity.isAuth(App.address)
+        return isAuth
+    },
     load: async () => {
         App.contract = await solidity.getElectionContract()
         App.address = await solidity.getElectionAddress()
@@ -28,8 +32,6 @@ const App = {
             $(".candidate" + x).load("candidate.html")
             await App.contract.electionCandidate(id, x).then((val) => {
                 console.log(val.name)
-
-
             })
 
             if ((x + 1) == total) {
@@ -50,12 +52,16 @@ const App = {
             )
         }
     },
-
 }
-
-
 
 window.App = App;
 window.addEventListener("load", async function () {
-    App.load()
+    App.checkAuth().then(function (result) {
+        if (!result) {
+            window.location.replace("/")
+        } else {
+            App.load()
+            $('body').removeClass('invisible')
+        }
+    })
 })

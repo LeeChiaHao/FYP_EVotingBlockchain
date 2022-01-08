@@ -11,13 +11,22 @@ const App = {
     address: null,
     loginID: null,
     myModal: null,
-    name: $("#profileName"),
-    email: $("#profileEmail"),
-    editArea: $("#editArea"),
-    submitArea: $("#submitArea"),
+    name: null,
+    email: null,
+    editArea: null,
+    submitArea: null,
+    checkAuth: async () => {
+        App.address = await solidity.getUserAddress()
+        var isAuth = await solidity.isAuth(App.address)
+        return isAuth
+    },
     load: async () => {
         App.contract = await solidity.getUserContrat()
         App.address = await solidity.getUserAddress()
+        App.name = $("#profileName")
+        App.email = $("#profileEmail")
+        App.editArea = $("#editArea")
+        App.submitArea = $("#submitArea")
 
         var loginBN = await App.contract.voterID(App.address)
         App.loginID = ethers.BigNumber.from(loginBN).toNumber()
@@ -69,5 +78,17 @@ const App = {
 
 window.App = App;
 window.addEventListener("load", async function () {
-    App.load()
+    App.checkAuth().then(function (result) {
+
+        if (!result) {
+            window.location.replace("/")
+        } else {
+            App.load()
+            $('body').removeClass('invisible')
+        }
+
+    })
 })
+// $(window).on('beforeunload', function () {
+//     return "Good bye";
+// });

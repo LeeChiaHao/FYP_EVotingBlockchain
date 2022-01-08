@@ -5,13 +5,10 @@
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
-    <!-- Bootstrap CSS -->
-    <!-- <script src="election.js"></script> -->
     <title>Cast Vote</title>
 </head>
 
-<body>
+<body class="invisible">
     <!-- header -->
     <div id="header">
         <%= require("fs").readFileSync(htmlWebpackPlugin.options.HTML_PATH + "header.html" ) %>
