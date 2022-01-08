@@ -1,13 +1,13 @@
 .header{
-    background-color: rgb(81, 89, 141);
+    background-color: #441d66;
 }
 
-#menuItem ul li a{
+#menuItem ul li a, #register ul li a{
     color: white;
 }
 
 #menuItem ul li:hover *{
-    background-color: rgb(138, 224, 229);
+    background-color: #dac8b1;
     color: black;
 }
 
@@ -27,11 +27,30 @@
     width: 60%;
 }
 
+.registerForm, .electionForm {
+    background-color: rgb(174, 112, 175);
+    padding: 3.5rem 6rem;
 
-.profile{
-    background-color: rgb(138, 224, 229);  
 }
 
+/* .profile{
+    background-color: rgb(138, 224, 229);  
+} */
+
+.btn-submit{
+    color: white;
+    background-color: #603c2c;
+    border: 2px solid #cd9542;
+}
+
+.btn-submit:hover{
+    background-color: #cd9542;
+    border: 2px solid #603c2c;
+
+}
+.form-control:valid {
+    border: 2px solid #198574;
+}
 .valid-feedback{
     font-size: medium;
     font-weight: bold;

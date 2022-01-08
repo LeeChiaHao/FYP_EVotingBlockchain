@@ -5,12 +5,14 @@
 }
 
 .addCandidate, .delCandidate{
-    color: black;
+    color: #603c2c;
     font-weight: bold;
     text-decoration: underline;
 }
 
 .addCandidate:hover, .delCandidate:hover{
-    color: rgb(219, 62, 62);
+    /* color: rgb(26, 44, 84); */
+    color: #fbe48f;
     cursor: pointer;
 }
+

@@ -1,6 +1,6 @@
 
 .history{
-    background-color: rgb(138, 224, 229); 
+    /* background-color: rgb(174, 112, 175); */
 }
 
 .historyTitle {
@@ -17,7 +17,7 @@
 }
 
 .historyList li{
-    background-color: rgb(138, 224, 229);  
+    background-color: rgb(174, 112, 175); 
     color: black;
     font-weight: bold;
     border: none;
@@ -25,7 +25,7 @@
 }
 
 .historyList input:disabled{
-    background-color: rgb(138, 224, 229);  
+    background-color: rgb(174, 112, 175);
     color: black;
     font-weight: bold;
     border: none;
@@ -33,9 +33,10 @@
 }
 
 .historyList input{
-    border: 2px solid black;
-    background-color: rgb(138, 250, 250);
-    border-left-width: 2px !important
+    border: 3px solid black;
+    background-color: rgb(214, 134, 197);
+    border-left-width: 2px !important;
+    border-top-width: 2px !important;
 }
 
 

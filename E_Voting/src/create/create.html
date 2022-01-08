@@ -32,17 +32,18 @@
 
     <div class="container mt-5">
         <div class="row justify-content-center">
-            <div class="col-lg-8 col-md-12">
-                <div class="col-6 mx-auto p-3 bg-info text-center fw-bolder border-bottom border-3 border-dark fs-4">
+            <div class="col-lg-9 col-md-12 mb-5">
+                <div
+                    class="col-6 mx-auto p-3 electionForm text-center fw-bolder border-bottom border-3 border-dark fs-4">
                     Create an election
                 </div>
-                <form class="form bg-info p-5 validation" onsubmit="App.submitForm(); return false;" novalidate>
+                <form class="form electionForm validation" onsubmit="App.submitForm(); return false;" novalidate>
                     <div class="input-group mb-3">
                         <span class="input-group-text col-3" id="">Election Name</span>
                         <input type="text" class="form-control" placeholder="Election Name" aria-label="Username"
                             aria-describedby="input" id="electionName" required>
                         <div class="invalid-feedback">
-                            Fill in the name before submission
+                            This election field is required.
                         </div>
                         <div class="valid-feedback">
                             Success
@@ -62,7 +63,7 @@
 
                     </div>
                     <div class="col-4 mx-auto">
-                        <button type="submit" class="btn btn-primary w-100" id="registerForm">Create</button>
+                        <button type="submit" class="btn btn-submit w-100" id="registerForm">Create</button>
                     </div>
                 </form>
             </div>

@@ -2,7 +2,6 @@ import 'bootstrap'
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../../style.css'
 import '../css/profile.css'
-// import img from 'success.png'
 import { ethers } from 'ethers';
 import { Modal } from 'bootstrap';
 
@@ -15,6 +14,7 @@ const App = {
     email: null,
     editArea: null,
     submitArea: null,
+    form: null,
     checkAuth: async () => {
         App.address = await solidity.getUserAddress()
         var isAuth = await solidity.isAuth(App.address)
@@ -27,6 +27,8 @@ const App = {
         App.email = $("#profileEmail")
         App.editArea = $("#editArea")
         App.submitArea = $("#submitArea")
+        App.form = document.querySelector('.validation')
+
 
         var loginBN = await App.contract.voterID(App.address)
         App.loginID = ethers.BigNumber.from(loginBN).toNumber()
@@ -41,28 +43,38 @@ const App = {
     editProfile: async () => {
         App.name.prop("disabled", false)
         App.email.prop("disabled", false)
+        var tmpName = App.name.val()
+        var tmpEmail = App.email.val()
+        App.name.on("keyup", function () {
+            App.checkChange(tmpName, tmpEmail)
+        })
+        App.email.on("keyup", function () {
+            App.checkChange(tmpName, tmpEmail)
+        })
 
         App.editArea.hide()
         App.submitArea.addClass("d-flex")
     },
 
     submitProfile: async () => {
-        App.myModal.show()
-        try {
-            App.contract.voters[App.loginID] = await App.contract.editVoter(App.name.val(), App.email.val(), App.loginID).then(
-                (tx) => tx.wait().then(function () {
-                    solidity.txnSuccess()
-                })
-            )
-        } catch (e) {
-            solidity.txnFail()
-            console.log(e)
+        App.form.checkValidity()
+        App.form.classList.add('was-validated')
+        if ($(".was-validated:invalid").length == 0) {
+            App.myModal.show()
+            try {
+                App.contract.voters[App.loginID] = await App.contract.editVoter(App.name.val(), App.email.val(), App.loginID).then(
+                    (tx) => tx.wait().then(function () {
+                        solidity.customMsg(true, "Transaction Success. Profile updated successfully.")
+                    })
+                )
+            } catch (e) {
+                solidity.customMsg(false, "Transaction Fail. Profile update failed.")
+                console.log(e)
+            }
+            $("#modalClose").on("click", function () {
+                window.location.reload()
+            })
         }
-        $("#modalClose").on("click", function () {
-            window.location.reload()
-
-        })
-
 
     },
 
@@ -73,20 +85,24 @@ const App = {
         App.submitArea.removeClass("d-flex")
     },
 
-
+    checkChange: async (name, email) => {
+        if (name == App.name.val() && email == App.email.val()) {
+            $("#submitBtn").prop("disabled", true)
+        } else {
+            $("#submitBtn").prop("disabled", false)
+        }
+    }
 }
 
 window.App = App;
 window.addEventListener("load", async function () {
     App.checkAuth().then(function (result) {
-
         if (!result) {
             window.location.replace("/")
         } else {
             App.load()
             $('body').removeClass('invisible')
         }
-
     })
 })
 // $(window).on('beforeunload', function () {

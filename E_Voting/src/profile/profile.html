@@ -27,15 +27,33 @@
             </div>
 
             <div class="col-10 p-3 mb-5">
-                <form>
+                <form class="validation">
                     <ul class="list-group list-group-horizontal historyList">
-                        <li class="list-group-item historyTitle">Name:</li>
-                        <input class="list-group-item historyContent" id="profileName" disabled></input>
+                        <div class="input-group">
+                            <li class="list-group-item historyTitle">Name:</li>
+                            <input class="list-group-item historyContent" id="profileName" disabled required></input>
+                            <div class="invalid-feedback">
+                                This name field is required.
+                            </div>
+                            <div class="valid-feedback">
+                                Success
+                            </div>
+                        </div>
+
                     </ul>
 
                     <ul class="list-group list-group-horizontal historyList">
-                        <li class="list-group-item historyTitle">Email:</li>
-                        <input class="list-group-item historyContent" id="profileEmail" disabled></input>
+                        <div class="input-group">
+                            <li class="list-group-item historyTitle">Email:</li>
+                            <input class="list-group-item historyContent" id="profileEmail" disabled required></input>
+                            <div class="invalid-feedback">
+                                This email field is required.
+                            </div>
+                            <div class="valid-feedback">
+                                Success
+                            </div>
+                        </div>
+
                     </ul>
 
                     <ul class="list-group list-group-horizontal historyList">
@@ -45,18 +63,18 @@
 
                     <div class="row justify-content-center" id="editArea">
                         <div class="col-3">
-                            <button class="btn btn-primary w-100 fs-5" onclick="App.editProfile(); return false"
+                            <button class="btn btn-submit w-100 fs-5" onclick="App.editProfile(); return false"
                                 id="editBtn">Edit</button>
                         </div>
                     </div>
 
                     <div class="row justify-content-center" id="submitArea">
                         <div class="col-3">
-                            <button type="submit" class="btn btn-primary w-100 fs-5" id="submitBtn"
-                                onclick="App.submitProfile(); return false">Submit</button>
+                            <button type="submit" class="btn btn-submit w-100 fs-5" id="submitBtn"
+                                onclick="App.submitProfile(); return false" disabled>Submit</button>
                         </div>
                         <div class="col-3">
-                            <button type="submit" class="btn btn-primary w-100 fs-5" id="cancelBtn"
+                            <button type="submit" class="btn btn-submit w-100 fs-5" id="cancelBtn"
                                 onclick="App.cancelProfile(); return false">Cancel</button>
                         </div>
                     </div>
