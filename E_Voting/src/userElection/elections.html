@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Cast Vote</title>
+</head>
+
+<body class="invisible">
+    <!-- header -->
+    <div id="header">
+        <%= require("fs").readFileSync(htmlWebpackPlugin.options.HTML_PATH + "header.html" ) %>
+    </div>
+
+
+    <div class="container ">
+        <div class="row justify-content-center">
+            <div class="col-10 mb-4">
+                <div class="title text-center m-3">
+                    <h2 class="fs-3 fw-bold">
+                        Select an election and cast your vote
+                    </h2>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="row gx-5 allElections">
+
+        </div>
+    </div>
+</body>
+
+</html>

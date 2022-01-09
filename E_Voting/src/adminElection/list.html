@@ -5,13 +5,14 @@
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Cast Vote</title>
+    <!-- <script src="create.js"></script> -->
+    <title>Create Election</title>
 </head>
 
 <body class="invisible">
     <!-- header -->
     <div id="header">
-        <%= require("fs").readFileSync(htmlWebpackPlugin.options.HTML_PATH + "header.html" ) %>
+        <%= require("fs").readFileSync(htmlWebpackPlugin.options.HTML_PATH + "adminHeader.html" ) %>
     </div>
 
 
@@ -28,17 +29,6 @@
 
 
         <div class="row gx-5 allElections">
-            <!-- <div class="col-lg-4 col-9 border-0 mb-5 electionCard election0">
-                <div class="card electionCard">
-                    <img src="https://picsum.photos/150/100">
-                    <div class="card-body">
-                        <h5 class="card-title electionTitle">Election 1</h5>
-                        <p class="card-text">
-                            End at: 20.00 2 Feb 2022
-                        </p>
-                    </div>
-                </div>
-            </div> -->
 
         </div>
     </div>

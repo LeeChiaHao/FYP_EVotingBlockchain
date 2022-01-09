@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- <script src="create.js"></script> -->
+    <title>Create Election</title>
+</head>
+
+<body class="invisible">
+    <!-- header -->
+    <div class="header">
+        <%= require("fs").readFileSync(htmlWebpackPlugin.options.HTML_PATH + "adminHeader.html" ) %>
+    </div>
+
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-9 col-md-12 mb-5">
+                <div
+                    class="col-6 mx-auto p-3 electionForm text-center fw-bolder border-bottom border-3 border-dark fs-4">
+                    Create an election
+                </div>
+                <form class="form electionForm validation" onsubmit="App.submitForm(); return false;" novalidate>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text col-3" id="">Election Name</span>
+                        <input type="text" class="form-control" placeholder="Election Name" aria-label="Username"
+                            aria-describedby="input" id="electionName" required>
+                        <div class="invalid-feedback">
+                            This election field is required.
+                        </div>
+                        <div class="valid-feedback">
+                            Success
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col d-flex">
+                            <div class="addCandidate ms-auto">Add New Candidate</div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col d-flex">
+                            <div class="delCandidate ms-auto d-none">Delete Candidate</div>
+                        </div>
+                    </div>
+                    <div class="loadCandidate">
+
+                    </div>
+                    <div class="col-4 mx-auto">
+                        <button type="submit" class="btn btn-submit w-100" id="registerForm">Create</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <%= require("fs").readFileSync(htmlWebpackPlugin.options.HTML_PATH + "modal.html" ) %>
+</body>
+
+</html>

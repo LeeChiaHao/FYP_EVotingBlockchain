@@ -15,11 +15,13 @@ const webpack = require("webpack")
 module.exports = {
     mode: 'development',
     entry: {
-        create_head: "./src/create/js/create.js",
+        create_head: "./src/adminElection/js/create.js",
+        list_head: "./src/adminElection/js/list.js",
+        edit_head: "./src/adminElection/js/edit.js",
         index_head: "./src/index.js",
         profile_head: "./src/profile/js/profile.js",
-        elections_head: "./src/election/js/elections.js",
-        candidates_head: "./src/election/js/candidates.js"
+        elections_head: "./src/userElection/js/elections.js",
+        candidates_head: "./src/userElection/js/candidates.js"
     },
     // resolve: {
     //     alias: {
@@ -28,9 +30,21 @@ module.exports = {
     // },
     plugins: [
         new HtmlWebpackPlugin({
-            template: "./src/create/create.html",
+            template: "./src/adminElection/create.html",
             filename: "create.html",
             chunks: ['create_head'],
+            HTML_PATH: './src/commonHTML/'
+        }),
+        new HtmlWebpackPlugin({
+            template: "./src/adminElection/list.html",
+            filename: "list.html",
+            chunks: ['list_head'],
+            HTML_PATH: './src/commonHTML/'
+        }),
+        new HtmlWebpackPlugin({
+            template: "./src/adminElection/edit.html",
+            filename: "edit.html",
+            chunks: ['edit_head'],
             HTML_PATH: './src/commonHTML/'
         }),
         new HtmlWebpackPlugin({
@@ -46,13 +60,13 @@ module.exports = {
             HTML_PATH: './src/commonHTML/'
         }),
         new HtmlWebpackPlugin({
-            template: "./src/election/elections.html",
+            template: "./src/userElection/elections.html",
             filename: "elections.html",
             chunks: ['elections_head'],
             HTML_PATH: './src/commonHTML/'
         }),
         new HtmlWebpackPlugin({
-            template: "./src/election/candidates.html",
+            template: "./src/userElection/candidates.html",
             filename: "candidates.html",
             chunks: ['candidates_head'],
             HTML_PATH: './src/commonHTML/'
@@ -67,9 +81,11 @@ module.exports = {
         new CopyWebpackPlugin([
             { from: "./src/img/success.png", to: "success.png" },
             { from: "./src/img/fail.png", to: "fail.png" },
-            { from: "./src/create/createForm.html", to: "createForm.html" },
-            { from: "./src/election/election.html", to: "election.html" },
-            { from: "./src/election/candidate.html", to: "candidate.html" },
+            { from: "./src/adminElection/createForm.html", to: "createForm.html" },
+            // { from: "./src/userElection/election.html", to: "election.html" },
+            { from: "./src/userElection/candidate.html", to: "candidate.html" },
+            { from: "./src/commonHTML/election.html", to: "election.html" },
+
         ]),
         new HtmlWebpackInjector()
 

@@ -22,7 +22,6 @@ const App = {
     },
     load: async () => {
         App.forms = document.querySelector('.validation')
-        // App.validateForm()
         App.contract = await solidity.getElectionContract()
         App.address = await solidity.getElectionAddress()
         App.popUpModal = new Modal($("#popUpModal"))
@@ -30,6 +29,7 @@ const App = {
         App.totalCandidate = 1;
         var divCandidate
         $(".addCandidate").on("click", async function () {
+            console.log(App.totalCandidate)
             divCandidate = "loadCandidate" + App.totalCandidate
             $("<div></div>").addClass(divCandidate).appendTo(".loadCandidate")
             $("." + divCandidate).load("createForm.html", function () {
@@ -100,12 +100,10 @@ const App = {
         // await App.validateForm()
         App.forms.checkValidity()
         App.forms.classList.add('was-validated')
-
+        console.log($(".was-validated:invalid").length)
         if ($(".was-validated:invalid").length == 0) {
-            console.log(App.totalCandidate)
             if (App.totalCandidate > 1) {
                 var allCandidates = []
-                console.log(App.totalCandidate)
                 var index = 0;
                 for (var i = 1; i < App.totalCandidate; i++) {
                     allCandidates[index] = $("#candidateName" + i).val()
@@ -130,6 +128,7 @@ const App = {
                     solidity.txnFail()
                 }
 
+                // way of receive emitted event from contract
                 await App.contract.once("electionInfo", (e, c) => {
                     console.log(e + " ==== " + c)
                 })
