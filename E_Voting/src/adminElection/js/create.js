@@ -1,7 +1,7 @@
 import 'bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../../style.css'
-import '../css/create.css'
+import '../css/admin.css'
 import { Modal } from 'bootstrap';
 const App = {
     forms: null,
@@ -74,13 +74,10 @@ const App = {
                             break
 
                     }
-                    // if (index == 1) {
-                    //             $(this).prop("id", "candidateName" + num)
-
-                    // }
                 }
             })
             $(this).removeClass("candidate-group").addClass("candidate-group-" + num)
+            $(this).addClass("election-input-group")
         })
     },
 
@@ -102,6 +99,7 @@ const App = {
         App.forms.classList.add('was-validated')
         console.log($(".was-validated:invalid").length)
         if ($(".was-validated:invalid").length == 0) {
+            console.log("Total Candidate: " + App.totalCandidate)
             if (App.totalCandidate > 1) {
                 var allCandidates = []
                 var index = 0;
@@ -119,9 +117,13 @@ const App = {
                 try {
                     App.popUpModal.show()
                     solidity.txnLoad()
-                    await App.contract.createElection($("#electionName").val(), allCandidates).then(
+                    var eid = solidity.bigNumberToNumber(await App.contract.totalElection())
+                    await App.contract.createElection(eid, $("#electionName").val(), allCandidates).then(
                         (tx) => tx.wait().then(function () {
                             solidity.txnSuccess()
+                            $("#modalClose").on("click", function () {
+                                window.location.replace("list.html")
+                            })
                         })
                     )
                 } catch (e) {

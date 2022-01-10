@@ -24,7 +24,7 @@
                 </div>
                 <form class="form electionForm validation" onsubmit="App.submitForm(); return false;" novalidate
                     id="editForm">
-                    <div class="input-group mb-3">
+                    <div class="input-group mb-3 election-input-group">
                         <span class="input-group-text col-3" id="">Election Name</span>
                         <input type="text" class="form-control" placeholder="Election Name" aria-label="Username"
                             aria-describedby="input" id="electionName" required>
@@ -35,9 +35,13 @@
                             Success
                         </div>
                     </div>
+
+                    <div class="loadCandidate">
+
+                    </div>
                     <div class="row">
                         <div class="col d-flex">
-                            <div class="addCandidate ms-auto">Add New Candidate</div>
+                            <div class="addCandidate ms-auto d-none">Add New Candidate</div>
                         </div>
                     </div>
                     <div class="row">
@@ -45,15 +49,21 @@
                             <div class="delCandidate ms-auto d-none">Delete Candidate</div>
                         </div>
                     </div>
-                    <div class="loadCandidate">
-
-                    </div>
-                    <div class="row g-3 justify-content-center">
+                    <div class="row g-3 justify-content-center mt-3">
                         <div class="col-4">
-                            <button type="submit" class="btn btn-submit w-100" id="registerForm">Create</button>
+                            <button type="submit" class="btn btn-submit w-100 d-none" id="saveBtn">Save</button>
                         </div>
                         <div class="col-4">
-                            <button class="btn btn-submit w-100" id="editFormBtn">Edit</button>
+                            <button class="btn btn-submit w-100" id="editBtn"
+                                onclick="App.editForm(); return false;">Edit</button>
+                        </div>
+                        <div class="col-4">
+                            <button class="btn btn-submit w-100 d-none" id="delBtn"
+                                onclick="App.delForm();return false;">Delete Election</button>
+                        </div>
+                        <div class="col-4">
+                            <button class="btn btn-submit w-100 d-none" id="cancelBtn"
+                                onclick="App.cancelForm();return false;">Cancel Edit</button>
                         </div>
                     </div>
                 </form>

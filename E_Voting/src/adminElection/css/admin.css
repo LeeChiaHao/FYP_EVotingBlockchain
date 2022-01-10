@@ -16,3 +16,16 @@
     cursor: pointer;
 }
 
+.electionCard:hover{
+    border: 5px solid black;
+}
+
+.election-input-group span, .election-input-group input:read-only{
+    background-color: #fbe48f;
+    font-weight: bold;
+    border: 2px solid black;
+}
+
+.election-input-group input {
+    border: 2px solid black;
+}

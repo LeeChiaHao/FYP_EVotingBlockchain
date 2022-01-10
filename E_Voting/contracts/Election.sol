@@ -26,14 +26,16 @@ contract Election {
         admin = msg.sender;
     }
 
-    function createElection(string memory _name, string[] memory candidateInfo)
-        public
-    {
-        elections[totalElection] = _name;
+    function createElection(
+        uint256 id,
+        string memory _name,
+        string[] memory candidateInfo
+    ) public {
+        elections[id] = _name;
         uint256 length = candidateInfo.length / 4;
         uint256 index = 0;
         for (uint256 x = 0; x < length; x++) {
-            electionCandidate[totalElection][x] = Candidate(
+            electionCandidate[id][x] = Candidate(
                 x,
                 candidateInfo[index],
                 candidateInfo[++index],
@@ -42,9 +44,35 @@ contract Election {
             );
             ++index;
         }
-        emit electionInfo(totalElection, length);
-        totalCandidate[totalElection] = length;
+        emit electionInfo(id, length);
+        totalCandidate[id] = length;
 
-        totalElection++;
+        if (id == totalElection) {
+            totalElection++;
+        }
+    }
+
+    function editElection(
+        uint256 id,
+        string memory _name,
+        string[] memory candidateInfo
+    ) public {
+        deleteElection(id);
+        createElection(id, _name, candidateInfo);
+    }
+
+    function deleteElection(uint256 id) public {
+        elections[id] = "";
+        uint256 candidateLength = totalCandidate[id];
+        totalCandidate[id] = 0;
+        for (uint256 x = 0; x < candidateLength; x++) {
+            electionCandidate[totalElection][candidateLength] = Candidate(
+                0,
+                "",
+                "",
+                "",
+                ""
+            );
+        }
     }
 }

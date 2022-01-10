@@ -23,7 +23,7 @@
                     Create an election
                 </div>
                 <form class="form electionForm validation" onsubmit="App.submitForm(); return false;" novalidate>
-                    <div class="input-group mb-3">
+                    <div class="input-group mb-3 election-input-group">
                         <span class="input-group-text col-3" id="">Election Name</span>
                         <input type="text" class="form-control" placeholder="Election Name" aria-label="Username"
                             aria-describedby="input" id="electionName" required>
@@ -34,6 +34,10 @@
                             Success
                         </div>
                     </div>
+
+                    <div class="loadCandidate">
+
+                    </div>
                     <div class="row">
                         <div class="col d-flex">
                             <div class="addCandidate ms-auto">Add New Candidate</div>
@@ -43,9 +47,6 @@
                         <div class="col d-flex">
                             <div class="delCandidate ms-auto d-none">Delete Candidate</div>
                         </div>
-                    </div>
-                    <div class="loadCandidate">
-
                     </div>
                     <div class="col-4 mx-auto">
                         <button type="submit" class="btn btn-submit w-100" id="registerForm">Create</button>

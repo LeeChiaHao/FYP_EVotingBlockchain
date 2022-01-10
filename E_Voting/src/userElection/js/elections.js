@@ -23,13 +23,17 @@ const App = {
     loadElection: async (total) => {
         var className = "col-lg-4 col-9 border-0 mb-5 electionCard"
         for (var x = 0; x < total; x++) {
-            console.log(x)
-            $("<div></div>").addClass(className + " election" + x).appendTo(".allElections")
-            $(".election" + x).prop("id", x)
-            $(".election" + x).load("election.html")
             if ((x + 1) == total) {
                 App.loadTitle(x)
             }
+            console.log(x)
+            if (await App.contract.totalCandidate(x) == 0) {
+                console.log("hi")
+                continue
+            }
+            $("<div></div>").addClass(className + " election" + x).appendTo(".allElections")
+            $(".election" + x).prop("id", x)
+            $(".election" + x).load("election.html")
         }
     },
 
@@ -41,7 +45,7 @@ const App = {
                 window.location.assign("candidates.html")
             })
             await App.contract.elections(x).then((val) => {
-                $(".election" + x).find("h5").text("Elections " + (x + 1) + ": " + val)
+                $(".election" + x).find("h5").text(val)
                 console.log(val)
             })
         }
@@ -52,6 +56,7 @@ window.App = App;
 window.addEventListener("load", async function () {
     App.checkAuth().then(function (result) {
         if (!result) {
+            console.log("jinaka")
             window.location.replace("/")
         } else {
             App.load()
@@ -59,4 +64,3 @@ window.addEventListener("load", async function () {
         }
     })
 })
-

@@ -1,14 +1,17 @@
 import 'bootstrap'
+import { Modal } from 'bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../../style.css'
-import '../css/create.css'
-import '../css/edit.css'
+import '../css/admin.css'
 
 const App = {
     contract: null,
     address: null,
     totalCandidate: null,
     delCandidate: null,
+    electionID: null,
+    form: null,
+    popUpModal: null,
     checkAuth: async () => {
         App.contract = await solidity.getElectionContract()
         App.address = await solidity.getUserAddress()
@@ -21,45 +24,21 @@ const App = {
     },
 
     load: async () => {
-
+        App.form = document.querySelector("#editForm")
         App.electionID = localStorage.getItem("election")
+        App.popUpModal = new Modal($("#popUpModal"))
         App.totalCandidate = await App.contract.totalCandidate(App.electionID)
-        console.log("Candidates: " + App.totalCandidate)
-        App.loadCandidate(App.electionID, App.totalCandidate)
         App.delCandidate = $('.delCandidate')
-        $(".delCandidate").removeClass('d-none')
 
-        $(".addCandidate").on("click", async function () {
-            console.log(App.totalCandidate)
-            var divCandidate = "loadCandidate" + App.totalCandidate
-            $("<div></div>").addClass(divCandidate).appendTo(".loadCandidate")
-            $("." + divCandidate).load("createForm.html", function () {
-                App.loadClassName("." + divCandidate, App.totalCandidate)
-
-            })
-            App.totalCandidate++
-            console.log(App.delCandidate)
-            App.delCandidate.removeClass("d-none")
-
-        })
-
-        App.delCandidate.on("click", async function () {
-            if (App.totalCandidate > 0) {
-                App.deleteCandidate(App.totalCandidate)
-                App.totalCandidate--;
-            }
-        })
-
+        App.loadCandidate(App.electionID, App.totalCandidate)
+        App.loadAddDel()
     },
     loadCandidate: async (id, total) => {
-        // var className = "col-lg-4 col-md-9 border-0 mb-5"
         for (var x = 0; x < total; x++) {
             $("<div></div").addClass("loadCandidate" + x).appendTo(".loadCandidate")
-            // $(".candidate" + x).prop("id", x)
 
             $(".loadCandidate" + x).load("createForm.html", async function () {
-                console.log("X: " + x)
-                App.loadClassName(".loadCandidate" + x, x)
+                App.loadCandidateClass(true, ".loadCandidate" + x, x)
             })
             await App.contract.electionCandidate(id, x).then((val) => {
                 console.log(val.name)
@@ -70,12 +49,43 @@ const App = {
             }
         }
     },
-    loadClassName: async (className, num) => {
+    loadAddDel: async () => {
+        $(".addCandidate").on("click", async function () {
+            console.log(App.totalCandidate)
+            var divCandidate = "loadCandidate" + App.totalCandidate
+            $("<div></div>").addClass(divCandidate).appendTo(".loadCandidate")
+            $("." + divCandidate).load("createForm.html", function () {
+                App.loadCandidateClass(false, "." + divCandidate, App.totalCandidate)
+            })
+            App.totalCandidate++
+            console.log(App.delCandidate)
+            App.delCandidate.removeClass("d-none")
+        })
+
+        App.delCandidate.on("click", async function () {
+            if (App.totalCandidate > 0) {
+                App.deleteCandidate(App.totalCandidate)
+                App.totalCandidate--;
+                console.log(App.totalCandidate)
+            }
+        })
+    },
+    // true means load from contract, false means add manually
+    loadCandidateClass: async (bool, className, num) => {
+        if (!bool) {
+            num--;
+        }
         console.log(className)
         $(className).children().each(function (index) {
             $(this).children().each(function (y) {
                 if ($(this).is("label")) {
-                    $(this).text("Candidate" + num)
+                    if (bool) {
+                        $(this).text("Candidate" + num)
+                    } else {
+                        $(this).text("Candidate" + (num + 1))
+
+                    }
+                    // num--
                 }
                 if (y == 1) {
                     switch (index) {
@@ -98,13 +108,12 @@ const App = {
                 }
             })
             $(this).removeClass("candidate-group").addClass("candidate-group-" + num)
+            $(this).addClass("election-input-group")
         })
     },
     loadCandidateData: async (id, total) => {
         $("#electionName").val(await App.contract.elections(id))
-
         for (var x = 0; x <= total; x++) {
-            console.log("X: " + x)
             await App.contract.electionCandidate(id, x).then((val) => {
                 $(".loadCandidate" + x).find(".candidate-label").text("Candidate " + (x + 1))
                 $(".loadCandidate" + x).find("#candidateName" + x).val(val.name)
@@ -115,9 +124,7 @@ const App = {
             )
         }
         $("#editForm :input").prop('disabled', true)
-        $(".btn-submit").prop('disabled', false)
-
-
+        $("#editBtn").prop('disabled', false)
     },
     deleteCandidate: async (num) => {
         num--;
@@ -130,6 +137,69 @@ const App = {
             }
         }
     },
+    editForm: async () => {
+        $("#editBtn").parent().addClass('d-none')
+        $("#editForm :input").prop('disabled', false)
+        $("#saveBtn, #delBtn, #cancelBtn, .addCandidate, .delCandidate").removeClass('d-none')
+
+    },
+    submitForm: async () => {
+        App.form.checkValidity()
+        App.form.classList.add('was-validated')
+        console.log($(".was-validated:invalid").length)
+        if ($(".was-validated:invalid").length == 0) {
+            console.log(App.totalCandidate)
+            if (App.totalCandidate >= 1) {
+                var allCandidates = []
+                var index = 0;
+                for (var i = 0; i < App.totalCandidate; i++) {
+                    allCandidates[index] = $("#candidateName" + i).val()
+                    index++;
+                    allCandidates[index] = $("#age" + i).val()
+                    index++;
+                    allCandidates[index] = $("#partyName" + i).val()
+                    index++;
+                    allCandidates[index] = $("#slogan" + i).val()
+                    index++;
+                }
+                console.log(allCandidates)
+                try {
+                    App.popUpModal.show()
+                    solidity.txnLoad()
+
+                    await App.contract.editElection(App.electionID, $("#electionName").val(), allCandidates).then(
+                        (tx) => tx.wait().then(function () {
+                            solidity.txnSuccess()
+                            $("#modalClose").on("click", function () {
+                                window.location.replace("list.html")
+                            })
+                        })
+                    )
+                } catch (e) {
+                    console.log(e)
+                    solidity.txnFail()
+                }
+
+                // way of receive emitted event from contract
+                await App.contract.once("electionInfo", (e, c) => {
+                    console.log(e + " ==== " + c)
+                })
+            } else {
+                App.popUpModal.show()
+                solidity.customMsg(false, "Must have more than 1 candidate for an election")
+            }
+        }
+    },
+    delForm: async () => {
+        App.contract.deleteElection(App.electionID).then(
+            (tx) => tx.wait().then(function () {
+                window.location.replace("list.html")
+            })
+        )
+    },
+    cancelForm: async () => {
+        window.location.reload()
+    }
 }
 
 window.App = App;
