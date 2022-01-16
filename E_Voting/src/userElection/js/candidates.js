@@ -51,6 +51,11 @@ const App = {
             }
             )
         }
+        $(".candidateCard").on("click", function () {
+            console.log("hi")
+            $(".candidateCard").removeClass("active")
+            $(this).addClass("active")
+        })
     },
 }
 

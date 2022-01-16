@@ -103,6 +103,7 @@ const App = {
             if (App.totalCandidate > 1) {
                 var allCandidates = []
                 var index = 0;
+                var votes;
                 for (var i = 1; i < App.totalCandidate; i++) {
                     allCandidates[index] = $("#candidateName" + i).val()
                     index++;
@@ -112,12 +113,17 @@ const App = {
                     index++;
                     allCandidates[index] = $("#slogan" + i).val()
                     index++;
+                    votes = solidity.encrypt(0).toString()
+                    allCandidates[index] = votes
+                    index++;
+
                 }
                 console.log(allCandidates)
                 try {
                     App.popUpModal.show()
                     solidity.txnLoad()
                     var eid = solidity.bigNumberToNumber(await App.contract.totalElection())
+
                     await App.contract.createElection(eid, $("#electionName").val(), allCandidates).then(
                         (tx) => tx.wait().then(function () {
                             solidity.txnSuccess()
@@ -127,6 +133,7 @@ const App = {
                         })
                     )
                 } catch (e) {
+                    console.log(e)
                     solidity.txnFail()
                 }
 
@@ -163,7 +170,10 @@ window.addEventListener("load", async function () {
         if (!result) {
             window.location.replace("/")
         } else {
+            console.log("hi")
+
             App.load()
+            console.log("hi")
             $('body').removeClass('invisible')
         }
     })

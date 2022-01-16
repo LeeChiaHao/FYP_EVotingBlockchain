@@ -120,6 +120,11 @@ const App = {
                 $(".loadCandidate" + x).find("#age" + x).val(val.age)
                 $(".loadCandidate" + x).find("#partyName" + x).val(val.party)
                 $(".loadCandidate" + x).find("#slogan" + x).val(val.slogan)
+                var vote = BigInt(val.voteGet)
+                var add = solidity.encrypt(4)
+                var total = solidity.encryptAdd(add, vote)
+                console.log(total)
+                console.log("Decryption: " + solidity.decrypt(total))
             }
             )
         }

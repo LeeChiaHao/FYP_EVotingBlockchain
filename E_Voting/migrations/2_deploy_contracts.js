@@ -1,8 +1,6 @@
 const User = artifacts.require("User");
 const Election = artifacts.require("Election");
-
-
-module.exports = function (deployer) {
-    deployer.deploy(User);
-    deployer.deploy(Election);
+module.exports = async function (deployer) {
+    await deployer.deploy(User);
+    await deployer.deploy(Election, User.address);
 };

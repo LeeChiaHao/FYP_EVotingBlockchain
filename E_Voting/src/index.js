@@ -46,7 +46,6 @@ const App = {
                 console.log(e)
             }
         }
-
     }
 };
 

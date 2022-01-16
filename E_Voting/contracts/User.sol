@@ -1,3 +1,4 @@
+// SPDX-License-Identifier: MIT
 pragma solidity >=0.4.22 <0.9.0;
 
 contract User {
@@ -11,6 +12,7 @@ contract User {
     mapping(uint256 => Voter) public voters;
     mapping(address => bool) public isRegister;
     mapping(address => uint256) public voterID;
+    mapping(address => mapping(uint256 => bool)) isVoted;
     uint256 voterCount = 0;
 
     constructor() public {

@@ -2,6 +2,7 @@ const path = require("path");
 const CopyWebpackPlugin = require("copy-webpack-plugin");
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const HtmlWebpackInjector = require('html-webpack-injector');
+const Dotenv = require('dotenv-webpack');
 const webpack = require("webpack")
 
 // let htmlPageNames = ['profile', 'example2', 'example3', 'example4'];
@@ -29,6 +30,7 @@ module.exports = {
     //     }
     // },
     plugins: [
+        new Dotenv(),
         new HtmlWebpackPlugin({
             template: "./src/adminElection/create.html",
             filename: "create.html",
