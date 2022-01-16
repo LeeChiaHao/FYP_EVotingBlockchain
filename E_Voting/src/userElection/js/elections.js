@@ -23,9 +23,6 @@ const App = {
     loadElection: async (total) => {
         var className = "col-lg-4 col-9 border-0 mb-5 electionCard"
         for (var x = 0; x < total; x++) {
-            if ((x + 1) == total) {
-                App.loadTitle(x)
-            }
             console.log(x)
             if (await App.contract.totalCandidate(x) == 0) {
                 console.log("hi")
@@ -35,6 +32,7 @@ const App = {
             $(".election" + x).prop("id", x)
             $(".election" + x).load("election.html")
         }
+        App.loadTitle(total)
     },
 
     loadTitle: async (num) => {
