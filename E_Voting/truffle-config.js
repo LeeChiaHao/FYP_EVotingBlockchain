@@ -18,11 +18,13 @@
  *
  */
 
-// const HDWalletProvider = require('@truffle/hdwallet-provider');
+const HDWalletProvider = require('@truffle/hdwallet-provider');
+require('dotenv').config();
 //
 // const fs = require('fs');
 // const mnemonic = fs.readFileSync(".secret").toString().trim();
-
+console.log(process.env.Infura_Key)
+console.log(process.env.MNENOMIC)
 module.exports = {
   /**
    * Networks define how you connect to your ethereum client and let you set the
@@ -45,6 +47,18 @@ module.exports = {
       port: 7545,            // Standard Ethereum port (default: none)
       network_id: "*",       // Any network (default: none)
     },
+    Ropsten: {
+      provider: function () {
+        return new HDWalletProvider(process.env.MNENOMIC, "wss://ropsten.infura.io/ws/v3/" + process.env.Infura_Key)
+
+      },
+      network_id: 3, // Ropsten Network ID
+      networkCheckTimeout: 1000000,
+      // from: "0x8cF600c9Dbcaf8b95eE83Df54DB03F287d423734",
+      // timeoutBlocks: 200,
+      gas: 3000000,
+      gasPrice: 10000000000
+    }
     // Another network with more advanced options...
     // advanced: {
     // port: 8777,             // Custom port
