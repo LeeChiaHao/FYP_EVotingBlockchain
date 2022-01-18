@@ -13,7 +13,7 @@ const App = {
         return isAuth
     },
     load: async () => {
-        App.contract = await solidity.getElectionContract()
+        App.contract = await solidity.getElectionsContract()
         App.address = await solidity.getElectionAddress()
         App.electionID = localStorage.getItem("election")
         console.log(localStorage.getItem("election"))

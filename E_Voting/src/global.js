@@ -1,9 +1,10 @@
+import { Modal } from 'bootstrap';
 import { ethers } from 'ethers';
 import * as paillierBigint from 'paillier-bigint';
 const publicKey = new paillierBigint.PublicKey(BigInt(process.env.publicN), BigInt(process.env.publicG))
 const privateKey = new paillierBigint.PrivateKey(BigInt(process.env.privateLambda), BigInt(process.env.privateMu), publicKey)
 
-export async function getUserContrat() {
+export async function getVotersContract() {
     try {
         const provider = new ethers.providers.Web3Provider(window.ethereum, "any")
         await provider.send("eth_requestAccounts", []);
@@ -12,9 +13,8 @@ export async function getUserContrat() {
         })
         const networkId = provider.provider.networkVersion
         const signer = provider.getSigner()
-
-        const abi = userJSON.abi
-        var network = userJSON.networks[networkId]
+        const abi = votersJSON.abi
+        var network = votersJSON.networks[networkId]
         var contract = new ethers.Contract(network.address, abi, signer)
         return contract
     } catch (e) {
@@ -24,7 +24,7 @@ export async function getUserContrat() {
 }
 
 export async function isAuth(user) {
-    var contract = await getUserContrat()
+    var contract = await getVotersContract()
     console.log(await contract.isRegister(user))
     if (await contract.isRegister(user)) {
         return true
@@ -33,7 +33,7 @@ export async function isAuth(user) {
     }
 }
 
-export async function getElectionContract() {
+export async function getElectionsContract() {
     try {
         const provider = new ethers.providers.Web3Provider(window.ethereum, "any")
         await provider.send("eth_requestAccounts", []);
@@ -42,8 +42,8 @@ export async function getElectionContract() {
         })
         const networkId = provider.provider.networkVersion
         const signer = provider.getSigner()
-        const abi = electionJSON.abi
-        var network = electionJSON.networks[networkId]
+        const abi = electionsJSON.abi
+        var network = electionsJSON.networks[networkId]
         var contract = new ethers.Contract(network.address, abi, signer)
         return contract
     } catch (e) {
@@ -53,19 +53,23 @@ export async function getElectionContract() {
 }
 
 export async function getUserAddress() {
-    var contract = await getUserContrat()
+    var contract = await getVotersContract()
     var address = contract.provider.getSigner().getAddress()
     return address
 }
 
 export async function getElectionAddress() {
-    var contract = await getElectionContract()
+    var contract = await getElectionsContract()
     var address = contract.provider.getSigner().getAddress()
     return address
 }
 
 export function bigNumberToNumber(bn) {
     return ethers.BigNumber.from(bn).toNumber()
+}
+// TODO: convert all to global function
+export function popUpModal() {
+    return new Modal($("#popUpModal"))
 }
 
 export function txnLoad() {
@@ -131,4 +135,17 @@ export function encryptAdd(num1, num2) {
 
 export function decrypt(num) {
     return privateKey.decrypt(num)
+}
+
+export function electionStatus(num) {
+    switch (num) {
+        case 0:
+            return "Initial"
+        case 1:
+            return "Ongoing"
+        case 2:
+            return "End"
+        default:
+            return "Abort"
+    }
 }

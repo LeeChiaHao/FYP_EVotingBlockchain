@@ -12,7 +12,7 @@ const App = {
         return isAuth
     },
     load: async () => {
-        App.contract = await solidity.getElectionContract()
+        App.contract = await solidity.getElectionsContract()
         App.address = await solidity.getElectionAddress()
         var totalElection = solidity.bigNumberToNumber(await App.contract.totalElection())
         console.log(totalElection)
@@ -22,28 +22,31 @@ const App = {
 
     loadElection: async (total) => {
         var className = "col-lg-4 col-9 border-0 mb-5 electionCard"
+        var elections = []
         for (var x = 0; x < total; x++) {
-            console.log(x)
-            if (await App.contract.totalCandidate(x) == 0) {
-                console.log("hi")
-                continue
+            console.log("Total" + total)
+            var election = await App.contract.elections(x)
+            if (election.status == 1) {
+                $("<div></div>").addClass(className + " election" + x).appendTo(".allElections")
+                $(".election" + x).prop("id", x)
+                $(".election" + x).load("election.html")
+                elections.push(x)
             }
-            $("<div></div>").addClass(className + " election" + x).appendTo(".allElections")
-            $(".election" + x).prop("id", x)
-            $(".election" + x).load("election.html")
         }
-        App.loadTitle(total)
+        console.log(elections)
+        App.loadTitle(elections)
     },
 
-    loadTitle: async (num) => {
-        for (var x = 0; x <= num; x++) {
-            $(".election" + x).on("click", function () {
+    loadTitle: async (e) => {
+        for (var x = 0; x < e.length; x++) {
+            console.log("election" + e[x])
+            $(".election" + e[x]).on("click", function () {
                 console.log($(this).attr("id"))
                 localStorage.setItem("election", $(this).attr("id"))
                 window.location.assign("candidates.html")
             })
-            await App.contract.elections(x).then((val) => {
-                $(".election" + x).find("h5").text(val)
+            await App.contract.elections(e[x]).then((val) => {
+                $(".election" + e[x]).find("h5").text(val.name)
                 console.log(val)
             })
         }

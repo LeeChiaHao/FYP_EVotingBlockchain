@@ -11,7 +11,7 @@ const App = {
     popUpModal: null,
     delCandidate: null,
     checkAuth: async () => {
-        App.contract = await solidity.getElectionContract()
+        App.contract = await solidity.getElectionsContract()
         App.address = await solidity.getUserAddress()
         console.log(await App.contract.admin())
         if (App.address == await App.contract.admin()) {
@@ -22,7 +22,7 @@ const App = {
     },
     load: async () => {
         App.forms = document.querySelector('.validation')
-        App.contract = await solidity.getElectionContract()
+        App.contract = await solidity.getElectionsContract()
         App.address = await solidity.getElectionAddress()
         App.popUpModal = new Modal($("#popUpModal"))
         App.delCandidate = $('.delCandidate')

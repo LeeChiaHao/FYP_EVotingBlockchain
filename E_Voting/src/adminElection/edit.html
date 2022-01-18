@@ -54,8 +54,8 @@
                             <button type="submit" class="btn btn-submit w-100 d-none" id="saveBtn">Save</button>
                         </div>
                         <div class="col-4">
-                            <button class="btn btn-submit w-100" id="editBtn"
-                                onclick="App.editForm(); return false;">Edit</button>
+                            <button class="btn btn-submit w-100" id="editBtn" onclick="App.editForm(); return false;"
+                                disabled>Edit</button>
                         </div>
                         <div class="col-4">
                             <button class="btn btn-submit w-100 d-none" id="delBtn"
@@ -65,6 +65,9 @@
                             <button class="btn btn-submit w-100 d-none" id="cancelBtn"
                                 onclick="App.cancelForm();return false;">Cancel Edit</button>
                         </div>
+                    </div>
+                    <div class="noEdit fs-3 d-none">
+                        Election started. Information are not allowed to edit.
                     </div>
                 </form>
             </div>

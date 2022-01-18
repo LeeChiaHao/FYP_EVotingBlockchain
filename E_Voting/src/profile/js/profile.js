@@ -21,7 +21,7 @@ const App = {
         return isAuth
     },
     load: async () => {
-        App.contract = await solidity.getUserContrat()
+        App.contract = await solidity.getVotersContract()
         App.address = await solidity.getUserAddress()
         App.name = $("#profileName")
         App.email = $("#profileEmail")

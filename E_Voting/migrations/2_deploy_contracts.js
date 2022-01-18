@@ -1,6 +1,6 @@
-const User = artifacts.require("User");
-const Election = artifacts.require("Election");
+const Voters = artifacts.require("Voters");
+const Elections = artifacts.require("Elections");
 module.exports = async function (deployer) {
-    await deployer.deploy(User);
-    await deployer.deploy(Election, User.address);
+    await deployer.deploy(Voters);
+    await deployer.deploy(Elections, Voters.address);
 };

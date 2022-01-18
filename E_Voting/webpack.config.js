@@ -77,8 +77,8 @@ module.exports = {
         new webpack.ProvidePlugin({
             '$': 'jQuery',
             'solidity': '../../global.js',
-            'userJSON': "../build/contracts/User.json",
-            "electionJSON": "../build/contracts/Election.json"
+            'votersJSON': "../build/contracts/Voters.json",
+            "electionsJSON": "../build/contracts/Elections.json"
         }),
         new CopyWebpackPlugin([
             { from: "./src/img/success.png", to: "success.png" },

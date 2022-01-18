@@ -21,7 +21,7 @@
             <div class="col-10 mb-4">
                 <div class="title text-center m-3">
                     <h2 class="fs-3 fw-bold">
-                        Select an election and cast your vote
+                        Election list. Stat/End the election or update election's information.
                     </h2>
                 </div>
             </div>
@@ -32,6 +32,8 @@
 
         </div>
     </div>
+    <!-- Modal -->
+    <%= require("fs").readFileSync(htmlWebpackPlugin.options.HTML_PATH + "modal.html" ) %>
 </body>
 
 </html>

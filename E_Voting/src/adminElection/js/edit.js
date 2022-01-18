@@ -13,7 +13,7 @@ const App = {
     form: null,
     popUpModal: null,
     checkAuth: async () => {
-        App.contract = await solidity.getElectionContract()
+        App.contract = await solidity.getElectionsContract()
         App.address = await solidity.getUserAddress()
         console.log(await App.contract.admin())
         if (App.address == await App.contract.admin()) {
@@ -112,7 +112,8 @@ const App = {
         })
     },
     loadCandidateData: async (id, total) => {
-        $("#electionName").val(await App.contract.elections(id))
+        var election = await App.contract.elections(id)
+        $("#electionName").val(election.name)
         for (var x = 0; x <= total; x++) {
             await App.contract.electionCandidate(id, x).then((val) => {
                 $(".loadCandidate" + x).find(".candidate-label").text("Candidate " + (x + 1))
@@ -123,13 +124,20 @@ const App = {
                 var vote = BigInt(val.voteGet)
                 var add = solidity.encrypt(4)
                 var total = solidity.encryptAdd(add, vote)
-                console.log(total)
-                console.log("Decryption: " + solidity.decrypt(total))
+                // console.log(total)
+                // console.log("Decryption: " + solidity.decrypt(total))
             }
             )
         }
+        console.log(election.status)
         $("#editForm :input").prop('disabled', true)
-        $("#editBtn").prop('disabled', false)
+        if (election.status == 0) {
+            $("#editBtn").prop('disabled', false)
+        } else if (election.status == 1) {
+            $(".noEdit").removeClass("d-none")
+
+        }
+
     },
     deleteCandidate: async (num) => {
         num--;
@@ -157,6 +165,7 @@ const App = {
             if (App.totalCandidate >= 1) {
                 var allCandidates = []
                 var index = 0;
+                var votes;
                 for (var i = 0; i < App.totalCandidate; i++) {
                     allCandidates[index] = $("#candidateName" + i).val()
                     index++;
@@ -166,12 +175,14 @@ const App = {
                     index++;
                     allCandidates[index] = $("#slogan" + i).val()
                     index++;
+                    votes = solidity.encrypt(0).toString()
+                    allCandidates[index] = votes
+                    index++;
                 }
                 console.log(allCandidates)
                 try {
                     App.popUpModal.show()
                     solidity.txnLoad()
-
                     await App.contract.editElection(App.electionID, $("#electionName").val(), allCandidates).then(
                         (tx) => tx.wait().then(function () {
                             solidity.txnSuccess()

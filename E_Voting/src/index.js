@@ -1,7 +1,7 @@
 import 'bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './style.css'
-import { getUserContrat, getUserAddress, txnFail, txnSuccess, txnLoad } from './global';
+import { getVotersContract, getUserAddress, txnFail, txnSuccess, txnLoad } from './global';
 import { Modal } from 'bootstrap';
 
 
@@ -11,7 +11,7 @@ const App = {
     txnModal: null,
     form: null,
     load: async () => {
-        App.contract = await getUserContrat()
+        App.contract = await getVotersContract()
         App.address = await getUserAddress()
         App.txnModal = new Modal($("#popUpModal"))
         App.form = document.querySelector('.validation')

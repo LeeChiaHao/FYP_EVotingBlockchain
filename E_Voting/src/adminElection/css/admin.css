@@ -16,7 +16,7 @@
     cursor: pointer;
 }
 
-.electionCard:hover{
+.electionContent:hover{
     border: 5px solid black;
 }
 
@@ -28,4 +28,28 @@
 
 .election-input-group input {
     border: 2px solid black;
+}
+
+.noEdit{
+    text-align: center;
+    color: rgb(200, 0, 0);
+    font-weight: bold;
+}
+
+.electionStatus{
+    font-size: large;
+    font-weight: bolder;
+    padding: 0.5rem;
+    text-align: center;
+    background-color: yellow;
+}
+
+.btn-start, .btn-end{
+    background-color: yellow;
+    border: 2px solid #cd9542;
+    width: 100%;
+    margin-top: 0.5rem;
+}
+.btn-start:hover, .btn-end:hover{
+    background-color: white;
 }
