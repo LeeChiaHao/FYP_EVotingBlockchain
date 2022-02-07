@@ -20,6 +20,7 @@ const App = {
             return false
         }
     },
+
     load: async () => {
         App.forms = document.querySelector('.validation')
         App.contract = await solidity.getElectionsContract()
@@ -72,7 +73,6 @@ const App = {
                             break
                         default:
                             break
-
                     }
                 }
             })
@@ -116,8 +116,8 @@ const App = {
                     votes = solidity.encrypt(0).toString()
                     allCandidates[index] = votes
                     index++;
-
                 }
+
                 console.log(allCandidates)
                 try {
                     App.popUpModal.show()
@@ -163,17 +163,13 @@ const App = {
     },
 }
 
-
 window.App = App;
 window.addEventListener("load", async function () {
     App.checkAuth().then(function (result) {
         if (!result) {
             window.location.replace("/")
         } else {
-            console.log("hi")
-
             App.load()
-            console.log("hi")
             $('body').removeClass('invisible')
         }
     })

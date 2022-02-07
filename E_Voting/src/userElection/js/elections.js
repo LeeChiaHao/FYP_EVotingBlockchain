@@ -1,5 +1,5 @@
 import 'bootstrap'
-import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/css/bootstrap.min.css'
 import '../../style.css'
 import '../css/election.css'
 
@@ -11,12 +11,11 @@ const App = {
         var isAuth = await solidity.isAuth(App.address)
         return isAuth
     },
+
     load: async () => {
         App.contract = await solidity.getElectionsContract()
         App.address = await solidity.getElectionAddress()
         var totalElection = solidity.bigNumberToNumber(await App.contract.totalElection())
-        console.log(totalElection)
-
         await App.loadElection(totalElection)
     },
 
@@ -57,7 +56,6 @@ window.App = App;
 window.addEventListener("load", async function () {
     App.checkAuth().then(function (result) {
         if (!result) {
-            console.log("jinaka")
             window.location.replace("/")
         } else {
             App.load()

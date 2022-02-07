@@ -20,6 +20,7 @@ const App = {
         var isAuth = await solidity.isAuth(App.address)
         return isAuth
     },
+
     load: async () => {
         App.contract = await solidity.getVotersContract()
         App.address = await solidity.getUserAddress()
@@ -28,7 +29,6 @@ const App = {
         App.editArea = $("#editArea")
         App.submitArea = $("#submitArea")
         App.form = document.querySelector('.validation')
-
 
         var loginBN = await App.contract.voterID(App.address)
         App.loginID = ethers.BigNumber.from(loginBN).toNumber()
@@ -51,7 +51,6 @@ const App = {
         App.email.on("keyup", function () {
             App.checkChange(tmpName, tmpEmail)
         })
-
         App.editArea.hide()
         App.submitArea.addClass("d-flex")
     },
@@ -75,7 +74,6 @@ const App = {
                 window.location.reload()
             })
         }
-
     },
 
     cancelProfile: async () => {
@@ -105,6 +103,3 @@ window.addEventListener("load", async function () {
         }
     })
 })
-// $(window).on('beforeunload', function () {
-//     return "Good bye";
-// });

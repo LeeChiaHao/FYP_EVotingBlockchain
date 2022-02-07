@@ -9,7 +9,6 @@ const App = {
     checkAuth: async () => {
         App.contract = await solidity.getElectionsContract()
         App.address = await solidity.getUserAddress()
-        console.log(await App.contract.admin())
         if (App.address == await App.contract.admin()) {
             return true
         } else {
@@ -23,14 +22,12 @@ const App = {
         var totalElection = solidity.bigNumberToNumber(await App.contract.totalElection())
         // if election.status == 3 (ABORT), means this election has been deteted
         console.log(totalElection)
-
         await App.loadElection(totalElection)
     },
 
     loadElection: async (total) => {
         var className = "col-lg-4 col-9 border-0 mb-5 electionCard"
         var elections = []
-        console.log(total)
         for (var x = 0; x < total; x++) {
             console.log("Total" + x)
             var election = await App.contract.elections(x)
@@ -47,15 +44,8 @@ const App = {
     },
 
     loadData: async (e) => {
-        console.log(e)
         for (var x = 0; x < e.length; x++) {
             var election = ".election" + e[x]
-            $(election + " .electionContent").on("click", function () {
-                var id = $(this).parent().attr("id")
-                console.log(id)
-                localStorage.setItem("election", id)
-                window.location.assign("edit.html")
-            })
             await App.contract.elections(e[x]).then((val) => {
                 $(election).find("span").text(solidity.electionStatus(val.status))
                 $(election).find("h5").text(val.name)
@@ -70,6 +60,12 @@ const App = {
                         break
                 }
                 console.log(val)
+            })
+            $(election + " .electionContent").on("click", function () {
+                var id = $(this).parent().attr("id")
+                console.log("ID:" + id)
+                localStorage.setItem("election", id)
+                window.location.assign("edit.html")
             })
         }
         $('.card-header').removeClass('d-none')
@@ -125,7 +121,6 @@ window.App = App;
 window.addEventListener("load", async function () {
     App.checkAuth().then(function (result) {
         if (!result) {
-            console.log("false")
             window.location.replace("/")
         } else {
             App.load()

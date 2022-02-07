@@ -49,6 +49,7 @@ const App = {
             }
         }
     },
+
     loadAddDel: async () => {
         $(".addCandidate").on("click", async function () {
             console.log(App.totalCandidate)
@@ -70,6 +71,7 @@ const App = {
             }
         })
     },
+
     // true means load from contract, false means add manually
     loadCandidateClass: async (bool, className, num) => {
         if (!bool) {
@@ -111,6 +113,7 @@ const App = {
             $(this).addClass("election-input-group")
         })
     },
+
     loadCandidateData: async (id, total) => {
         var election = await App.contract.elections(id)
         $("#electionName").val(election.name)
@@ -129,7 +132,6 @@ const App = {
             }
             )
         }
-        console.log(election.status)
         $("#editForm :input").prop('disabled', true)
         if (election.status == 0) {
             $("#editBtn").prop('disabled', false)
@@ -139,6 +141,7 @@ const App = {
         }
 
     },
+
     deleteCandidate: async (num) => {
         num--;
         if (num >= 0) {
@@ -150,18 +153,19 @@ const App = {
             }
         }
     },
+
     editForm: async () => {
         $("#editBtn").parent().addClass('d-none')
         $("#editForm :input").prop('disabled', false)
         $("#saveBtn, #delBtn, #cancelBtn, .addCandidate, .delCandidate").removeClass('d-none')
 
     },
+
     submitForm: async () => {
         App.form.checkValidity()
         App.form.classList.add('was-validated')
         console.log($(".was-validated:invalid").length)
         if ($(".was-validated:invalid").length == 0) {
-            console.log(App.totalCandidate)
             if (App.totalCandidate >= 1) {
                 var allCandidates = []
                 var index = 0;

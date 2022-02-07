@@ -4,13 +4,14 @@ pragma experimental ABIEncoderV2;
 import "./Voters.sol";
 
 contract Elections {
+    // Represent Election's status - 0, 1, 2, 3
     enum ElectionStatus {
         INIT,
         START,
         END,
         ABORT
     }
-    address public admin;
+    address public admin; // verify
     string name;
     Voters public votersContract;
 
@@ -22,6 +23,7 @@ contract Elections {
         uint256 id;
         string name;
         string age;
+        // gender ?
         string party;
         string slogan;
         string voteGet;
@@ -57,6 +59,12 @@ contract Elections {
     //         votersContract.isRegister(0xe4Bf5c1B1c80c90720D95563923122cC16880E52);
     // }
 
+    /**
+        createElection will create a new election and add in elections mapping
+        :param id: election ID
+        :param _name: election's name
+        :param candidateInfo: candidate's information - name, age, party, slogan, voteGet
+    */
     function createElection(
         uint256 id,
         string memory _name,
@@ -84,6 +92,12 @@ contract Elections {
         }
     }
 
+    /**
+        editElection can update the elections by delete the original election's info, then update will new one
+        :param id: election ID
+        :param _name: election's name
+        :param candidateInfo: candidate's information - name, age, party, slogan, voteGet
+    */
     function editElection(
         uint256 id,
         string memory _name,
@@ -93,6 +107,10 @@ contract Elections {
         createElection(id, _name, candidateInfo);
     }
 
+    /**
+        deleteElection will empty the elections mapping
+        :param id: election's id that want to del    
+     */
     function deleteElection(uint256 id) public onlyAdmin {
         elections[id] = Election("", ElectionStatus.ABORT);
         uint256 candidateLength = totalCandidate[id];
@@ -109,6 +127,11 @@ contract Elections {
         }
     }
 
+    /**
+        editStatus can edit the election's status
+        :param id: election's id
+        :param status: election's new status
+     */
     function editStatus(uint256 id, uint256 status) public onlyAdmin {
         Election storage tmp = elections[id];
         require(tmp.status != ElectionStatus(3));

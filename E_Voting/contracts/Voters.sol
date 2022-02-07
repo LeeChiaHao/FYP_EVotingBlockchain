@@ -10,6 +10,7 @@ contract Voters {
     }
 
     mapping(uint256 => Voter) public voters;
+    // default to false, when registered, set can turn to login status directly
     mapping(address => bool) public isRegister;
     mapping(address => uint256) public voterID;
     mapping(address => mapping(uint256 => bool)) isVoted;
@@ -19,6 +20,11 @@ contract Voters {
         admin = msg.sender;
     }
 
+    /**
+        createVoter creates a new voter
+        :param _name: voter's name
+        :param _email: voter's email
+     */
     function createVoter(string memory _name, string memory _email) public {
         voterCount++;
         voters[voterCount] = Voter(_name, _email, msg.sender);
@@ -26,6 +32,11 @@ contract Voters {
         voterID[msg.sender] = voterCount;
     }
 
+    /**
+        editVoter edit the exist voter
+        :param _name: voter's name
+        :param _email: voter's email
+     */
     function editVoter(
         string memory _name,
         string memory _email,
@@ -34,7 +45,6 @@ contract Voters {
         Voter memory voter = voters[_id];
         voter.name = _name;
         voter.email = _email;
-
         voters[_id] = voter;
     }
 }

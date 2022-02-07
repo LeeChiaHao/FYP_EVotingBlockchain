@@ -1,3 +1,6 @@
+/**
+ * GLOBAL FUNCTION THAT WILL BE USED IN MULTIPLE JS FILE
+*/
 import { Modal } from 'bootstrap';
 import { ethers } from 'ethers';
 import * as paillierBigint from 'paillier-bigint';
@@ -18,7 +21,6 @@ export async function getVotersContract() {
         var contract = new ethers.Contract(network.address, abi, signer)
         return contract
     } catch (e) {
-        // window.location.reload()
         console.log(e)
     }
 }
@@ -47,7 +49,6 @@ export async function getElectionsContract() {
         var contract = new ethers.Contract(network.address, abi, signer)
         return contract
     } catch (e) {
-        // window.location.reload()
         console.log(e)
     }
 }
@@ -78,7 +79,6 @@ export function txnLoad() {
     $("#modalLoad").removeClass('d-none')
     $("#modalClose").addClass('d-none')
     $("#modalStatus").text('Making Transaction')
-
 }
 
 export function txnSuccess() {
@@ -105,7 +105,6 @@ export function customMsg(boolean, msg) {
     } else {
         $("#imgFail").removeClass('d-none')
         $("#modalStatus").text(msg)
-
     }
 }
 

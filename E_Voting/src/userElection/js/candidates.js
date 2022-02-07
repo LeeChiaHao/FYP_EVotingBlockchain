@@ -1,5 +1,5 @@
 import 'bootstrap'
-import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootstrap/dist/css/bootstrap.min.css'
 import '../../style.css'
 import '../css/candidate.css'
 
