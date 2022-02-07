@@ -6,6 +6,22 @@ import { ethers } from 'ethers';
 import * as paillierBigint from 'paillier-bigint';
 const publicKey = new paillierBigint.PublicKey(BigInt(process.env.publicN), BigInt(process.env.publicG))
 const privateKey = new paillierBigint.PrivateKey(BigInt(process.env.privateLambda), BigInt(process.env.privateMu), publicKey)
+var signature
+
+export async function setSignature(signer) {
+    console.log(signer)
+    var msg, verify
+    msg = "Hi, Please proof your identity by signing this message. It would not cost any. TQ "
+    signature = await signer.signMessage(msg)
+    console.log(signature)
+    localStorage.setItem("Signature", signature)
+    verify = ethers.utils.verifyMessage(msg, signature)
+    console.log(verify)
+}
+
+export function getSignature() {
+    return signature
+}
 
 export async function getVotersContract() {
     try {
@@ -70,7 +86,7 @@ export function bigNumberToNumber(bn) {
 }
 // TODO: convert all to global function
 export function popUpModal() {
-    return new Modal($("#popUpModal"))
+    return new Modal($("#txnModal"))
 }
 
 export function txnLoad() {

@@ -37,7 +37,7 @@ const App = {
         App.name.val(voter.name)
         App.email.val(voter.email)
         $("#profileAddress").val(voter.account)
-        App.myModal = new Modal($("#popUpModal"))
+        App.myModal = new Modal($("#txnModal"))
     },
 
     editProfile: async () => {

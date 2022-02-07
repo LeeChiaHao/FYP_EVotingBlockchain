@@ -11,7 +11,7 @@ const App = {
     delCandidate: null,
     electionID: null,
     form: null,
-    popUpModal: null,
+    txnModal: null,
     checkAuth: async () => {
         App.contract = await solidity.getElectionsContract()
         App.address = await solidity.getUserAddress()
@@ -26,7 +26,7 @@ const App = {
     load: async () => {
         App.form = document.querySelector("#editForm")
         App.electionID = localStorage.getItem("election")
-        App.popUpModal = new Modal($("#popUpModal"))
+        App.txnModal = new Modal($("#txnModal"))
         App.totalCandidate = await App.contract.totalCandidate(App.electionID)
         App.delCandidate = $('.delCandidate')
 
@@ -185,7 +185,7 @@ const App = {
                 }
                 console.log(allCandidates)
                 try {
-                    App.popUpModal.show()
+                    App.txnModal.show()
                     solidity.txnLoad()
                     await App.contract.editElection(App.electionID, $("#electionName").val(), allCandidates).then(
                         (tx) => tx.wait().then(function () {
@@ -205,7 +205,7 @@ const App = {
                     console.log(e + " ==== " + c)
                 })
             } else {
-                App.popUpModal.show()
+                App.txnModal.show()
                 solidity.customMsg(false, "Must have more than 1 candidate for an election")
             }
         }

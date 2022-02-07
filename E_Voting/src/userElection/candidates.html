@@ -15,29 +15,36 @@
     </div>
 
     <div class="container">
-        <div class="row justify-content-around">
-            <div class="col-10 mb-4">
-                <div class="title text-center m-3">
-                    <h2 class="fs-3 fw-bold">
-                        Select a candidate and confirm your vote
-                    </h2>
+        <form onsubmit="App.submitVote(); return false;">
+            <div class="row justify-content-around">
+                <div class="col-10 mb-4">
+                    <div class="title text-center m-3">
+                        <h2 class="fs-3 fw-bold">
+                            Select a candidate and confirm your vote
+                        </h2>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <div class="row allCandidates g-5">
+            <div class="row allCandidates g-5">
 
-        </div>
+            </div>
 
-        <div class="row justify-content-around">
-            <div class="col-10 mb-4">
-                <div class="title text-center m-3">
-                    <button class="fs-3 fw-bold btn btn-submit">
-                        Confirm your vote
-                    </button>
+            <div class="row justify-content-around">
+                <div class="col-10 mb-4">
+                    <div class="title text-center m-3">
+                        <button class="fs-3 fw-bold btn btn-submit">
+                            Confirm your vote
+                        </button>
+
+                    </div>
                 </div>
             </div>
-        </div>
+        </form>
+        <button class="decrypt">
+            Decrypt
+        </button>
+
     </div>
 </body>
 

@@ -8,7 +8,7 @@ const App = {
     contract: null,
     address: null,
     totalCandidate: null,
-    popUpModal: null,
+    txnModal: null,
     delCandidate: null,
     checkAuth: async () => {
         App.contract = await solidity.getElectionsContract()
@@ -25,7 +25,7 @@ const App = {
         App.forms = document.querySelector('.validation')
         App.contract = await solidity.getElectionsContract()
         App.address = await solidity.getElectionAddress()
-        App.popUpModal = new Modal($("#popUpModal"))
+        App.txnModal = new Modal($("#txnModal"))
         App.delCandidate = $('.delCandidate')
         App.totalCandidate = 1;
         var divCandidate
@@ -120,7 +120,7 @@ const App = {
 
                 console.log(allCandidates)
                 try {
-                    App.popUpModal.show()
+                    App.txnModal.show()
                     solidity.txnLoad()
                     var eid = solidity.bigNumberToNumber(await App.contract.totalElection())
 
@@ -142,7 +142,7 @@ const App = {
                     console.log(e + " ==== " + c)
                 })
             } else {
-                App.popUpModal.show()
+                App.txnModal.show()
                 solidity.customMsg(false, "Must have more than 1 candidate for an election")
             }
         }

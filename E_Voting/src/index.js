@@ -1,18 +1,20 @@
 import 'bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './style.css'
-import { getVotersContract, getUserAddress, txnFail, txnSuccess, txnLoad } from './global';
+import { getVotersContract, getUserAddress, txnFail, txnSuccess, txnLoad, setSignature, getSignature } from './global';
 import { Modal } from 'bootstrap';
 
 const App = {
     contract: null,
     address: null,
     txnModal: null,
+    requestModal: null,
     form: null,
     load: async () => {
         App.contract = await getVotersContract()
         App.address = await getUserAddress()
-        App.txnModal = new Modal($("#popUpModal"))
+        App.txnModal = new Modal($("#txnModal"))
+        App.requestModal = new Modal($('#requestModal'))
         App.form = document.querySelector('.validation')
         console.log(App.address)
         console.log(await App.contract.isRegister(App.address))
@@ -20,8 +22,15 @@ const App = {
             window.location.replace("create.html")
         }
         if (await App.contract.isRegister(App.address)) {
-            window.location.assign("profile.html")
+            App.requestModal.show()
+
         }
+        $(".modalBtn").on("click", async function () {
+            await setSignature(App.contract.provider.getSigner())
+            console.log(getSignature())
+            window.location.assign("profile.html")
+
+        })
         $('body').removeClass('invisible')
     },
 
@@ -36,8 +45,8 @@ const App = {
                 await App.contract.createVoter($("#userName").val(), $("#email").val()).then(
                     (tx) => tx.wait().then(function () {
                         txnSuccess()
-                        $(".modalClose").on("click", function () {
-                            window.location.assign("profile.html")
+                        $(".modalClose").on("click", async function () {
+                            App.requestModal.show()
                         })
                     })
                 )

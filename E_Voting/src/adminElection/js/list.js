@@ -97,7 +97,7 @@ const App = {
 
     endE: async () => {
         $(".btn-end").on("click", async function () {
-            solidity.popUpModal().show()
+            solidity.txnModal().show()
 
             var eid = $(this).parent().attr("id")
             try {

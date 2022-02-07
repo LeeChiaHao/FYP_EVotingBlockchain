@@ -31,6 +31,7 @@ contract Elections {
 
     // store election ID, basically the uint will be same, then use the ID to find candidate
     mapping(uint256 => Election) public elections;
+    mapping(uint256 => mapping(string => string)) public encryptedVerify;
 
     // election ID => candidate mapping
     mapping(uint256 => mapping(uint256 => Candidate)) public electionCandidate;
@@ -137,5 +138,23 @@ contract Elections {
         require(tmp.status != ElectionStatus(3));
         tmp.status = ElectionStatus(status);
         elections[id] = tmp;
+    }
+
+    /**
+
+     */
+    function addVote(
+        uint256 id,
+        string memory sign,
+        string memory encrypted,
+        string[] memory votesGet
+    ) public {
+        encryptedVerify[id][sign] = encrypted;
+        uint256 candidateLength = totalCandidate[id];
+        for (uint256 x = 0; x < candidateLength; x++) {
+            Candidate memory candidate = electionCandidate[id][candidateLength];
+            candidate.voteGet = votesGet[x];
+            electionCandidate[id][candidateLength] = candidate;
+        }
     }
 }
