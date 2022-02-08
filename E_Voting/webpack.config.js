@@ -5,14 +5,19 @@ const HtmlWebpackInjector = require('html-webpack-injector');
 const Dotenv = require('dotenv-webpack');
 const webpack = require("webpack")
 
-// let htmlPageNames = ['profile', 'example2', 'example3', 'example4'];
-// let multipleHtmlPlugins = htmlPageNames.map(name => {
-//     return new HtmlWebpackPlugin({
-//         template: `./src/${name}.html`, // relative path to the HTML files
-//         filename: `${name}.html`, // output HTML files
-//         chunks: [`${name}`] // respective JS files
-//     })
-// });
+let template = ['adminElection/', 'adminElection/', 'adminElection/', 'profile/', 'userElection/', 'userElection/', 'electionResult/', 'electionResult/']
+let count = -1
+let files = ['create', 'list', 'edit', 'profile', 'elections', 'candidates', 'resultList', 'result'];
+let multipleHtmlPlugins = files.map(name => {
+    count++
+    return new HtmlWebpackPlugin({
+        template: `./src/${template[count]}${name}.html`, // relative path to the HTML files
+        filename: `${name}.html`, // output HTML files
+        chunks: [`${name}_head`],  // respective JS files
+        HTML_PATH: './src/commonHTML/'
+    })
+
+});
 module.exports = {
     mode: 'development',
     entry: {
@@ -22,7 +27,9 @@ module.exports = {
         index_head: "./src/index.js",
         profile_head: "./src/profile/js/profile.js",
         elections_head: "./src/userElection/js/elections.js",
-        candidates_head: "./src/userElection/js/candidates.js"
+        candidates_head: "./src/userElection/js/candidates.js",
+        resultList_head: "./src/electionResult/js/resultList.js",
+        result_head: "./src/electionResult/js/result.js",
     },
     // resolve: {
     //     alias: {
@@ -32,45 +39,9 @@ module.exports = {
     plugins: [
         new Dotenv(),
         new HtmlWebpackPlugin({
-            template: "./src/adminElection/create.html",
-            filename: "create.html",
-            chunks: ['create_head'],
-            HTML_PATH: './src/commonHTML/'
-        }),
-        new HtmlWebpackPlugin({
-            template: "./src/adminElection/list.html",
-            filename: "list.html",
-            chunks: ['list_head'],
-            HTML_PATH: './src/commonHTML/'
-        }),
-        new HtmlWebpackPlugin({
-            template: "./src/adminElection/edit.html",
-            filename: "edit.html",
-            chunks: ['edit_head'],
-            HTML_PATH: './src/commonHTML/'
-        }),
-        new HtmlWebpackPlugin({
             template: "./src/index.html",
             filename: "index.html",
             chunks: ['index_head'],
-            HTML_PATH: './src/commonHTML/'
-        }),
-        new HtmlWebpackPlugin({
-            template: "./src/profile/profile.html",
-            filename: "profile.html",
-            chunks: ['profile_head'],
-            HTML_PATH: './src/commonHTML/'
-        }),
-        new HtmlWebpackPlugin({
-            template: "./src/userElection/elections.html",
-            filename: "elections.html",
-            chunks: ['elections_head'],
-            HTML_PATH: './src/commonHTML/'
-        }),
-        new HtmlWebpackPlugin({
-            template: "./src/userElection/candidates.html",
-            filename: "candidates.html",
-            chunks: ['candidates_head'],
             HTML_PATH: './src/commonHTML/'
         }),
         // global import in every js file
@@ -90,7 +61,7 @@ module.exports = {
         ]),
         new HtmlWebpackInjector()
 
-    ],
+    ].concat(multipleHtmlPlugins),
     devServer: { contentBase: path.join(__dirname, "dist"), compress: true },
     module: {
         rules: [

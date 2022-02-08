@@ -15,7 +15,7 @@
     </div>
 
     <div class="container">
-        <form onsubmit="App.submitVote(); return false;">
+        <form>
             <div class="row justify-content-around">
                 <div class="col-10 mb-4">
                     <div class="title text-center m-3">
@@ -33,10 +33,8 @@
             <div class="row justify-content-around">
                 <div class="col-10 mb-4">
                     <div class="title text-center m-3">
-                        <button class="fs-3 fw-bold btn btn-submit">
-                            Confirm your vote
-                        </button>
-
+                        <input type="button" class="fs-3 fw-bold btn btn-submit" id="btn-confirm"
+                            value="Confirm Your Vote">
                     </div>
                 </div>
             </div>
@@ -46,6 +44,11 @@
         </button>
 
     </div>
+
+    <!-- TxnModal -->
+    <%= require("fs").readFileSync(htmlWebpackPlugin.options.HTML_PATH + "txnModal.html" ) %>
+        <!-- RequestModal -->
+        <%= require("fs").readFileSync(htmlWebpackPlugin.options.HTML_PATH + "requestModal.html" ) %>
 </body>
 
 </html>

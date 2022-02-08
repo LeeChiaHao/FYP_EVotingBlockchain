@@ -36,14 +36,6 @@
     font-weight: bold;
 }
 
-.electionStatus{
-    font-size: large;
-    font-weight: bolder;
-    padding: 0.5rem;
-    text-align: center;
-    background-color: yellow;
-}
-
 .btn-start, .btn-end{
     background-color: yellow;
     border: 2px solid #cd9542;

@@ -85,16 +85,16 @@ export function bigNumberToNumber(bn) {
     return ethers.BigNumber.from(bn).toNumber()
 }
 // TODO: convert all to global function
-export function popUpModal() {
+export function txnModal() {
     return new Modal($("#txnModal"))
 }
 
-export function txnLoad() {
+export function txnLoad(txt) {
     $("#imgFail").addClass('d-none')
     $("#imgSuccess").addClass('d-none')
     $("#modalLoad").removeClass('d-none')
     $("#modalClose").addClass('d-none')
-    $("#modalStatus").text('Making Transaction')
+    $("#modalStatus").text(txt)
 }
 
 export function txnSuccess() {

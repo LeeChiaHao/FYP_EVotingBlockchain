@@ -3,8 +3,7 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import { ethers } from 'ethers'
 import '../../style.css'
 import '../css/candidate.css'
-// import encrypt from 'ethereumjs-util'
-const encryption = require('ethereumjs-util');
+import { Modal } from 'bootstrap';
 import { encrypt } from '@metamask/eth-sig-util'
 
 const App = {
@@ -13,6 +12,7 @@ const App = {
     electionID: null,
     voted: null,
     totalCandidate: null,
+    reqModal: null,
     checkAuth: async () => {
         App.address = await solidity.getUserAddress()
         var isAuth = await solidity.isAuth(App.address)
@@ -22,11 +22,19 @@ const App = {
         App.contract = await solidity.getElectionsContract()
         App.address = await solidity.getElectionAddress()
         App.electionID = localStorage.getItem("election")
+        App.reqModal = new Modal($("#requestModal"))
         console.log(localStorage.getItem("election"))
 
         App.totalCandidate = await App.contract.totalCandidate(App.electionID)
         console.log("Candidates: " + App.totalCandidate)
         App.loadCandidate(App.electionID, App.totalCandidate)
+        await App.onclickModal()
+
+        $("#btn-confirm").on("click", async (e) => {
+            e.preventDefault()
+            e.stopImmediatePropagation()
+            await App.submitVote()
+        })
     },
 
     loadCandidate: async (id, total) => {
@@ -66,43 +74,90 @@ const App = {
     },
 
     submitVote: async () => {
-        var e = await App.contract.encryptedVerify(0, "0x5aabd9d81fda3bb28b568942107729be9a14b8e5e0823ee57934ba8c5a6940ec1521f1308ec16578c9a9d84aa1fcb0bc837ae6e130e280d162d204640d0182f81c")
-            .then(async (val) => {
-                console.log(val)
-                // var plain = await ethereum.request({
-                //     method: 'eth_decrypt',
-                //     params: [val, App.address],
-                // })
-                // console.log("Decrpted: " + plain)
-            })
-        // console.log(e.encryptedVerify)
+        // var e = await App.contract.encryptedVerify(0, "0x5aabd9d81fda3bb28b568942107729be9a14b8e5e0823ee57934ba8c5a6940ec1521f1308ec16578c9a9d84aa1fcb0bc837ae6e130e280d162d204640d0182f81c")
+        //     .then(async (val) => {
+        //         console.log(val)
+        //         // var plain = await ethereum.request({
+        //         //     method: 'eth_decrypt',
+        //         //     params: [val, App.address],
+        //         // })
+        //         // console.log("Decrpted: " + plain)
+        //     })
+
         if (App.voted != null) {
-            var signature = localStorage.getItem("Signature")
-            var encrypt = await App.requestEncrypt()
-            var voteGet = await App.setVoteGet()
-            console.log(App.electionID + signature + encrypt + voteGet)
-            try {
-                await App.contract.addVote(App.electionID, signature, encrypt, voteGet).then(
-                    (tx) => tx.wait().then(() => {
-                        console.log("Success")
-                    })
-                )
-            } catch (e) {
-                console.log(e)
-            }
+            App.requestModal()
         }
+    },
+
+    requestModal: async () => {
+        $(".sign").addClass("d-none")
+        $(".option").removeClass("d-none")
+        App.reqModal.show()
+        $('.modalTitle').text("Voting Confirmation")
+        $('.modalBody').html("<p>Are you sure you want to vote to: <\p> <h4 class='text-center'> Candidate " + (parseInt(App.voted) + 1) + "<\h4>")
+    },
+
+    onclickModal: async () => {
+        $("#modalYes").on("click", async function () {
+            App.reqModal.hide()
+            solidity.txnModal().show()
+            solidity.txnLoad("Requesting Encryption Key")
+            var signature = localStorage.getItem("Signature")
+            console.log("Twiceeee whyyy")
+            var encrypt
+            await App.requestEncrypt().then(async (re) => {
+                encrypt = re
+                console.log("Encrypt: " + encrypt)
+                if (encrypt != null) {
+                    console.log("Don't Enter");
+                    solidity.txnLoad("Making Transaction")
+                    var voteGet = await App.setVoteGet()
+                    console.log(App.electionID + signature + encrypt + voteGet)
+                    try {
+                        await App.contract.addVote(App.electionID, signature, encrypt, voteGet).then(
+                            (tx) => tx.wait().then(() => {
+                                solidity.txnSuccess()
+                            })
+                        )
+                    } catch (e) {
+                        console.log(e)
+                        solidity.txnFail()
+                    }
+                } else {
+                    console.log("Key Failed")
+                }
+            })
+        })
+
+        $("#modalNo").on("click", async function () {
+            App.reqModal.hide()
+        })
+
+        $("#modalClose").on("click", async function () {
+            window.location.replace("elections.html")
+        })
     },
 
     requestEncrypt: async () => {
         var key
         console.log('hi')
-        console.log(ethereum)
         await ethereum.request({
             method: 'eth_getEncryptionPublicKey',
             params: [App.address],
         }).then((result) => {
             key = result
             console.log(key)
+
+        }).catch((error) => {
+            solidity.customMsg(false, "Request Encryption Key Failed")
+            return null
+            // if (error.code === 4001) {
+            //     // EIP-1193 userRejectedRequest error
+            //     console.log("We can't encrypt anything without the key.");
+            //     return null
+            // } else {
+            //     console.error(error);
+            // }
         })
         var data = "Candidate " + App.voted
         var encrypted = ethers.utils.hexlify(Buffer.from(

@@ -40,7 +40,7 @@ const App = {
         if ($(".was-validated:invalid").length == 0) {
             try {
                 App.txnModal.show()
-                txnLoad()
+                txnLoad("Making Transaction")
                 console.log($("#userName").val() + $("#email").val())
                 await App.contract.createVoter($("#userName").val(), $("#email").val()).then(
                     (tx) => tx.wait().then(function () {

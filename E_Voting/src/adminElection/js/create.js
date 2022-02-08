@@ -121,7 +121,7 @@ const App = {
                 console.log(allCandidates)
                 try {
                     App.txnModal.show()
-                    solidity.txnLoad()
+                    solidity.txnLoad("Making Transaction")
                     var eid = solidity.bigNumberToNumber(await App.contract.totalElection())
 
                     await App.contract.createElection(eid, $("#electionName").val(), allCandidates).then(

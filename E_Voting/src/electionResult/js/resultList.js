@@ -1,7 +1,6 @@
 import 'bootstrap'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import '../../style.css'
-import '../css/election.css'
 
 const App = {
     contract: null,
@@ -25,7 +24,7 @@ const App = {
         for (var x = 0; x < total; x++) {
             console.log("Total" + total)
             var election = await App.contract.elections(x)
-            if (election.status == 1) {
+            if (election.status == 2) {
                 $("<div></div>").addClass(className + " election" + x).appendTo(".allElections")
                 $(".election" + x).prop("id", x)
                 $(".election" + x).load("election.html")
@@ -45,21 +44,12 @@ const App = {
                 window.location.assign("candidates.html")
             })
             await App.contract.elections(e[x]).then((val) => {
-                $(".electionStatus").removeClass("d-none")
                 $(".election" + e[x]).find("h5").text(val.name)
-            })
-            await App.contract.encryptedVerify(e[x], localStorage.getItem("Signature")).then((val) => {
-                if (val != "") {
-                    console.log("Value: " + val)
-                    $(".election" + e[x]).find(".electionStatus").text("Status: Voted")
-                } else {
-                    $(".election" + e[x]).find(".electionStatus").text("Status: Not Yet Vote")
-
-                }
             })
         }
     }
 }
+
 
 window.App = App;
 window.addEventListener("load", async function () {

@@ -186,7 +186,7 @@ const App = {
                 console.log(allCandidates)
                 try {
                     App.txnModal.show()
-                    solidity.txnLoad()
+                    solidity.txnLoad("Making Transaction")
                     await App.contract.editElection(App.electionID, $("#electionName").val(), allCandidates).then(
                         (tx) => tx.wait().then(function () {
                             solidity.txnSuccess()

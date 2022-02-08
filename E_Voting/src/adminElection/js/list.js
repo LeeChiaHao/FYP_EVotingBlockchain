@@ -75,7 +75,7 @@ const App = {
 
     startE: async () => {
         $(".btn-start").on("click", async function () {
-            solidity.popUpModal().show()
+            solidity.txnModal().show()
 
             var eid = $(this).parent().attr("id")
             try {
