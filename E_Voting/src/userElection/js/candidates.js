@@ -23,18 +23,24 @@ const App = {
         App.address = await solidity.getElectionAddress()
         App.electionID = localStorage.getItem("election")
         App.reqModal = new Modal($("#requestModal"))
-        console.log(localStorage.getItem("election"))
-
         App.totalCandidate = await App.contract.totalCandidate(App.electionID)
-        console.log("Candidates: " + App.totalCandidate)
-        App.loadCandidate(App.electionID, App.totalCandidate)
-        await App.onclickModal()
 
-        $("#btn-confirm").on("click", async (e) => {
-            e.preventDefault()
-            e.stopImmediatePropagation()
-            await App.submitVote()
+        App.loadCandidate(App.electionID, App.totalCandidate)
+        await App.contract.encryptedVerify(App.electionID, localStorage.getItem("Signature")).then(async (val) => {
+            console.log(val)
+            if (val == "") {
+                await App.onclickModal()
+
+                $("#btn-confirm").on("click", async () => {
+                    await App.submitVote()
+                })
+            } else {
+                $(".noVote").removeClass("d-none")
+                $("#btn-confirm").prop("disabled", true)
+
+            }
         })
+
     },
 
     loadCandidate: async (id, total) => {
@@ -42,12 +48,7 @@ const App = {
         for (var x = 0; x < total; x++) {
             $("<div></div").addClass(className + " candidate" + x).appendTo(".allCandidates")
             $(".candidate" + x).prop("id", x)
-
             $(".candidate" + x).load("candidate.html")
-            await App.contract.electionCandidate(id, x).then((val) => {
-                console.log(val.name)
-            })
-
             if ((x + 1) == total) {
                 App.loadCandidateData(id, x)
             }
@@ -112,7 +113,6 @@ const App = {
                     console.log("Don't Enter");
                     solidity.txnLoad("Making Transaction")
                     var voteGet = await App.setVoteGet()
-                    console.log(App.electionID + signature + encrypt + voteGet)
                     try {
                         await App.contract.addVote(App.electionID, signature, encrypt, voteGet).then(
                             (tx) => tx.wait().then(() => {
@@ -188,18 +188,14 @@ const App = {
             await App.contract.electionCandidate(App.electionID, x).then((val) => {
                 var vote = BigInt(val.voteGet)
                 if (x == App.voted) {
-                    voteGet.push(solidity.encryptAdd(solidity.encrypt(1), vote))
+                    voteGet.push(solidity.encryptAdd(solidity.encrypt(1), vote).toString())
                 } else {
-                    voteGet.push(solidity.encryptAdd(solidity.encrypt(0), vote))
-
+                    voteGet.push(solidity.encryptAdd(solidity.encrypt(0), vote).toString())
                 }
             })
         }
-        console.log(voteGet)
+        console.log(typeof (voteGet[1]))
         return voteGet
-        // for (var x = 0; x < App.totalCandidate; x++) {
-        //     console.log(solidity.decrypt(voteGet[x]))
-        // }
     }
 }
 

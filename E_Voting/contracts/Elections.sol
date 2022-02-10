@@ -44,6 +44,7 @@ contract Elections {
 
     uint256 public totalElection = 0;
     event electionInfo(uint256 e, uint256 c);
+    event candidateLen(uint256 len);
 
     constructor(address voters) public {
         votersContract = Voters(voters);
@@ -72,7 +73,7 @@ contract Elections {
         string[] memory candidateInfo
     ) public onlyAdmin {
         elections[id] = Election(_name, ElectionStatus.INIT);
-        uint256 length = candidateInfo.length / 4;
+        uint256 length = candidateInfo.length / 5;
         uint256 index = 0;
         for (uint256 x = 0; x < length; x++) {
             electionCandidate[id][x] = Candidate(
@@ -117,7 +118,7 @@ contract Elections {
         uint256 candidateLength = totalCandidate[id];
         totalCandidate[id] = 0;
         for (uint256 x = 0; x < candidateLength; x++) {
-            electionCandidate[totalElection][candidateLength] = Candidate(
+            electionCandidate[totalElection][x] = Candidate(
                 0,
                 "",
                 "",
@@ -152,9 +153,10 @@ contract Elections {
         encryptedVerify[id][sign] = encrypted;
         uint256 candidateLength = totalCandidate[id];
         for (uint256 x = 0; x < candidateLength; x++) {
-            Candidate memory candidate = electionCandidate[id][candidateLength];
+            emit candidateLen(candidateLength);
+            Candidate memory candidate = electionCandidate[id][x];
             candidate.voteGet = votesGet[x];
-            electionCandidate[id][candidateLength] = candidate;
+            electionCandidate[id][x] = candidate;
         }
     }
 }

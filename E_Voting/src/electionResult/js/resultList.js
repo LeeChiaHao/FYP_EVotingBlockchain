@@ -41,7 +41,7 @@ const App = {
             $(".election" + e[x]).on("click", function () {
                 console.log($(this).attr("id"))
                 localStorage.setItem("election", $(this).attr("id"))
-                window.location.assign("candidates.html")
+                window.location.assign("results.html")
             })
             await App.contract.elections(e[x]).then((val) => {
                 $(".election" + e[x]).find("h5").text(val.name)

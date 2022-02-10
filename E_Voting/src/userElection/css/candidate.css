@@ -6,3 +6,8 @@
     border: 5px solid black;
 }
 
+.noVote{
+    text-align: center;
+    color: rgb(200, 0, 0);
+    font-weight: bold;
+}
