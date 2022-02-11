@@ -1,0 +1,23 @@
+.history{
+    background-color: rgb(138, 224, 229);  
+}
+
+.title {
+    width: 30%;
+}
+
+.content {
+    width: 70%;
+}
+
+.historyList{
+    margin: 2rem;
+}
+
+.historyList li{
+    background-color: rgb(138, 224, 229);  
+    color: black;
+    font-weight: bold;
+    border: none;
+    border-bottom: 1px solid black;
+}

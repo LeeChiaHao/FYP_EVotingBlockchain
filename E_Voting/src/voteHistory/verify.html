@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Verify Vote</title>
+</head>
+
+<body>
+    <!-- header -->
+    <div id="header">
+        <%= require("fs").readFileSync(htmlWebpackPlugin.options.HTML_PATH + "header.html" ) %>
+    </div>
+
+    <div class="container">
+        <div class="row justify-content-around">
+            <div class="col-10 mb-4">
+                <div class="text-center m-3">
+                    <h2 class="fs-3 fw-bold ">
+                        Vote History of
+                    </h2>
+                    <h2 class="fs-3 fw-bold elecName ">
+
+                    </h2>
+                </div>
+            </div>
+
+            <div class="col-10 p-3 mb-5 history">
+                <ul class="list-group list-group-horizontal historyList">
+                    <li class="list-group-item title">Candidate Vote:</li>
+                    <li class="list-group-item content historyCandidate"></li>
+                </ul>
+
+                <ul class="list-group list-group-horizontal historyList">
+                    <li class="list-group-item title">Time: </li>
+                    <li class="list-group-item content historyTime"></li>
+                </ul>
+
+                <ul class="list-group list-group-horizontal historyList">
+                    <li class="list-group-item title">Transaction ID: </li>
+                    <li class="list-group-item content historyTxn text-break"></li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- TxnModal -->
+    <%= require("fs").readFileSync(htmlWebpackPlugin.options.HTML_PATH + "txnModal.html" ) %>
+        <!-- RequestModal -->
+        <%= require("fs").readFileSync(htmlWebpackPlugin.options.HTML_PATH + "requestModal.html" ) %>
+</body>
+
+</html>

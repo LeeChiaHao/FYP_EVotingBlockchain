@@ -28,6 +28,9 @@ const App = {
     },
 
     countWinner: async (candidates) => {
+        if (candidates == 1) {
+            $(".others").addClass("d-none")
+        }
         var max = 0
         for (var x = 0; x < candidates; x++) {
             await App.contract.electionCandidate(App.electionID, x).then((val) => {

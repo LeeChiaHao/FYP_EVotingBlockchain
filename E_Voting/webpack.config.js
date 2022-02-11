@@ -6,9 +6,11 @@ const Dotenv = require('dotenv-webpack');
 const webpack = require("webpack")
 
 let template = ['adminElection/', 'adminElection/', 'adminElection/', 'profile/',
-    'userElection/', 'userElection/', 'electionResult/', 'electionResult/', 'voteHistory/']
+    'userElection/', 'userElection/', 'electionResult/', 'electionResult/',
+    'voteHistory/', 'voteHistory/']
 let count = -1
-let files = ['create', 'list', 'edit', 'profile', 'elections', 'candidates', 'resultList', 'results', 'historyList'];
+let files = ['create', 'list', 'edit', 'profile', 'elections',
+    'candidates', 'resultList', 'results', 'historyList', 'verify'];
 let multipleHtmlPlugins = files.map(name => {
     count++
     return new HtmlWebpackPlugin({
@@ -31,7 +33,8 @@ module.exports = {
         candidates_head: "./src/userElection/js/candidates.js",
         resultList_head: "./src/electionResult/js/resultList.js",
         results_head: "./src/electionResult/js/results.js",
-        historyList_head: "./src/voteHistory/js/historyList.js"
+        historyList_head: "./src/voteHistory/js/historyList.js",
+        verify_head: "./src/voteHistory/js/verify.js"
     },
     // resolve: {
     //     alias: {
