@@ -162,3 +162,17 @@ export function electionStatus(num) {
             return "Abort"
     }
 }
+
+export function caretOnClick() {
+    $(".btn-collapse").on("click", function () {
+        console.log($(this));
+        var caret = $(this).find(".caret")
+        if (caret.hasClass("down")) {
+            caret.removeClass("down")
+            caret.html("&#9650;")
+        } else {
+            caret.addClass("down")
+            caret.html("&#9660;")
+        }
+    })
+}

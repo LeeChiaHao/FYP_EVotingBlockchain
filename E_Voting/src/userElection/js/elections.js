@@ -16,6 +16,7 @@ const App = {
         App.contract = await solidity.getElectionsContract()
         App.address = await solidity.getElectionAddress()
         var totalElection = solidity.bigNumberToNumber(await App.contract.totalElection())
+        solidity.caretOnClick()
         await App.loadElection(totalElection)
     },
 
@@ -26,14 +27,25 @@ const App = {
             console.log("Total" + total)
             var election = await App.contract.elections(x)
             if (election.status == 1) {
-                $("<div></div>").addClass(className + " election" + x).appendTo(".allElections")
-                $(".election" + x).prop("id", x)
-                $(".election" + x).load("election.html")
-                elections.push(x)
+                var append
+                var e = ".election" + x
+                await App.contract.encryptedVerify(x, localStorage.getItem("Signature")).then((val) => {
+                    if (val != "") {
+                        console.log("Value: " + val)
+                        append = ".voted"
+                    } else {
+                        append = ".noVote"
+                    }
+                    $(append).find(".noList").addClass("d-none")
+                    $("<div></div>").addClass(className + " election" + x).appendTo(append)
+                    $(e).prop("id", x)
+                    $(e).load("election.html")
+                    elections.push(x)
+                })
             }
         }
         console.log(elections)
-        App.loadTitle(elections)
+        await App.loadTitle(elections)
     },
 
     loadTitle: async (e) => {
@@ -45,17 +57,7 @@ const App = {
                 window.location.assign("candidates.html")
             })
             await App.contract.elections(e[x]).then((val) => {
-                $(".electionStatus").removeClass("d-none")
                 $(".election" + e[x]).find("h5").text(val.name)
-            })
-            await App.contract.encryptedVerify(e[x], localStorage.getItem("Signature")).then((val) => {
-                if (val != "") {
-                    console.log("Value: " + val)
-                    $(".election" + e[x]).find(".electionStatus").text("Status: Voted")
-                } else {
-                    $(".election" + e[x]).find(".electionStatus").text("Status: Not Yet Vote")
-
-                }
             })
         }
     }

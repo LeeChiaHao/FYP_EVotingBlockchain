@@ -31,7 +31,15 @@ contract Elections {
 
     // store election ID, basically the uint will be same, then use the ID to find candidate
     mapping(uint256 => Election) public elections;
+
+    // election ID, then the voter's signature (so can be verify by anyone), then the encrypted string that can only be decrypted by voter
     mapping(uint256 => mapping(string => string)) public encryptedVerify;
+
+    // to do: store the signature (?), so can verify the vote, else u dun know who got vote before (if just use the encryptedVerify)
+    mapping(uint256 => string) public voterVerify;
+
+    // voter's signature --> then block number, so can retrieve time and transaction ID
+    mapping(string => uint256) public verifyTimeID;
 
     // election ID => candidate mapping
     mapping(uint256 => mapping(uint256 => Candidate)) public electionCandidate;
@@ -43,6 +51,7 @@ contract Elections {
     mapping(uint256 => mapping(string => string)) verifyVote;
 
     uint256 public totalElection = 0;
+    uint256 public totalVerify = 0;
     event electionInfo(uint256 e, uint256 c);
     event candidateLen(uint256 len);
 
@@ -150,6 +159,10 @@ contract Elections {
         string memory encrypted,
         string[] memory votesGet
     ) public {
+        voterVerify[totalVerify] = sign;
+        totalVerify++;
+
+        verifyTimeID[sign] = block.number;
         encryptedVerify[id][sign] = encrypted;
         uint256 candidateLength = totalCandidate[id];
         for (uint256 x = 0; x < candidateLength; x++) {

@@ -21,8 +21,8 @@ const App = {
         App.address = await solidity.getElectionAddress()
         var totalElection = solidity.bigNumberToNumber(await App.contract.totalElection())
         // if election.status == 3 (ABORT), means this election has been deteted
-        console.log(totalElection)
         await App.loadElection(totalElection)
+        solidity.caretOnClick()
     },
 
     loadElection: async (total) => {
@@ -35,9 +35,27 @@ const App = {
             if (election.status == 3) {
                 continue
             }
-            $("<div></div>").addClass(className + " election" + x).appendTo(".allElections")
-            $(".election" + x).prop("id", x)
-            $(".election" + x).load("election.html")
+            var e = ".election" + x
+            var append
+            console.log(election.status);
+            switch (election.status) {
+                case 0:
+                    append = ".initialE"
+                    break
+                case 1:
+                    append = ".ongoingE"
+                    break
+                case 2:
+                    append = ".endE"
+                    break
+                default:
+                    break
+            }
+            console.log(append)
+            $(append).find(".noList").addClass("d-none")
+            $("<div></div>").addClass(className + " election" + x).appendTo(append)
+            $(e).prop("id", x)
+            $(e).load("election.html")
             elections.push(x)
         }
         App.loadData(elections)
@@ -47,7 +65,6 @@ const App = {
         for (var x = 0; x < e.length; x++) {
             var election = ".election" + e[x]
             await App.contract.elections(e[x]).then((val) => {
-                $(election).find("span").text(solidity.electionStatus(val.status))
                 $(election).find("h5").text(val.name)
                 switch (val.status) {
                     case 0:
@@ -59,7 +76,6 @@ const App = {
                     default:
                         break
                 }
-                console.log(val)
             })
             $(election + " .electionContent").on("click", function () {
                 var id = $(this).parent().attr("id")
@@ -68,7 +84,6 @@ const App = {
                 window.location.assign("edit.html")
             })
         }
-        $('.card-header').removeClass('d-none')
         App.startE()
         App.endE()
     },
@@ -91,7 +106,6 @@ const App = {
             $("#modalClose").on("click", function () {
                 window.location.reload()
             })
-
         })
     },
 
@@ -103,7 +117,7 @@ const App = {
             try {
                 await App.contract.editStatus(eid, 2).then(
                     (tx) => tx.wait().then(function () {
-                        solidity.customMsg(true, "Election Started Successfully")
+                        solidity.customMsg(true, "Election Ended Successfully")
                     })
                 )
             } catch (e) {

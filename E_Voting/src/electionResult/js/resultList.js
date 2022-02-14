@@ -29,6 +29,7 @@ const App = {
                 $(".election" + x).prop("id", x)
                 $(".election" + x).load("election.html")
                 elections.push(x)
+                $(".noList").addClass("d-none")
             }
         }
         console.log(elections)

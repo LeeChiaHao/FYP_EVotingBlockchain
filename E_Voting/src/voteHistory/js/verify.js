@@ -29,7 +29,7 @@ const App = {
         $(".elecName").text("Election Name: " + elecName.name)
         App.reqModal.show()
         $('.modalTitle').text("Verify Vote")
-        $('.modalBody').html("<p>Please click the verify button below to verify your vote.<\p> <p>Please decrypt the message on pop-up window to verify</p><p>Do not share with others about your vote information.</p>")
+        $('.modalBody').html("<p>Please click the verify button below to verify your vote.<\p> <p>Then, please decrypt the message on pop-up window to get the message.</p><p>Do not share with others about your vote information.</p>")
         $(".modalBtn").text("Verify")
         $(".modalBtn").on("click", async function () {
             await App.verifyVote()
@@ -38,7 +38,8 @@ const App = {
 
     verifyVote: async () => {
         var encrypted
-        await App.contract.encryptedVerify(App.electionID, localStorage.getItem("Signature")).then((val) => {
+        var signature = localStorage.getItem("Signature")
+        await App.contract.encryptedVerify(App.electionID, signature).then((val) => {
             console.log(val)
             encrypted = val
         })
@@ -46,10 +47,22 @@ const App = {
         await ethereum.request({
             method: 'eth_decrypt',
             params: [encrypted, App.address],
-        }).then((plain) => {
+        }).then(async (plain) => {
             App.reqModal.hide()
             console.log(plain)
             $(".historyCandidate").text(plain)
+            await App.contract.verifyTimeID(signature).then(async (val) => {
+                var num = solidity.bigNumberToNumber(val)
+                await App.contract.provider.getBlockWithTransactions(num).then((data) => {
+                    var date = new Date(data.timestamp * 1000)
+                    console.log(data)
+                    console.log(date.toLocaleDateString("en-US"));
+                    $(".historyTime").text(date.toLocaleDateString("en-US"))
+                    console.log(data.transactions)
+                    $(".historyTxn").text(data.transactions[0].hash)
+                    $(".historyBlock").text("Block " + num + " (" + data.hash + ")")
+                })
+            })
         })
     }
 }

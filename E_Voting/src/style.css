@@ -73,4 +73,15 @@
 
 .electionContent:hover{
     border: 5px solid black;
+    cursor: pointer;
+}
+
+.noList{
+    margin: 0rem 1rem;
+}
+
+
+.btn-collapse{
+    text-align: left;
+    font-weight: bolder;
 }
