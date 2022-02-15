@@ -33,7 +33,7 @@ const App = {
             }
         }
         console.log(elections)
-        App.loadTitle(elections)
+        await App.loadTitle(elections)
     },
 
     loadTitle: async (e) => {

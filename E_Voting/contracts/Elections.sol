@@ -18,12 +18,13 @@ contract Elections {
     struct Election {
         string name;
         ElectionStatus status;
+        string desc;
     }
     struct Candidate {
         uint256 id;
         string name;
         string age;
-        // gender ?
+        string gender;
         string party;
         string slogan;
         string voteGet;
@@ -79,15 +80,17 @@ contract Elections {
     function createElection(
         uint256 id,
         string memory _name,
+        string memory _desc,
         string[] memory candidateInfo
     ) public onlyAdmin {
-        elections[id] = Election(_name, ElectionStatus.INIT);
-        uint256 length = candidateInfo.length / 5;
+        elections[id] = Election(_name, ElectionStatus.INIT, _desc);
+        uint256 length = candidateInfo.length / 6;
         uint256 index = 0;
         for (uint256 x = 0; x < length; x++) {
             electionCandidate[id][x] = Candidate(
                 x,
                 candidateInfo[index],
+                candidateInfo[++index],
                 candidateInfo[++index],
                 candidateInfo[++index],
                 candidateInfo[++index],
@@ -112,23 +115,32 @@ contract Elections {
     function editElection(
         uint256 id,
         string memory _name,
+        string memory _desc,
         string[] memory candidateInfo
     ) public onlyAdmin {
-        deleteElection(id);
-        createElection(id, _name, candidateInfo);
+        uint256 length = candidateInfo.length / 6;
+        uint256 oriLength = totalCandidate[id];
+        // as evertime execute here wait very long, so adjust no need to delete all
+        // if new info is longer then no need empty first as will replace eventually
+        // if new info is shorter then just need to empty the original's extra
+        if (length < oriLength) {
+            deleteElection(id, length);
+        }
+        createElection(id, _name, _desc, candidateInfo);
     }
 
     /**
         deleteElection will empty the elections mapping
         :param id: election's id that want to del    
      */
-    function deleteElection(uint256 id) public onlyAdmin {
-        elections[id] = Election("", ElectionStatus.ABORT);
+    function deleteElection(uint256 id, uint256 del) public onlyAdmin {
+        elections[id] = Election("", ElectionStatus.ABORT, "");
         uint256 candidateLength = totalCandidate[id];
         totalCandidate[id] = 0;
-        for (uint256 x = 0; x < candidateLength; x++) {
+        for (uint256 x = (del - 1); x < candidateLength; x++) {
             electionCandidate[totalElection][x] = Candidate(
                 0,
+                "",
                 "",
                 "",
                 "",

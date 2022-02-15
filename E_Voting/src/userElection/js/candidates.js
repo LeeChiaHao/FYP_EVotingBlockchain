@@ -22,10 +22,11 @@ const App = {
         App.contract = await solidity.getElectionsContract()
         App.address = await solidity.getElectionAddress()
         App.electionID = localStorage.getItem("election")
-        App.reqModal = new Modal($("#requestModal"))
+        App.reqModal = solidity.reqModal()
         App.totalCandidate = await App.contract.totalCandidate(App.electionID)
 
         App.loadCandidate(App.electionID, App.totalCandidate)
+        await App.loadModal()
         await App.contract.encryptedVerify(App.electionID, localStorage.getItem("Signature")).then(async (val) => {
             console.log(val)
             if (val == "") {
@@ -41,6 +42,18 @@ const App = {
             }
         })
 
+    },
+
+    loadModal: async () => {
+        $(".modalBtn").text("Okay, I understand.")
+        App.reqModal.show()
+        $('.modalTitle').text("Voting Information")
+        $('.modalBody').html(`<h4>For your information: </h4>
+        <p>After confirm the candidate you want to vote, the system will require you to share your encryption key.</p>
+        <p>Please do not share the encryption key with others to protect your vote information.</p>`)
+        $(".modalBtn").on("click", async function () {
+            App.reqModal.hide()
+        })
     },
 
     loadCandidate: async (id, total) => {
@@ -75,16 +88,6 @@ const App = {
     },
 
     submitVote: async () => {
-        // var e = await App.contract.encryptedVerify(0, "0x5aabd9d81fda3bb28b568942107729be9a14b8e5e0823ee57934ba8c5a6940ec1521f1308ec16578c9a9d84aa1fcb0bc837ae6e130e280d162d204640d0182f81c")
-        //     .then(async (val) => {
-        //         console.log(val)
-        //         // var plain = await ethereum.request({
-        //         //     method: 'eth_decrypt',
-        //         //     params: [val, App.address],
-        //         // })
-        //         // console.log("Decrpted: " + plain)
-        //     })
-
         if (App.voted != null) {
             App.requestModal()
         }
@@ -93,14 +96,15 @@ const App = {
     requestModal: async () => {
         $(".sign").addClass("d-none")
         $(".option").removeClass("d-none")
-        App.reqModal.show()
+        solidity.reqModal().show()
         $('.modalTitle').text("Voting Confirmation")
-        $('.modalBody').html("<p>Are you sure you want to vote to: <\p> <h4 class='text-center'> Candidate " + (parseInt(App.voted) + 1) + "<\h4>")
+        $('.modalBody').html(`<p>Are you sure you want to vote to: </p> 
+            <h4 class='text-center'> Candidate " + (parseInt(App.voted) + 1) + "</h4>`)
     },
 
     onclickModal: async () => {
         $("#modalYes").on("click", async function () {
-            App.reqModal.hide()
+            solidity.reqModal().hide()
             solidity.txnModal().show()
             solidity.txnLoad("Requesting Encryption Key")
             var signature = localStorage.getItem("Signature")
@@ -130,7 +134,7 @@ const App = {
         })
 
         $("#modalNo").on("click", async function () {
-            App.reqModal.hide()
+            solidity.reqModal().hide()
         })
 
         $("#modalClose").on("click", async function () {

@@ -9,7 +9,6 @@ const privateKey = new paillierBigint.PrivateKey(BigInt(process.env.privateLambd
 var signature
 
 export async function setSignature(signer) {
-    console.log(signer)
     var msg, verify
     msg = "Hi, Please proof your identity by signing this message. It would not cost any. TQ "
     signature = await signer.signMessage(msg)
@@ -27,7 +26,7 @@ export async function getVotersContract() {
     try {
         const provider = new ethers.providers.Web3Provider(window.ethereum, "any")
         await provider.send("eth_requestAccounts", []);
-        ethereum.on("accountsChanged", function (a) {
+        ethereum.on("accountsChanged", function () {
             window.location.replace("/")
         })
         const networkId = provider.provider.networkVersion
@@ -55,7 +54,7 @@ export async function getElectionsContract() {
     try {
         const provider = new ethers.providers.Web3Provider(window.ethereum, "any")
         await provider.send("eth_requestAccounts", []);
-        ethereum.on("accountsChanged", function (a) {
+        ethereum.on("accountsChanged", function () {
             window.location.replace("/")
         })
         const networkId = provider.provider.networkVersion
@@ -87,6 +86,10 @@ export function bigNumberToNumber(bn) {
 // TODO: convert all to global function
 export function txnModal() {
     return new Modal($("#txnModal"))
+}
+
+export function reqModal() {
+    return new Modal($("#requestModal"))
 }
 
 export function txnLoad(txt) {

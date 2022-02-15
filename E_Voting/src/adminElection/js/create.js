@@ -55,7 +55,7 @@ const App = {
         $(className).children().each(function (index) {
             $(this).children().each(function (y) {
                 if ($(this).is("label")) {
-                    $(this).text("Candidate" + num)
+                    $(this).text("Candidate " + num)
                 }
                 if (y == 1) {
                     switch (index) {
@@ -66,9 +66,13 @@ const App = {
                             $(this).prop("id", "age" + num)
                             break
                         case 3:
-                            $(this).prop("id", "partyName" + num)
+                            $(this).prop("id", "gender" + num)
+                            $(this).find("input").prop("name", "gender" + num)
                             break
                         case 4:
+                            $(this).prop("id", "partyName" + num)
+                            break
+                        case 5:
                             $(this).prop("id", "slogan" + num)
                             break
                         default:
@@ -108,6 +112,9 @@ const App = {
                     allCandidates[index] = $("#candidateName" + i).val()
                     index++;
                     allCandidates[index] = $("#age" + i).val()
+                    index++;
+                    allCandidates[index] = $("input[type='radio'][name='gender" + i + "']:checked").val()
+                    console.log(allCandidates[index]);
                     index++;
                     allCandidates[index] = $("#partyName" + i).val()
                     index++;

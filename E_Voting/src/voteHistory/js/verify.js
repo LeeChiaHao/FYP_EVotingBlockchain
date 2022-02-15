@@ -30,9 +30,15 @@ const App = {
         App.reqModal.show()
         $('.modalTitle').text("Verify Vote")
         $('.modalBody').html("<p>Please click the verify button below to verify your vote.<\p> <p>Then, please decrypt the message on pop-up window to get the message.</p><p>Do not share with others about your vote information.</p>")
-        $(".modalBtn").text("Verify")
-        $(".modalBtn").on("click", async function () {
+        $(".sign").addClass("d-none")
+        $(".option").removeClass("d-none")
+        $("#modalYes").text("Verify")
+        $("#modalYes").on("click", async function () {
             await App.verifyVote()
+        })
+        $("#modalNo").text("Cancel")
+        $("#modalNo").on("click", async function () {
+            window.location.replace("historyList.html")
         })
     },
 

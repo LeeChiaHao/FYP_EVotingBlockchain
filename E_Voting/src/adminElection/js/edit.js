@@ -175,6 +175,9 @@ const App = {
                     index++;
                     allCandidates[index] = $("#age" + i).val()
                     index++;
+                    allCandidates[index] = $("input[type='radio'][name='gender" + i + "']:checked").val()
+                    console.log(allCandidates[index]);
+                    index++;
                     allCandidates[index] = $("#partyName" + i).val()
                     index++;
                     allCandidates[index] = $("#slogan" + i).val()
@@ -211,11 +214,20 @@ const App = {
         }
     },
     delForm: async () => {
-        App.contract.deleteElection(App.electionID).then(
-            (tx) => tx.wait().then(function () {
-                window.location.replace("list.html")
-            })
-        )
+        try {
+            App.txnModal.show()
+            solidity.txnLoad("Making Transaction")
+            await App.contract.deleteElection(App.electionID).then(
+                (tx) => tx.wait().then(function () {
+                    solidity.txnSuccess()
+                    window.location.replace("list.html")
+                })
+            )
+        } catch (e) {
+            console.log(e);
+            solidity.txnFail()
+        }
+
     },
     cancelForm: async () => {
         window.location.reload()

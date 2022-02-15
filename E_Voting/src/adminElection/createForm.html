@@ -24,6 +24,21 @@
     </div>
 </div>
 <div class="input-group mb-3 candidate-group">
+    <span class="input-group-text col-3" id="">Gender</span>
+    <div class="radio form-control">
+        <input class="form-control" type="radio" value="male" name="gender" label="Male" required>
+        <input class="form-control" type="radio" value="female" name="gender" label="Female">
+    </div>
+    <div class="invalid-feedback">
+        This gender field is required.
+    </div>
+    <div class="valid-feedback">
+        Success
+    </div>
+    <!-- <input type="text" class="form-control" placeholder="Gender" aria-label="gender" aria-describedby="" id="" required> -->
+
+</div>
+<div class="input-group mb-3 candidate-group">
     <span class="input-group-text col-3" id="">Party Name</span>
     <input type="text" class="form-control" placeholder="Candidate Name" aria-label="Party Name" aria-describedby=""
         id="" required>
