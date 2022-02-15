@@ -98,9 +98,13 @@ const App = {
                             $(this).prop("id", "age" + num)
                             break
                         case 3:
-                            $(this).prop("id", "partyName" + num)
+                            $(this).prop("id", "gender" + num)
+                            $(this).find("input").prop("name", "gender" + num)
                             break
                         case 4:
+                            $(this).prop("id", "partyName" + num)
+                            break
+                        case 5:
                             $(this).prop("id", "slogan" + num)
                             break
                         default:
@@ -117,11 +121,13 @@ const App = {
     loadCandidateData: async (id, total) => {
         var election = await App.contract.elections(id)
         $("#electionName").val(election.name)
+        $("#description").val(election.desc)
         for (var x = 0; x <= total; x++) {
             await App.contract.electionCandidate(id, x).then((val) => {
                 $(".loadCandidate" + x).find(".candidate-label").text("Candidate " + (x + 1))
                 $(".loadCandidate" + x).find("#candidateName" + x).val(val.name)
                 $(".loadCandidate" + x).find("#age" + x).val(val.age)
+                $(".loadCandidate" + x).find("#gender" + x).find("." + val.gender).prop("checked", true)
                 $(".loadCandidate" + x).find("#partyName" + x).val(val.party)
                 $(".loadCandidate" + x).find("#slogan" + x).val(val.slogan)
                 var vote = BigInt(val.voteGet)
@@ -158,7 +164,6 @@ const App = {
         $("#editBtn").parent().addClass('d-none')
         $("#editForm :input").prop('disabled', false)
         $("#saveBtn, #delBtn, #cancelBtn, .addCandidate, .delCandidate").removeClass('d-none')
-
     },
 
     submitForm: async () => {
@@ -190,7 +195,7 @@ const App = {
                 try {
                     App.txnModal.show()
                     solidity.txnLoad("Making Transaction")
-                    await App.contract.editElection(App.electionID, $("#electionName").val(), allCandidates).then(
+                    await App.contract.editElection(App.electionID, $("#electionName").val(), $("#description"), allCandidates).then(
                         (tx) => tx.wait().then(function () {
                             solidity.txnSuccess()
                             $("#modalClose").on("click", function () {

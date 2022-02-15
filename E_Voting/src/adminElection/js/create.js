@@ -130,8 +130,7 @@ const App = {
                     App.txnModal.show()
                     solidity.txnLoad("Making Transaction")
                     var eid = solidity.bigNumberToNumber(await App.contract.totalElection())
-
-                    await App.contract.createElection(eid, $("#electionName").val(), allCandidates).then(
+                    await App.contract.createElection(eid, $("#electionName").val(), $("#description").val(), allCandidates).then(
                         (tx) => tx.wait().then(function () {
                             solidity.txnSuccess()
                             $("#modalClose").on("click", function () {

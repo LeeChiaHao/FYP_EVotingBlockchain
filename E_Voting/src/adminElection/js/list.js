@@ -65,7 +65,14 @@ const App = {
         for (var x = 0; x < e.length; x++) {
             var election = ".election" + e[x]
             await App.contract.elections(e[x]).then((val) => {
-                $(election).find("h5").text(val.name)
+                $(election).find(".electionTitle").text(val.name)
+                $(election).find(".electionDesc").text(val.desc)
+                if (val.startD != 0) {
+                    $(election).find(".startD").text(solidity.utcToLocal(val.startD))
+                }
+                if (val.endD != 0) {
+                    $(election).find(".endD").text(solidity.utcToLocal(val.endD))
+                }
                 switch (val.status) {
                     case 0:
                         $(election).find(".btn-start").removeClass("d-none")

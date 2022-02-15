@@ -179,3 +179,16 @@ export function caretOnClick() {
         }
     })
 }
+
+export function utcToLocal(utc) {
+    var date = new Date(utc * 1000)
+    var result = date.getDate() + "/" + date.getMonth() + "/" + date.getFullYear() + "  "
+        + String(date.getHours()).padStart(2, 0) + ":" + String(date.getMinutes()).padStart(2, 0)
+    if (date.getHours() >= 12) {
+        result += " PM"
+    } else {
+        result += " AM"
+    }
+    return result
+
+}

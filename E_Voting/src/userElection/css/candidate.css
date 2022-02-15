@@ -4,6 +4,7 @@
 
 .candidateCard:hover, .active{
     border: 5px solid black;
+    cursor: pointer;
 }
 
 .noVote{

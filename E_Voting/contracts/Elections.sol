@@ -19,6 +19,8 @@ contract Elections {
         string name;
         ElectionStatus status;
         string desc;
+        uint256 startD;
+        uint256 endD;
     }
     struct Candidate {
         uint256 id;
@@ -83,7 +85,7 @@ contract Elections {
         string memory _desc,
         string[] memory candidateInfo
     ) public onlyAdmin {
-        elections[id] = Election(_name, ElectionStatus.INIT, _desc);
+        elections[id] = Election(_name, ElectionStatus.INIT, _desc, 0, 0);
         uint256 length = candidateInfo.length / 6;
         uint256 index = 0;
         for (uint256 x = 0; x < length; x++) {
@@ -134,7 +136,7 @@ contract Elections {
         :param id: election's id that want to del    
      */
     function deleteElection(uint256 id, uint256 del) public onlyAdmin {
-        elections[id] = Election("", ElectionStatus.ABORT, "");
+        elections[id] = Election("", ElectionStatus.ABORT, "", 0, 0);
         uint256 candidateLength = totalCandidate[id];
         totalCandidate[id] = 0;
         for (uint256 x = (del - 1); x < candidateLength; x++) {
@@ -158,6 +160,12 @@ contract Elections {
     function editStatus(uint256 id, uint256 status) public onlyAdmin {
         Election storage tmp = elections[id];
         require(tmp.status != ElectionStatus(3));
+        if (status == 1) {
+            tmp.startD = block.timestamp;
+        }
+        if (status == 2) {
+            tmp.endD = block.timestamp;
+        }
         tmp.status = ElectionStatus(status);
         elections[id] = tmp;
     }

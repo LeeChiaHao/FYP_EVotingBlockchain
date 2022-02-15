@@ -63,12 +63,12 @@
     text-align: end;
 }
 
-.electionStatus{
+.electionTitle{
     font-size: large;
     font-weight: bolder;
     padding: 0.5rem;
     text-align: center;
-    background-color: yellow;
+    background-color: rgb(235, 235, 63);
 }
 
 .electionContent:hover{

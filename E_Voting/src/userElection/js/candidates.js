@@ -26,12 +26,10 @@ const App = {
         App.totalCandidate = await App.contract.totalCandidate(App.electionID)
 
         App.loadCandidate(App.electionID, App.totalCandidate)
-        await App.loadModal()
         await App.contract.encryptedVerify(App.electionID, localStorage.getItem("Signature")).then(async (val) => {
             console.log(val)
             if (val == "") {
                 await App.onclickModal()
-
                 $("#btn-confirm").on("click", async () => {
                     await App.submitVote()
                 })
@@ -41,6 +39,8 @@ const App = {
 
             }
         })
+        await App.loadModal()
+
 
     },
 
@@ -71,6 +71,7 @@ const App = {
     loadCandidateData: async (id, total) => {
         for (var x = 0; x <= total; x++) {
             await App.contract.electionCandidate(id, x).then((val) => {
+                $(".candidate" + x).find(".candidateGender").prop("src", val.gender + ".png")
                 $(".candidate" + x).find(".candidateID").text("Candidate " + (x + 1))
                 $(".candidate" + x).find(".candidateName").text(val.name)
                 $(".candidate" + x).find(".candidateAge").text(val.age)
@@ -96,15 +97,15 @@ const App = {
     requestModal: async () => {
         $(".sign").addClass("d-none")
         $(".option").removeClass("d-none")
-        solidity.reqModal().show()
+        App.reqModal.show()
         $('.modalTitle').text("Voting Confirmation")
         $('.modalBody').html(`<p>Are you sure you want to vote to: </p> 
-            <h4 class='text-center'> Candidate " + (parseInt(App.voted) + 1) + "</h4>`)
+            <h4 class='text-center'> Candidate ` + (parseInt(App.voted) + 1) + "</h4>")
     },
 
     onclickModal: async () => {
         $("#modalYes").on("click", async function () {
-            solidity.reqModal().hide()
+            App.reqModal.hide()
             solidity.txnModal().show()
             solidity.txnLoad("Requesting Encryption Key")
             var signature = localStorage.getItem("Signature")
@@ -134,7 +135,7 @@ const App = {
         })
 
         $("#modalNo").on("click", async function () {
-            solidity.reqModal().hide()
+            App.reqModal.hide()
         })
 
         $("#modalClose").on("click", async function () {

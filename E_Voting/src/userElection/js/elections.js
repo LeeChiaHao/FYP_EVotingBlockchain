@@ -57,7 +57,14 @@ const App = {
                 window.location.assign("candidates.html")
             })
             await App.contract.elections(e[x]).then((val) => {
-                $(".election" + e[x]).find("h5").text(val.name)
+                var election = ".election" + e[x]
+                $(election).find(".electionTitle").text(val.name)
+                $(election).find(".electionDesc").text(val.desc)
+                $(election).find(".startD").text(solidity.utcToLocal(val.startD))
+                if (val.endD != 0) {
+                    $(election).find(".endD").text(solidity.utcToLocal(val.endD))
+                }
+
             })
         }
     }
