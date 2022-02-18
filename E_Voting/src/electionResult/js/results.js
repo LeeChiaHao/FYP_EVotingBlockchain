@@ -53,7 +53,7 @@ const App = {
         var winnerClass
         var len = Object.keys(App.winner).length
         if (len > 1) {
-            winnerClass = "col-lg-6 border-0 mb-4"
+            winnerClass = "col-lg-5 border-0 mb-4"
         } else {
             winnerClass = "col-lg-11 border-0 mb-4"
             $(".winnerCandidates").addClass("justify-content-center")
@@ -88,6 +88,8 @@ const App = {
                 $(candidate).find(".otherCandidate").text("Candidate " + (x + 1))
                 $(candidate).find(".candidateName").text(val.name)
                 $(candidate).find(".candidateAge").text(val.age)
+                $(candidate).find(".candidateGender").prop("src", val.gender + ".png")
+
                 $(candidate).find(".candidateParty").text(val.party)
                 $(candidate).find(".candidateSlogan").text(val.slogan)
                 var percent = Number(App.votes[x]) / Number(App.totalVote)

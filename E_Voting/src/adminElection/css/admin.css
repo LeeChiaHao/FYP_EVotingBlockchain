@@ -16,10 +16,6 @@
     cursor: pointer;
 }
 
-.electionContent:hover{
-    border: 5px solid black;
-}
-
 .election-input-group span, .election-input-group input:read-only{
     background-color: #fbe48f;
     font-weight: bold;

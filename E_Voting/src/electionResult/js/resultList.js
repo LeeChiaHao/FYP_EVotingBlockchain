@@ -25,11 +25,13 @@ const App = {
             console.log("Total" + total)
             var election = await App.contract.elections(x)
             if (election.status == 2) {
+                $(".noList").addClass("d-none")
+                $(".title").removeClass("d-none")
                 $("<div></div>").addClass(className + " election" + x).appendTo(".allElections")
                 $(".election" + x).prop("id", x)
                 $(".election" + x).load("election.html")
                 elections.push(x)
-                $(".noList").addClass("d-none")
+
             }
         }
         console.log(elections)
@@ -45,7 +47,12 @@ const App = {
                 window.location.assign("results.html")
             })
             await App.contract.elections(e[x]).then((val) => {
-                $(".election" + e[x]).find("h5").text(val.name)
+                var election = ".election" + e[x]
+                $(election).find(".electionTitle").text(val.name)
+                $(election).find(".electionDesc").text(val.desc)
+                $(election).find(".startD").text(solidity.utcToLocal(val.startD))
+                $(election).find(".endD").text(solidity.utcToLocal(val.endD))
+
             })
         }
     }

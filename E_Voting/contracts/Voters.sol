@@ -14,6 +14,7 @@ contract Voters {
     mapping(address => bool) public isRegister;
     mapping(address => uint256) public voterID;
     mapping(address => mapping(uint256 => bool)) isVoted;
+    // TO DO: address => signature, then require the address must be same with this function's sender
     uint256 voterCount = 0;
 
     constructor() public {

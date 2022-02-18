@@ -26,7 +26,7 @@ const App = {
     },
 
     loadElection: async (total) => {
-        var className = "col-lg-4 col-9 border-0 mb-5 electionCard"
+        var className = "col-lg-4 col-9 border-0 mb-5 mt-3 electionCard"
         var elections = []
         for (var x = 0; x < total; x++) {
             console.log("Total" + x)

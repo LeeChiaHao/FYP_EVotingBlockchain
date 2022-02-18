@@ -50,14 +50,14 @@ const App = {
         $('.modalTitle').text("Voting Information")
         $('.modalBody').html(`<h4>For your information: </h4>
         <p>After confirm the candidate you want to vote, the system will require you to share your encryption key.</p>
-        <p>Please do not share the encryption key with others to protect your vote information.</p>`)
+        <p class="reqAlert">Please do not share the encryption key with others to protect your vote information.</p>`)
         $(".modalBtn").on("click", async function () {
             App.reqModal.hide()
         })
     },
 
     loadCandidate: async (id, total) => {
-        var className = "col-lg-4 col-md-9 border-0 mb-5"
+        var className = "col-lg-4 col-md-9 border-0 mt-5"
         for (var x = 0; x < total; x++) {
             $("<div></div").addClass(className + " candidate" + x).appendTo(".allCandidates")
             $(".candidate" + x).prop("id", x)
@@ -82,6 +82,7 @@ const App = {
         }
         $(".candidateCard").on("click", function () {
             $(".candidateCard").removeClass("active")
+            $(".btn-submit").prop("disabled", false)
             $(this).addClass("active")
             App.voted = $(this).parent().attr("id")
             console.log(App.voted)

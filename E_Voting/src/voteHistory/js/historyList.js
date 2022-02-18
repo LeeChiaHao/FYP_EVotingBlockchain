@@ -29,6 +29,7 @@ const App = {
                     console.log(sign)
                     await App.contract.encryptedVerify(x, sign).then((val) => {
                         if (val != "") {
+                            $(".noList").addClass("d-none")
                             console.log(election)
                             $("<div></div>").addClass(className + " election" + x).appendTo(".historyList")
                             $(".election" + x).prop("id", x)

@@ -1,3 +1,7 @@
+.bodyContainer{
+    margin-bottom: 3rem;
+}
+
 .header{
     background-color: #441d66;
 }
@@ -30,7 +34,16 @@
 .registerForm, .electionForm {
     background-color: rgb(174, 112, 175);
     padding: 3.5rem 6rem;
+}
 
+.registerForm span{
+    background-color: #fbe48f;
+    font-weight: bold;
+    border: 2px solid black;
+}
+
+.registerForm input{
+    border: 2px solid black;
 }
 
 /* .profile{
@@ -64,9 +77,8 @@
 }
 
 .electionTitle{
-    font-size: large;
+    font-size: x-large;
     font-weight: bolder;
-    padding: 0.5rem;
     text-align: center;
     background-color: rgb(235, 235, 63);
 }
@@ -76,12 +88,40 @@
     cursor: pointer;
 }
 
-.noList{
+.noList, .list {
     margin: 0rem 1rem;
+    padding: 1.3rem;
 }
 
-
-.btn-collapse{
+.btn-collapse {
     text-align: left;
     font-weight: bolder;
+    font-size: large;
+    position: relative;
+}
+
+.sign, .option {
+    display: flex;
+    justify-content: center;
+}
+
+.option{
+    justify-content:space-around;
+}
+
+.modalBtn, #modalYes, #modalNo{
+    width: 40%;
+}
+
+.caret{
+    position:absolute;
+    right: 1rem;
+    bottom: 0;
+    color: black;
+    font-size: x-large;
+}
+
+.reqAlert{
+    color: red;
+    font-weight: bold;
 }

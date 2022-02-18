@@ -29,7 +29,9 @@ const App = {
         $(".elecName").text("Election Name: " + elecName.name)
         App.reqModal.show()
         $('.modalTitle').text("Verify Vote")
-        $('.modalBody').html("<p>Please click the verify button below to verify your vote.<\p> <p>Then, please decrypt the message on pop-up window to get the message.</p><p>Do not share with others about your vote information.</p>")
+        $('.modalBody').html(`<p>Please click the verify button below to verify your vote.</p> 
+                        <p>Then, please decrypt the message on pop-up window to get the message.</p>
+                        <p class='reqAlert'>Do not share with others about your vote information.</p>`)
         $(".sign").addClass("d-none")
         $(".option").removeClass("d-none")
         $("#modalYes").text("Verify")
@@ -63,7 +65,7 @@ const App = {
                     var date = new Date(data.timestamp * 1000)
                     console.log(data)
                     console.log(date.toLocaleDateString("en-US"));
-                    $(".historyTime").text(date.toLocaleDateString("en-US"))
+                    $(".historyTime").text(solidity.utcToLocal(data.timestamp))
                     console.log(data.transactions)
                     $(".historyTxn").text(data.transactions[0].hash)
                     $(".historyBlock").text("Block " + num + " (" + data.hash + ")")

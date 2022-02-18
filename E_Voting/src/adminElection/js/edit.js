@@ -195,7 +195,7 @@ const App = {
                 try {
                     App.txnModal.show()
                     solidity.txnLoad("Making Transaction")
-                    await App.contract.editElection(App.electionID, $("#electionName").val(), $("#description"), allCandidates).then(
+                    await App.contract.editElection(App.electionID, $("#electionName").val(), $("#description").val(), allCandidates).then(
                         (tx) => tx.wait().then(function () {
                             solidity.txnSuccess()
                             $("#modalClose").on("click", function () {
