@@ -30,14 +30,25 @@ const App = {
         App.submitArea = $("#submitArea")
         App.form = document.querySelector('.validation')
 
-        var loginBN = await App.contract.voterID(App.address)
-        App.loginID = ethers.BigNumber.from(loginBN).toNumber()
-        var voter = await App.contract.voters(App.loginID)
+        var voter = await App.contract.voters(App.address)
 
         App.name.val(voter.name)
         App.email.val(voter.email)
+        console.log(voter.signature);
+
         $("#profileAddress").val(voter.account)
         App.myModal = new Modal($("#txnModal"))
+        // Testing
+
+        // await App.contract.verifySignature("0x0f2f57d792336b3bd79ed7aa9d44ac9c3f4b11a05503c55a7c87a31b5357b2be", localStorage.getItem("Signature"))
+        //     .then(function (val) {
+        //         console.log(val);
+        //     });
+        await App.contract.once("verifySigner", (hash, signer) => {
+            console.log("Signer: " + signer)
+            console.log("Signer: " + hash)
+
+        })
     },
 
     editProfile: async () => {
@@ -61,7 +72,7 @@ const App = {
         if ($(".was-validated:invalid").length == 0) {
             App.myModal.show()
             try {
-                App.contract.voters[App.loginID] = await App.contract.editVoter(App.name.val(), App.email.val(), App.loginID).then(
+                App.contract.voters[App.address] = await App.contract.editVoter(App.name.val(), App.email.val()).then(
                     (tx) => tx.wait().then(function () {
                         solidity.customMsg(true, "Transaction Success. Profile updated successfully.")
                     })

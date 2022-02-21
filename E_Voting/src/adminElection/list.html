@@ -25,42 +25,68 @@
             </div>
         </div>
 
-        <div class="row mb-4 mt-4">
-            <button class="btn btn-primary btn-collapse" type="button" data-bs-toggle="collapse"
-                data-bs-target="#ongoingE" aria-expanded="false" aria-controls="ongoingE">
-                Status: Ongoing<div class="caret down">&#9660;</div>
-            </button>
-        </div>
-        <div class="row gx-5 ongoingE collapse" id="ongoingE">
-            <div class="card card-body noList">
-                Do not have any Ongoing Elections at this moment.
+        <div class="row">
+            <div class="col-lg-4 col-12">
+                <div class="row justify-content-evenly">
+                    <div class="col-lg-12 col-4 mb-4 me-lg-2">
+                        <button class="btn btn-primary btn-collapse initial" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#initialE" aria-expanded="false" aria-controls="initialE">
+                            Status: Initial<b class="caret ps-3 left">&#9666;</b>
+                        </button>
+                    </div>
+
+                    <div class="col-lg-12 col-4 mb-4 me-lg-2">
+                        <button class="btn btn-primary btn-collapse ongoing" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#ongoingE" aria-expanded="false" aria-controls="ongoingE">
+                            Status: Ongoing<b class="caret ps-3 left">&#9666;</b>
+                        </button>
+                    </div>
+
+                    <div class="col-lg-12 col-4 mb-4 me-lg-2">
+                        <button class="btn btn-primary btn-collapse end" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#endE" aria-expanded="false" aria-controls="endE">
+                            Status: End<b class="caret ps-3 left">&#9666;</b>
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="col-lg-8 col-12 collapseDiv">
+                <div class="row ongoingE collapse listBackground justify-content-center" id="ongoingE">
+                    <div class="card card-body noList">
+                        Do not have any Ongoing Elections at this moment.
+                    </div>
+                    <div class="list d-none">
+                        Ongoing Election
+                    </div>
+                </div>
+
+
+                <div class="row initialE collapse listBackground" id="initialE">
+                    <div class="card card-body noList">
+                        Do not have any Initial Elections at this moment.
+                    </div>
+                    <div class="list d-none">
+                        Initial Election
+                    </div>
+
+                </div>
+
+
+                <div class="row endE collapse listBackground" id="endE">
+                    <div class="card card-body noList">
+                        Do not have any End Elections at this moment.
+                    </div>
+                    <div class="list d-none">
+                        End Election
+                    </div>
+                </div>
+
             </div>
         </div>
 
-        <div class="row mb-4 mt-4">
-            <button class="btn btn-primary btn-collapse" type="button" data-bs-toggle="collapse"
-                data-bs-target="#initialE" aria-expanded="false" aria-controls="initialE">
-                Status: Initial<b class="caret ps-3 down">&#9660;</b>
-            </button>
-        </div>
-        <div class="row gx-5 initialE collapse" id="initialE">
-            <div class="card card-body noList">
-                Do not have any Initial Elections at this moment.
-            </div>
 
-        </div>
-
-        <div class="row mb-4 mt-4">
-            <button class="btn btn-primary btn-collapse" type="button" data-bs-toggle="collapse" data-bs-target="#endE"
-                aria-expanded="false" aria-controls="endE">
-                Status: End<b class="caret ps-3 down">&#9660;</b>
-            </button>
-        </div>
-        <div class="row gx-5 endE collapse" id="endE">
-            <div class="card card-body noList">
-                Do not have any End Elections at this moment.
-            </div>
-        </div>
     </div>
     <!-- TxnModal -->
     <%= require("fs").readFileSync(htmlWebpackPlugin.options.HTML_PATH + "txnModal.html" ) %>

@@ -22,11 +22,14 @@ const App = {
         var totalElection = solidity.bigNumberToNumber(await App.contract.totalElection())
         // if election.status == 3 (ABORT), means this election has been deteted
         await App.loadElection(totalElection)
-        solidity.caretOnClick()
+        solidity.caretOnClick(3)
+        $(".initialE").addClass("show")
+        $(".initial").find('.caret').removeClass("left")
+        $(".initial").find('.caret').html("&#9656;")
     },
 
     loadElection: async (total) => {
-        var className = "col-lg-4 col-9 border-0 mb-5 mt-3 electionCard"
+        var className = "col-lg-5 col-9 border-0 mb-5 electionCard p-3"
         var elections = []
         for (var x = 0; x < total; x++) {
             console.log("Total" + x)
@@ -53,6 +56,7 @@ const App = {
             }
             console.log(append)
             $(append).find(".noList").addClass("d-none")
+            $(append).find(".list").removeClass("d-none")
             $("<div></div>").addClass(className + " election" + x).appendTo(append)
             $(e).prop("id", x)
             $(e).load("election.html")

@@ -24,33 +24,50 @@
                 </div>
             </div>
         </div>
-        <div class="row mb-4 mt-4">
-            <button class="btn btn-primary btn-collapse" type="button" data-bs-toggle="collapse"
-                data-bs-target="#noVote" aria-expanded="false" aria-controls="noVote">
-                Status: Yet to Vote<b class="caret ps-3 down">&#9660;</b>
-            </button>
+
+        <div class="row">
+            <div class="col-lg-4 col-12">
+                <div class="row justify-content-evenly">
+                    <div class="col-lg-12 col-5 mb-4 me-2">
+                        <button class="btn btn-primary btn-collapse noV w-100" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#noVote" aria-expanded="false" aria-controls="noVote">
+                            Status: Yet to Vote<b class="caret ps-3 left">&#9666;</b>
+                        </button>
+                    </div>
+                    <div class="col-lg-12 col-5 mb-4 me-2">
+                        <button class="btn btn-primary btn-collapse vote w-100" type="button" data-bs-toggle="collapse"
+                            data-bs-target="#voted" aria-expanded="false" aria-controls="voted">
+                            Status: Voted<b class="caret ps-3 left">&#9666;</b>
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+            <div class="col-lg-8 col-12">
+                <div class="row noVote collapse listBackground" id="noVote">
+                    <div class="card card-body noList">
+                        Do not have any Yet to Vote Elections at this moment.
+                    </div>
+                    <div class="list d-none">
+                        Election(s) to vote
+                    </div>
+                </div>
+
+                <div class="row voted collapse listBackground" id="voted">
+                    <div class="card card-body noList">
+                        Do not have any Voted Elections at this moment.
+                    </div>
+                    <div class="list d-none">
+                        <h5>Please wait until the election(s) end. Then, you can check the result at <a
+                                href="resultList.html">here</a></h5>
+                    </div>
+                </div>
+            </div>
+
+
         </div>
 
-        <div class="row gx-5 noVote collapse" id="noVote">
-            <div class="card card-body noList">
-                Do not have any Yet to Vote Elections at this moment.
-            </div>
-        </div>
-        <div class="row mb-4 mt-4">
-            <button class="btn btn-primary btn-collapse" type="button" data-bs-toggle="collapse" data-bs-target="#voted"
-                aria-expanded="false" aria-controls="voted">
-                Status: Voted<b class="caret ps-3 down">&#9660;</b>
-            </button>
-        </div>
-        <div class="row gx-5 voted collapse" id="voted">
-            <div class="card card-body noList">
-                Do not have any Voted Elections at this moment.
-            </div>
-            <div class="card card-body list d-none">
-                <h5>Please wait until the election(s) end. Then, you can check the result at <a
-                        href="resultList.html">here</a></h5>
-            </div>
-        </div>
+
         <div class="row gx-5 allElections">
 
         </div>

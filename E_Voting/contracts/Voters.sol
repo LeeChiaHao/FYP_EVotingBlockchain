@@ -1,13 +1,12 @@
 // SPDX-License-Identifier: MIT
-pragma solidity >=0.4.22 <0.9.0;
-
-import "../node_modules/@openzeppelin/contracts/utils/cryptography/ECDSA.sol";
+pragma solidity >=0.6.6 <0.9.0;
 
 contract Voters {
     address public admin;
     struct Voter {
         string name;
         string email;
+        string signature;
         address account;
     }
 
@@ -35,33 +34,30 @@ contract Voters {
         _;
     }
 
-    using ECDSA for bytes32;
-
-    constructor() {
+    constructor() public {
         admin = msg.sender;
     }
 
-    event verifyVoter(
-        bytes32 msg,
-        bytes32 hashMsg,
-        bytes b,
-        address voter,
-        uint8 v,
-        bytes32 r,
-        bytes32 s
-    );
+    event verifySigner(bytes32 message, address signer);
 
     /**
         createVoter creates a new voter
         :param _name: voter's name
         :param _email: voter's email
      */
-    function createVoter(string memory _name, string memory _email)
-        public
-        notEmpty(_name, _email)
-    {
-        require(isRegister[msg.sender] == false);
-        voters[msg.sender] = Voter(_name, _email, msg.sender);
+    function createVoter(
+        string calldata _name,
+        string calldata _email,
+        bytes32 hashMsg,
+        bytes calldata signature,
+        string calldata stringSign
+    ) external notEmpty(_name, _email) {
+        require(isRegister[msg.sender] == false, "Voter registered already.");
+        require(
+            verifySignature(hashMsg, signature, stringSign) == msg.sender,
+            "This voter's signature is not verified"
+        );
+        voters[msg.sender] = Voter(_name, _email, stringSign, msg.sender);
         isRegister[msg.sender] = true;
         voterCount++;
     }
@@ -71,8 +67,8 @@ contract Voters {
         :param _name: voter's name
         :param _email: voter's email
      */
-    function editVoter(string memory _name, string memory _email)
-        public
+    function editVoter(string calldata _name, string calldata _email)
+        external
         notEmpty(_name, _email)
     {
         require(isRegister[msg.sender] == true);
@@ -90,14 +86,11 @@ contract Voters {
         isVoted[_voter][id] = true;
     }
 
-    function getBytes(string memory signature) public returns (bytes memory) {
-        return bytes(signature);
-    }
-
-    function verifySignature(bytes32 hashMsg, bytes memory signature)
-        public
-        returns (address)
-    {
+    function verifySignature(
+        bytes32 hashMsg,
+        bytes memory signature,
+        string memory stringSign
+    ) public returns (address) {
         bytes32 signedHash = keccak256(
             abi.encodePacked("\x19Ethereum Signed Message:\n32", hashMsg)
         );
@@ -113,7 +106,9 @@ contract Voters {
         if (v < 27) v += 27;
 
         address signer = ecrecover(signedHash, v, r, s);
-        emit verifyVoter(hashMsg, signedHash, signature, signer, v, r, s);
+        require(signer == msg.sender);
+        emit verifySigner(hashMsg, signer);
+        voterSignature[signer] = stringSign;
         return signer;
     }
 }

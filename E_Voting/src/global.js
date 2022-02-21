@@ -1,8 +1,12 @@
 /**
  * GLOBAL FUNCTION THAT WILL BE USED IN MULTIPLE JS FILE
 */
+import 'bootstrap'
+import 'bootstrap/dist/css/bootstrap.min.css';
+
 import { Modal } from 'bootstrap';
 import { ethers } from 'ethers';
+import { arrayify, solidityKeccak256 } from 'ethers/lib/utils';
 import * as paillierBigint from 'paillier-bigint';
 const publicKey = new paillierBigint.PublicKey(BigInt(process.env.publicN), BigInt(process.env.publicG))
 const privateKey = new paillierBigint.PrivateKey(BigInt(process.env.privateLambda), BigInt(process.env.privateMu), publicKey)
@@ -11,7 +15,14 @@ var signature
 export async function setSignature(signer) {
     var msg, verify
     msg = "Hi, Please proof your identity by signing this message. It would not cost any. TQ "
-    signature = await signer.signMessage(msg)
+    var shamsg = solidityKeccak256(
+        ["string"],
+        [msg])
+    // var shamsg = sha256(msg)
+    console.log(shamsg);
+    let signing = arrayify(shamsg)
+    console.log(signing);
+    signature = await signer.signMessage(signing)
     console.log(signature)
     localStorage.setItem("Signature", signature)
     verify = ethers.utils.verifyMessage(msg, signature)
@@ -27,6 +38,7 @@ export async function getVotersContract() {
         const provider = new ethers.providers.Web3Provider(window.ethereum, "any")
         await provider.send("eth_requestAccounts", []);
         ethereum.on("accountsChanged", function () {
+            localStorage.clear()
             window.location.replace("/")
         })
         const networkId = provider.provider.networkVersion
@@ -55,6 +67,7 @@ export async function getElectionsContract() {
         const provider = new ethers.providers.Web3Provider(window.ethereum, "any")
         await provider.send("eth_requestAccounts", []);
         ethereum.on("accountsChanged", function () {
+            localStorage.clear()
             window.location.replace("/")
         })
         const networkId = provider.provider.networkVersion
@@ -166,16 +179,33 @@ export function electionStatus(num) {
     }
 }
 
-export function caretOnClick() {
+export function caretOnClick(choice) {
+    var object, object2
+    if (choice == 2) {
+        object = [".noVote", ".voted"]
+        object2 = [".noV", ".vote"]
+    } else {
+        object = [".initialE", ".ongoingE", ".endE"]
+        object2 = [".initial", ".ongoing", ".end"]
+    }
+
     $(".btn-collapse").on("click", function () {
-        console.log($(this));
+        var target = "." + $(this).attr("aria-controls")
+        for (var x in object) {
+            console.log(object[x]);
+            if (object[x] != target) {
+                $(object[x]).removeClass("show")
+                $(object2[x]).find(".caret").addClass("left")
+                $(object2[x]).find(".caret").html("&#9666;")
+            }
+        }
         var caret = $(this).find(".caret")
-        if (caret.hasClass("down")) {
-            caret.removeClass("down")
-            caret.html("&#9650;")
+        if (caret.hasClass("left")) {
+            caret.removeClass("left")
+            caret.html("&#9656;")
         } else {
-            caret.addClass("down")
-            caret.html("&#9660;")
+            caret.addClass("left")
+            caret.html("&#9666;")
         }
     })
 }

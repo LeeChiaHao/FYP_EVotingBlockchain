@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity >=0.4.22 <0.9.0;
+pragma solidity >=0.6.6 <0.9.0;
 pragma experimental ABIEncoderV2;
 import "./Voters.sol";
 
@@ -39,10 +39,10 @@ contract Elections {
     mapping(uint256 => mapping(string => string)) public encryptedVerify;
 
     // to do: store the signature (?), so can verify the vote, else u dun know who got vote before (if just use the encryptedVerify)
-    mapping(uint256 => mapping(uint256 => string)) public voterVerify;
+    mapping(uint256 => mapping(address => bool)) public voterVerify;
 
     // voter's signature --> then block number, so can retrieve time and transaction ID
-    mapping(string => uint256) public verifyTimeID;
+    mapping(uint256 => mapping(string => uint256)) public verifyTimeID;
 
     // election ID => candidate mapping
     mapping(uint256 => mapping(uint256 => Candidate)) public electionCandidate;
@@ -61,7 +61,33 @@ contract Elections {
     }
 
     modifier onlyAdmin() {
-        require(msg.sender == admin);
+        require(msg.sender == admin, "Only admin can perform this action.");
+        _;
+    }
+
+    modifier notEmpty(
+        string memory _name,
+        string memory _desc,
+        string[] memory candidateInfo
+    ) {
+        require(
+            keccak256(abi.encodePacked(_name)) !=
+                keccak256(abi.encodePacked(""))
+        );
+        require(
+            keccak256(abi.encodePacked(_desc)) !=
+                keccak256(abi.encodePacked(""))
+        );
+        require((candidateInfo.length % 6) == 0);
+        _;
+    }
+
+    modifier idValid(uint256 _id) {
+        require(
+            keccak256(abi.encodePacked(elections[_id].name)) !=
+                keccak256(abi.encodePacked("")),
+            "The election must exist to perform the action."
+        );
         _;
     }
 
@@ -81,7 +107,7 @@ contract Elections {
         string memory _name,
         string memory _desc,
         string[] memory candidateInfo
-    ) public onlyAdmin {
+    ) public onlyAdmin notEmpty(_name, _desc, candidateInfo) {
         elections[id] = Election(_name, ElectionStatus.INIT, _desc, 0, 0);
         uint256 length = candidateInfo.length / 6;
         uint256 index = 0;
@@ -113,10 +139,15 @@ contract Elections {
     */
     function editElection(
         uint256 id,
-        string memory _name,
-        string memory _desc,
-        string[] memory candidateInfo
-    ) public onlyAdmin {
+        string calldata _name,
+        string calldata _desc,
+        string[] calldata candidateInfo
+    ) external onlyAdmin notEmpty(_name, _desc, candidateInfo) idValid(id) {
+        require(
+            elections[id].status == ElectionStatus(0),
+            "Election already started, cannot edit"
+        ); // must be initial stage to be edit
+
         uint256 length = candidateInfo.length / 6;
         uint256 oriLength = totalCandidate[id];
         // as evertime execute here wait very long, so adjust no need to delete all
@@ -132,7 +163,16 @@ contract Elections {
         deleteElection will empty the elections mapping
         :param id: election's id that want to del    
      */
-    function deleteElection(uint256 id, uint256 del) public onlyAdmin {
+    function deleteElection(uint256 id, uint256 del)
+        public
+        onlyAdmin
+        idValid(id)
+    {
+        require(
+            elections[id].status == ElectionStatus(0),
+            "Only initial status can be deleted."
+        ); // must be initial stage to be edit
+
         elections[id] = Election("", ElectionStatus.ABORT, "", 0, 0);
         uint256 candidateLength = totalCandidate[id];
         totalCandidate[id] = 0;
@@ -154,13 +194,25 @@ contract Elections {
         :param id: election's id
         :param status: election's new status
      */
-    function editStatus(uint256 id, uint256 status) public onlyAdmin {
+    function editStatus(uint256 id, uint256 status)
+        external
+        onlyAdmin
+        idValid(id)
+    {
         Election storage tmp = elections[id];
         require(tmp.status != ElectionStatus(3));
         if (status == 1) {
+            require(
+                tmp.status == ElectionStatus(0),
+                "Election must be initial status before start."
+            );
             tmp.startD = block.timestamp;
         }
         if (status == 2) {
+            require(
+                tmp.status == ElectionStatus(1),
+                "Election must be ongoing status before end."
+            );
             tmp.endD = block.timestamp;
         }
         tmp.status = ElectionStatus(status);
@@ -170,16 +222,61 @@ contract Elections {
     /**
 
      */
+    // event seeContent(bytes store, bytes send);
+    event seeContent2(string store, string send);
+
     function addVote(
         uint256 id,
-        string memory sign,
-        string memory encrypted,
-        string[] memory votesGet
-    ) public {
-        voterVerify[id][totalVerify] = sign;
+        string calldata sign,
+        string calldata encrypted,
+        string[] calldata votesGet
+    ) external idValid(id) {
+        require(
+            votersContract.isRegister(msg.sender) == true,
+            "Voter need to register before vote"
+        );
+        // emit seeContent(
+        //     abi.encodePacked(votersContract.voterSignature(msg.sender)),
+        //     abi.encodePacked(sign)
+        // );
+        emit seeContent2(votersContract.voterSignature(msg.sender), sign);
+
+        require(
+            keccak256(
+                abi.encodePacked(votersContract.voterSignature(msg.sender))
+            ) == keccak256(abi.encodePacked(sign)),
+            "The signature verification failed"
+        );
+        require(
+            keccak256(abi.encodePacked(sign)) !=
+                keccak256(abi.encodePacked("")),
+            "Vote infomation cannot be empty"
+        );
+        require(
+            keccak256(abi.encodePacked(encrypted)) !=
+                keccak256(abi.encodePacked("")),
+            "Vote infomation cannot be empty"
+        );
+        // another way
+        // require(
+        //     voterVerify[id][msg.sender] == false,
+        //     "Voter cannot vote twice"
+        // );\
+        require(
+            votersContract.isVoted(msg.sender, id) == false,
+            "Voter cannot vote twice"
+        );
+        require(
+            elections[id].status == ElectionStatus(1),
+            "Election must be ongoing to accept vote"
+        );
+        require(msg.sender != admin, "Admin is not allowed to vote");
+        require(votesGet.length == totalCandidate[id], "Vote invalid");
+
+        voterVerify[id][msg.sender] = true;
         totalVerify++;
 
-        verifyTimeID[sign] = block.number;
+        verifyTimeID[id][sign] = block.number;
         encryptedVerify[id][sign] = encrypted;
         uint256 candidateLength = totalCandidate[id];
         for (uint256 x = 0; x < candidateLength; x++) {
@@ -188,5 +285,6 @@ contract Elections {
             candidate.voteGet = votesGet[x];
             electionCandidate[id][x] = candidate;
         }
+        votersContract.setIsVoted(msg.sender, id);
     }
 }

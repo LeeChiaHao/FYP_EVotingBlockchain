@@ -59,7 +59,8 @@ const App = {
             App.reqModal.hide()
             console.log(plain)
             $(".historyCandidate").text(plain)
-            await App.contract.verifyTimeID(signature).then(async (val) => {
+            // TODO: electionID, signature
+            await App.contract.verifyTimeID(App.electionID, signature).then(async (val) => {
                 var num = solidity.bigNumberToNumber(val)
                 await App.contract.provider.getBlockWithTransactions(num).then((data) => {
                     var date = new Date(data.timestamp * 1000)

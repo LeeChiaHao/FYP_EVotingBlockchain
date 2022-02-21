@@ -16,12 +16,15 @@ const App = {
         App.contract = await solidity.getElectionsContract()
         App.address = await solidity.getElectionAddress()
         var totalElection = solidity.bigNumberToNumber(await App.contract.totalElection())
-        solidity.caretOnClick()
+        solidity.caretOnClick(2)
+        $(".noVote").addClass("show")
+        $(".noV").find(".caret").removeClass("left")
+        $(".noV").find(".caret").html("&#9656;")
         await App.loadElection(totalElection)
     },
 
     loadElection: async (total) => {
-        var className = "col-lg-4 col-9 border-0 mb-5 mt-3 electionCard"
+        var className = "col-lg-5 col-9 border-0 mb-5 electionCard"
         var elections = []
         for (var x = 0; x < total; x++) {
             console.log("Total" + total)
@@ -33,11 +36,12 @@ const App = {
                     if (val != "") {
                         console.log("Value: " + val)
                         append = ".voted"
-                        $(append).find(".list").removeClass("d-none")
                     } else {
                         append = ".noVote"
                     }
                     $(append).find(".noList").addClass("d-none")
+                    $(append).find(".list").removeClass("d-none")
+
                     $("<div></div>").addClass(className + " election" + x).appendTo(append)
                     $(e).prop("id", x)
                     $(e).load("election.html")

@@ -88,9 +88,21 @@
     cursor: pointer;
 }
 
-.noList, .list {
-    margin: 0rem 1rem;
-    padding: 1.3rem;
+.list {
+    font-weight: bolder;
+    text-align: center;
+    font-size: x-large;
+    padding: 0.5rem 0rem;
+}
+
+.voted .list {
+    padding: 0.5rem;
+}
+
+
+.listBackground{
+    background-color: bisque;
+    justify-content: center;
 }
 
 .btn-collapse {
@@ -98,6 +110,7 @@
     font-weight: bolder;
     font-size: large;
     position: relative;
+    width: 100%;
 }
 
 .sign, .option {
@@ -116,12 +129,16 @@
 .caret{
     position:absolute;
     right: 1rem;
-    bottom: 0;
+    bottom: -0.7rem;
     color: black;
-    font-size: x-large;
+    font-size: xxx-large;
 }
 
 .reqAlert{
     color: red;
     font-weight: bold;
+}
+
+.txnImg{
+    width: 40%;
 }

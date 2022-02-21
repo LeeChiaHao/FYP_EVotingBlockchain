@@ -222,7 +222,7 @@ const App = {
         try {
             App.txnModal.show()
             solidity.txnLoad("Making Transaction")
-            await App.contract.deleteElection(App.electionID).then(
+            await App.contract.deleteElection(App.electionID, 1).then(
                 (tx) => tx.wait().then(function () {
                     solidity.txnSuccess()
                     window.location.replace("list.html")
@@ -241,12 +241,14 @@ const App = {
 
 window.App = App;
 window.addEventListener("load", async function () {
-    App.checkAuth().then(function (result) {
+    App.checkAuth().then(async function (result) {
         if (!result) {
             window.location.replace("/")
         } else {
-            App.load()
-            $('body').removeClass('invisible')
+            await App.load().then(() => {
+                $('body').removeClass('invisible')
+
+            })
         }
     })
 })

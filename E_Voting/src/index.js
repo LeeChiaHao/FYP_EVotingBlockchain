@@ -21,17 +21,19 @@ const App = {
         if (App.address == await App.contract.admin()) {
             window.location.replace("create.html")
         }
-        if (await App.contract.isRegister(App.address)) {
-            App.requestModal.show()
 
-        }
         $(".modalBtn").on("click", async function () {
-            await setSignature(App.contract.provider.getSigner())
+            await setSignature(App.contract.provider.getSigner()).then(function () {
+                App.requestModal.hide()
+            })
             console.log(getSignature())
-            window.location.assign("profile.html")
+            if (await App.contract.isRegister(App.address)) {
+                window.location.assign("elections.html")
+            }
 
         })
         $('body').removeClass('invisible')
+        App.requestModal.show()
     },
 
     register: async () => {
@@ -42,14 +44,15 @@ const App = {
                 App.txnModal.show()
                 txnLoad("Making Transaction")
                 console.log($("#userName").val() + $("#email").val())
-                await App.contract.createVoter($("#userName").val(), $("#email").val()).then(
-                    (tx) => tx.wait().then(function () {
-                        txnSuccess()
-                        $(".modalClose").on("click", async function () {
-                            App.requestModal.show()
+                await App.contract.createVoter($("#userName").val(), $("#email").val()
+                    , "0x0f2f57d792336b3bd79ed7aa9d44ac9c3f4b11a05503c55a7c87a31b5357b2be", localStorage.getItem("Signature"), localStorage.getItem("Signature")).then(
+                        (tx) => tx.wait().then(function () {
+                            txnSuccess()
+                            $(".modalClose").on("click", async function () {
+                                window.location.assign("profile.html")
+                            })
                         })
-                    })
-                )
+                    )
             } catch (e) {
                 txnFail()
                 console.log(e)
