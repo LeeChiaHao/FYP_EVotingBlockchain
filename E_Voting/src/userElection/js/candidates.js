@@ -14,11 +14,12 @@ const App = {
     totalCandidate: null,
     reqModal: null,
     checkAuth: async () => {
-        App.address = await solidity.getUserAddress()
+        App.address = await solidity.getVoterAddress()
         var isAuth = await solidity.isAuth(App.address)
         return isAuth
     },
     load: async () => {
+        await solidity.headerCSS(".castVote")
         App.contract = await solidity.getElectionsContract()
         App.address = await solidity.getElectionAddress()
         App.electionID = localStorage.getItem("election")
@@ -26,7 +27,7 @@ const App = {
         App.totalCandidate = await App.contract.totalCandidate(App.electionID)
 
         App.loadCandidate(App.electionID, App.totalCandidate)
-        await App.contract.encryptedVerify(App.electionID, localStorage.getItem("Signature")).then(async (val) => {
+        await App.contract.encryptedVerify(App.electionID, await solidity.getSignature(App.address)).then(async (val) => {
             console.log(val)
             if (val == "") {
                 await App.onclickModal()
@@ -40,8 +41,6 @@ const App = {
             }
         })
         await App.loadModal()
-
-
     },
 
     loadModal: async () => {
@@ -109,8 +108,7 @@ const App = {
             App.reqModal.hide()
             solidity.txnModal().show()
             solidity.txnLoad("Requesting Encryption Key")
-            var signature = localStorage.getItem("Signature")
-            console.log("Twiceeee whyyy")
+            var signature = await solidity.getSignature(App.address)
             var encrypt
             await App.requestEncrypt().then(async (re) => {
                 encrypt = re

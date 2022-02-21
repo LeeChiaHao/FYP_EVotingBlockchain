@@ -7,12 +7,13 @@ const App = {
     contract: null,
     address: null,
     checkAuth: async () => {
-        App.address = await solidity.getUserAddress()
+        App.address = await solidity.getVoterAddress()
         var isAuth = await solidity.isAuth(App.address)
         return isAuth
     },
 
     load: async () => {
+        await solidity.headerCSS(".castVote")
         App.contract = await solidity.getElectionsContract()
         App.address = await solidity.getElectionAddress()
         var totalElection = solidity.bigNumberToNumber(await App.contract.totalElection())
@@ -32,7 +33,7 @@ const App = {
             if (election.status == 1) {
                 var append
                 var e = ".election" + x
-                await App.contract.encryptedVerify(x, localStorage.getItem("Signature")).then((val) => {
+                await App.contract.encryptedVerify(x, await solidity.getSignature(App.address)).then((val) => {
                     if (val != "") {
                         console.log("Value: " + val)
                         append = ".voted"

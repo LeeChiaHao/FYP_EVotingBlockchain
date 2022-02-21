@@ -1,31 +1,32 @@
 import 'bootstrap'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import '../../style.css'
+import '../css/historyList.css'
 
 const App = {
     contract: null,
     address: null,
     checkAuth: async () => {
-        App.address = await solidity.getUserAddress()
+        App.address = await solidity.getVoterAddress()
         var isAuth = await solidity.isAuth(App.address)
         return isAuth
     },
 
     load: async () => {
+        await solidity.headerCSS(".vHistory")
         App.contract = await solidity.getElectionsContract()
         App.address = await solidity.getElectionAddress()
-
         await App.loadHistory()
     },
 
     loadHistory: async () => {
         var elections = []
         var totalE = await App.contract.totalElection()
-        var className = "col-10 bg-primary p-3 mb-5"
+        var className = "col-10 hList p-3 mb-5"
         for (var x = totalE - 1; x >= 0; x--) {
             await App.contract.elections(x).then(async (election) => {
                 if (election.status == 2) {
-                    var sign = localStorage.getItem("Signature")
+                    var sign = await solidity.getSignature(App.address)
                     console.log(sign)
                     await App.contract.encryptedVerify(x, sign).then((val) => {
                         if (val != "") {

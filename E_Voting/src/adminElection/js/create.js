@@ -12,7 +12,7 @@ const App = {
     delCandidate: null,
     checkAuth: async () => {
         App.contract = await solidity.getElectionsContract()
-        App.address = await solidity.getUserAddress()
+        App.address = await solidity.getVoterAddress()
         console.log(await App.contract.admin())
         if (App.address == await App.contract.admin()) {
             return true
@@ -22,6 +22,7 @@ const App = {
     },
 
     load: async () => {
+        await solidity.headerCSS(".creating")
         App.forms = document.querySelector('.validation')
         App.contract = await solidity.getElectionsContract()
         App.address = await solidity.getElectionAddress()

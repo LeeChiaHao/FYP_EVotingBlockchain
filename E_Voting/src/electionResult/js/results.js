@@ -12,12 +12,13 @@ const App = {
     votes: {},
     totalVote: BigInt(0),
     checkAuth: async () => {
-        App.address = await solidity.getUserAddress()
+        App.address = await solidity.getVoterAddress()
         var isAuth = await solidity.isAuth(App.address)
         return isAuth
     },
 
     load: async () => {
+        await solidity.headerCSS(".eResult")
         App.contract = await solidity.getElectionsContract()
         App.address = await solidity.getElectionAddress()
         App.electionID = localStorage.getItem("election")

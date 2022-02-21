@@ -1,3 +1,6 @@
+html, body{
+    background-color: #EBEAF6;
+}
 .bodyContainer{
     margin-bottom: 3rem;
 }
@@ -11,8 +14,19 @@
 }
 
 #menuItem ul li:hover *{
-    background-color: #dac8b1;
+    background-color: #EBEAF6;
     color: black;
+    border-right: 1px solid black;
+    border-left: 1px solid black;
+}
+
+.menuSelect {
+    background-color: #EBEAF6;
+    border-bottom: 1px solid black;
+}
+
+.menuSelect a{
+    color: black !important;
 }
 
 .candidate:hover {
@@ -51,16 +65,23 @@
 } */
 
 .btn-submit{
-    color: white;
-    background-color: #603c2c;
-    border: 2px solid #cd9542;
+    color: black;
+    background-color: #b371b3;
+    border: 2px solid #74449b;
+    font-weight: bold;
+    font-size: large;
 }
 
 .btn-submit:hover{
-    background-color: #cd9542;
-    border: 2px solid #603c2c;
-
+    background-color: #74449b;
+    border: 2px solid #b371b3;
+    color: white;
 }
+
+.btn-submit:disabled{
+    text-decoration: line-through;
+}
+
 .form-control:valid {
     border: 2px solid #198574;
 }

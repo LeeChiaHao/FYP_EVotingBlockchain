@@ -14,7 +14,7 @@ const App = {
     txnModal: null,
     checkAuth: async () => {
         App.contract = await solidity.getElectionsContract()
-        App.address = await solidity.getUserAddress()
+        App.address = await solidity.getVoterAddress()
         console.log(await App.contract.admin())
         if (App.address == await App.contract.admin()) {
             return true
@@ -24,6 +24,7 @@ const App = {
     },
 
     load: async () => {
+        await solidity.headerCSS(".listing")
         App.form = document.querySelector("#editForm")
         App.electionID = localStorage.getItem("election")
         App.txnModal = new Modal($("#txnModal"))
@@ -32,7 +33,11 @@ const App = {
 
         App.loadCandidate(App.electionID, App.totalCandidate)
         App.loadAddDel()
+        $("#modalClose").on("click", function () {
+            window.location.replace("list.html")
+        })
     },
+
     loadCandidate: async (id, total) => {
         for (var x = 0; x < total; x++) {
             $("<div></div").addClass("loadCandidate" + x).appendTo(".loadCandidate")
@@ -109,7 +114,6 @@ const App = {
                             break
                         default:
                             break
-
                     }
                 }
             })
@@ -132,9 +136,6 @@ const App = {
                 $(".loadCandidate" + x).find("#slogan" + x).val(val.slogan)
                 var vote = BigInt(val.voteGet)
                 var add = solidity.encrypt(4)
-                var total = solidity.encryptAdd(add, vote)
-                // console.log(total)
-                // console.log("Decryption: " + solidity.decrypt(total))
             }
             )
         }
@@ -143,9 +144,7 @@ const App = {
             $("#editBtn").prop('disabled', false)
         } else if (election.status == 1) {
             $(".noEdit").removeClass("d-none")
-
         }
-
     },
 
     deleteCandidate: async (num) => {
@@ -198,9 +197,6 @@ const App = {
                     await App.contract.editElection(App.electionID, $("#electionName").val(), $("#description").val(), allCandidates).then(
                         (tx) => tx.wait().then(function () {
                             solidity.txnSuccess()
-                            $("#modalClose").on("click", function () {
-                                window.location.replace("list.html")
-                            })
                         })
                     )
                 } catch (e) {
@@ -218,6 +214,7 @@ const App = {
             }
         }
     },
+
     delForm: async () => {
         try {
             App.txnModal.show()
@@ -225,15 +222,15 @@ const App = {
             await App.contract.deleteElection(App.electionID, 1).then(
                 (tx) => tx.wait().then(function () {
                     solidity.txnSuccess()
-                    window.location.replace("list.html")
+                    // window.location.replace("list.html")
                 })
             )
         } catch (e) {
             console.log(e);
             solidity.txnFail()
         }
-
     },
+
     cancelForm: async () => {
         window.location.reload()
     }

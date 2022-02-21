@@ -10,12 +10,13 @@ const App = {
     electionID: null,
     reqModal: null,
     checkAuth: async () => {
-        App.address = await solidity.getUserAddress()
+        App.address = await solidity.getVoterAddress()
         var isAuth = await solidity.isAuth(App.address)
         return isAuth
     },
 
     load: async () => {
+        await solidity.headerCSS(".vHistory")
         App.contract = await solidity.getElectionsContract()
         App.address = await solidity.getElectionAddress()
         App.electionID = localStorage.getItem("election")
@@ -46,7 +47,7 @@ const App = {
 
     verifyVote: async () => {
         var encrypted
-        var signature = localStorage.getItem("Signature")
+        var signature = await solidity.getSignature(App.address)
         await App.contract.encryptedVerify(App.electionID, signature).then((val) => {
             console.log(val)
             encrypted = val

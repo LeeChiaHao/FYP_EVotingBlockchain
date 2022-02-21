@@ -12,18 +12,21 @@ const App = {
     myModal: null,
     name: null,
     email: null,
+    tmpName: null,
+    tmpEmail: null,
     editArea: null,
     submitArea: null,
     form: null,
     checkAuth: async () => {
-        App.address = await solidity.getUserAddress()
+        App.address = await solidity.getVoterAddress()
         var isAuth = await solidity.isAuth(App.address)
         return isAuth
     },
 
     load: async () => {
+        solidity.headerCSS(".profile")
         App.contract = await solidity.getVotersContract()
-        App.address = await solidity.getUserAddress()
+        App.address = await solidity.getVoterAddress()
         App.name = $("#profileName")
         App.email = $("#profileEmail")
         App.editArea = $("#editArea")
@@ -40,7 +43,7 @@ const App = {
         App.myModal = new Modal($("#txnModal"))
         // Testing
 
-        // await App.contract.verifySignature("0x0f2f57d792336b3bd79ed7aa9d44ac9c3f4b11a05503c55a7c87a31b5357b2be", localStorage.getItem("Signature"))
+        // await App.contract.verifySignature("0x0f2f57d792336b3bd79ed7aa9d44ac9c3f4b11a05503c55a7c87a31b5357b2be", await solidity.getSignature(App.address))
         //     .then(function (val) {
         //         console.log(val);
         //     });
@@ -54,13 +57,14 @@ const App = {
     editProfile: async () => {
         App.name.prop("disabled", false)
         App.email.prop("disabled", false)
-        var tmpName = App.name.val()
-        var tmpEmail = App.email.val()
+        App.tmpName = App.name.val()
+        App.tmpEmail = App.email.val()
         App.name.on("keyup", function () {
-            App.checkChange(tmpName, tmpEmail)
+            App.checkChange(App.tmpName, App.tmpEmail)
         })
         App.email.on("keyup", function () {
-            App.checkChange(tmpName, tmpEmail)
+            App.checkChange(App.tmpName, App.tmpEmail)
+
         })
         App.editArea.hide()
         App.submitArea.addClass("d-flex")
@@ -90,6 +94,8 @@ const App = {
     cancelProfile: async () => {
         App.name.prop("disabled", true)
         App.email.prop("disabled", true)
+        await App.name.val(App.tmpName)
+        await App.email.val(App.tmpEmail)
         App.editArea.show()
         App.submitArea.removeClass("d-flex")
     },

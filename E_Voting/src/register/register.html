@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- <script src="index.js"></script> -->
+    <title>Register</title>
+</head>
+
+<body class="invisible">
+    <!-- header -->
+    <nav class="navbar navbar-expand-lg navbar-light header pt-lg-4">
+        <div class="container">
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#register"
+                aria-controls="register" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon mr-auto"></span>
+            </button>
+            <div class="collapse navbar-collapse row" id="register">
+                <ul class="navbar-nav mb-2 mb-lg-0 text-lg-center text-md-start fs-3 ps-3 justify-content-center">
+                    <li class="nav-item col-lg-4 col-md-12">
+                        <a class="nav-link" href="#">Registration</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-lg-8 col-md-12">
+                <div class="col-5 mx-auto p-3 text-center fw-bolder border-bottom border-3 border-dark registerForm">
+                    Register as Voter
+                </div>
+                <form class="form validation registerForm" onsubmit="App.register(); return false" novalidate>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text col-3" id="basic-addon1">UserID</span>
+                        <input type="text" class="form-control" placeholder="Username" aria-label="Username"
+                            aria-describedby="basic-addon1" id="userName" required>
+                        <div class="invalid-feedback">
+                            This name field is required.
+                        </div>
+                        <div class="valid-feedback">
+                            Success
+                        </div>
+                    </div>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text col-3" id="basic-addon1">Email</span>
+                        <input type="text" class="form-control" placeholder="Email address" aria-label="Email"
+                            aria-describedby="basic-addon1" id="email" required>
+                        <div class="invalid-feedback">
+                            This email field is required.
+                        </div>
+                        <div class="valid-feedback">
+                            Success
+                        </div>
+                    </div>
+                    <div class="col-3 mx-auto">
+                        <button type="submit" class="btn btn-submit w-100" id="registerForm">Register</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- TxnModal -->
+    <%= require("fs").readFileSync(htmlWebpackPlugin.options.HTML_PATH + "txnModal.html" ) %>
+        <!-- RequestModal -->
+        <%= require("fs").readFileSync(htmlWebpackPlugin.options.HTML_PATH + "requestModal.html" ) %>
+
+</body>
+
+</html>

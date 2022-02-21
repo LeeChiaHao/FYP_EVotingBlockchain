@@ -8,7 +8,7 @@ const App = {
     address: null,
     checkAuth: async () => {
         App.contract = await solidity.getElectionsContract()
-        App.address = await solidity.getUserAddress()
+        App.address = await solidity.getVoterAddress()
         if (App.address == await App.contract.admin()) {
             return true
         } else {
@@ -17,6 +17,7 @@ const App = {
     },
 
     load: async () => {
+        await solidity.headerCSS(".listing")
         App.contract = await solidity.getElectionsContract()
         App.address = await solidity.getElectionAddress()
         var totalElection = solidity.bigNumberToNumber(await App.contract.totalElection())

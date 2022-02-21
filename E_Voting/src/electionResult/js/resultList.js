@@ -6,12 +6,13 @@ const App = {
     contract: null,
     address: null,
     checkAuth: async () => {
-        App.address = await solidity.getUserAddress()
+        App.address = await solidity.getVoterAddress()
         var isAuth = await solidity.isAuth(App.address)
         return isAuth
     },
 
     load: async () => {
+        await solidity.headerCSS(".eResult")
         App.contract = await solidity.getElectionsContract()
         App.address = await solidity.getElectionAddress()
         var totalElection = solidity.bigNumberToNumber(await App.contract.totalElection())

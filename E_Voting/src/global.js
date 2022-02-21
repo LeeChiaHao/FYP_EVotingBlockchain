@@ -23,20 +23,33 @@ export async function setSignature(signer) {
     let signing = arrayify(shamsg)
     console.log(signing);
     signature = await signer.signMessage(signing)
-    console.log(signature)
-    localStorage.setItem("Signature", signature)
+    console.log("Signature: " + signature)
+    window.localStorage.setItem("Signature", signature)
     verify = ethers.utils.verifyMessage(msg, signature)
-    console.log(verify)
+    console.log("Verify: " + verify)
 }
 
-export function getSignature() {
-    return signature
+export async function getSignature(address) {
+    var sign
+    await getVotersContract().then(async function (contract) {
+        await contract.voters(address).then(function (voter) {
+            sign = voter.signature
+        })
+    })
+
+    return sign
+}
+
+export async function headerCSS(page) {
+    $(page).addClass("menuSelect")
 }
 
 export async function getVotersContract() {
     try {
         const provider = new ethers.providers.Web3Provider(window.ethereum, "any")
-        await provider.send("eth_requestAccounts", []);
+        await provider.send("eth_requestAccounts", []).then(function (val) {
+            console.log("Test: " + val);
+        });
         ethereum.on("accountsChanged", function () {
             localStorage.clear()
             window.location.replace("/")
@@ -81,7 +94,7 @@ export async function getElectionsContract() {
     }
 }
 
-export async function getUserAddress() {
+export async function getVoterAddress() {
     var contract = await getVotersContract()
     var address = contract.provider.getSigner().getAddress()
     return address

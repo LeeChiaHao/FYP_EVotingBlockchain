@@ -1,5 +1,7 @@
 .history{
-    background-color: rgb(138, 224, 229);  
+    background-color: #cdc9e4;  
+    border: 2px solid black;
+
 }
 
 .title {
@@ -15,7 +17,8 @@
 }
 
 .historyList li{
-    background-color: rgb(138, 224, 229);  
+    background-color: #cdc9e4;  
+
     color: black;
     font-weight: bold;
     border: none;
