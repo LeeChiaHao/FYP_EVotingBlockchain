@@ -23,6 +23,7 @@ const App = {
         App.contract = await solidity.getElectionsContract()
         App.address = await solidity.getElectionAddress()
         App.electionID = localStorage.getItem("election")
+        solidity.navigate("elections.html")
         App.reqModal = solidity.reqModal()
         App.totalCandidate = await App.contract.totalCandidate(App.electionID)
 
@@ -56,7 +57,7 @@ const App = {
     },
 
     loadCandidate: async (id, total) => {
-        var className = "col-lg-4 col-md-9 border-0 mt-5"
+        var className = "col-lg-4 col-md-9 border-0 mt-lg-3 mt-5"
         for (var x = 0; x < total; x++) {
             $("<div></div").addClass(className + " candidate" + x).appendTo(".allCandidates")
             $(".candidate" + x).prop("id", x)

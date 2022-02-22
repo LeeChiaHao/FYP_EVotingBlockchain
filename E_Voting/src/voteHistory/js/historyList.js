@@ -42,6 +42,7 @@ const App = {
                 }
             })
         }
+
         var count = 1
         for (var x = 0; x < elections.length; x++) {
             var e = elections[x]
@@ -58,6 +59,7 @@ const App = {
             localStorage.setItem("election", $(this).attr("id"))
             window.location.assign("verify.html")
         })
+        $(".container").removeClass("d-none")
     }
 }
 

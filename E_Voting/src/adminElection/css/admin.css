@@ -32,6 +32,7 @@
     background-color: #fbe48f;
     font-weight: bold;
     border: 2px solid black;
+    white-space: normal;
 }
 
 .election-input-group input {
@@ -44,14 +45,45 @@
     font-weight: bold;
 }
 
+.back {
+    position: absolute;
+    top: 5rem;
+}
+
+.btn-collapse {
+    background-color: bisque;
+    color: black;
+    border: 1px solid black;
+    border-radius: 0.7rem;
+}
+
+.btn-collapse:hover, .btn-collapse:focus {
+    background-color: bisque;
+    color: black;
+    box-shadow: 0 0 0 0.25rem rgb(255 0 0 / 50%)
+}
+
+#initialE .electionTitle, #initialE .btn-start{
+    background-color: #c6c3e9;
+}
+
+#ongoingE .electionTitle, #ongoingE .btn-end {
+    background-color: #a59fec;
+}
+
+#endE .electionTitle {
+    background-color: #6659f6;
+}
+
 .btn-start, .btn-end{
-    background-color: yellow;
-    border: 2px solid #cd9542;
+    border: 2px solid black;
     width: 100%;
     margin-top: 0.5rem;
 }
+
 .btn-start:hover, .btn-end:hover{
-    background-color: white;
+    background-color: #7b73da  !important;
+    font-weight: bold;
 }
 
 .radio {
@@ -84,4 +116,16 @@
 }
 .radio input:checked {
     background-color: #fbe48f !important;
+}
+
+@media screen and (max-width: 576px) {
+    .caret{
+        right: -0.5rem;
+    }
+    .electionForm {
+        padding: 1rem;
+    }
+    .election-input-group span{
+        justify-content: center;
+    }
 }

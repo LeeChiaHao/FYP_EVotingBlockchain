@@ -62,6 +62,7 @@ module.exports = {
             { from: "./src/img/fail.png", to: "fail.png" },
             { from: "./src/img/male.png", to: "male.png" },
             { from: "./src/img/female.png", to: "female.png" },
+            { from: "./src/img/logo.png", to: "logo.png" },
             { from: "./src/adminElection/createForm.html", to: "createForm.html" },
             { from: "./src/userElection/candidate.html", to: "candidate.html" },
             { from: "./src/commonHTML/election.html", to: "election.html" },

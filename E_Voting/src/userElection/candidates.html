@@ -17,16 +17,21 @@
     <div class="container">
         <form>
             <div class="row justify-content-around">
-                <div class="col-10 mb-2">
-                    <div class="title text-center m-3">
-                        <h2 class="fs-3 fw-bold">
-                            Select a candidate and confirm your vote
-                        </h2>
+                <div class="col-12 mb-0">
+                    <div class="row">
+                        <div class="col-1 backBtn" onclick="history.back()">
+                            <span class="back">&#x2baa;</span>
+                        </div>
+                        <div class="col-10 title text-center mt-4">
+                            <h2 class="fs-3 fw-bold">
+                                Select a candidate and confirm your vote
+                            </h2>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <div class="row allCandidates g-5">
+            <div class="row allCandidates g-5 mt-2">
 
             </div>
 
@@ -36,7 +41,7 @@
                         You have voted. Please wait until end of election to check the result.
                     </div>
                     <div class="title text-center m-3">
-                        <input type="button" class="fs-3 fw-bold btn btn-submit" id="btn-confirm"
+                        <input type="button" class="fs-4 fw-bold btn btn-submit" id="btn-confirm"
                             value="Confirm Your Vote" disabled>
                     </div>
                 </div>

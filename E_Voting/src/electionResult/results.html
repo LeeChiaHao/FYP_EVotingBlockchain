@@ -14,16 +14,21 @@
         <%= require("fs").readFileSync(htmlWebpackPlugin.options.HTML_PATH + "header.html" ) %>
     </div>
 
-    <div class="container">
-        <div class="row gx-5">
+    <div class="container results">
+        <div class="row mx-0 px-0">
             <div class="col-12 mb-0">
-                <div class="title text-center m-3">
-                    <h2 class="fs-3 fw-bold">
-                        Election Result of
-                    </h2>
-                    <h2 class="fs-3 fw-bold elecName">
+                <div class="row">
+                    <div class="col-1 backBtn" onclick="history.back()">
+                        <span class="">&#x2baa;</span>
+                    </div>
+                    <div class="col-lg-10 col-9 title text-center m-3">
+                        <h2 class="fs-3 fw-bold">
+                            Election Result of
+                        </h2>
+                        <h2 class="fs-3 fw-bold elecName">
 
-                    </h2>
+                        </h2>
+                    </div>
                 </div>
             </div>
 
@@ -35,7 +40,7 @@
                 </div>
             </div>
 
-            <div class="row winnerCandidates gx-5 justify-content-evenly">
+            <div class="row winnerCandidates gx-5 justify-content-evenly  mx-0 px-0">
             </div>
 
             <div class="col-12 mb-4 others">
@@ -46,10 +51,15 @@
                 </div>
             </div>
 
-            <div class="row row-cols-lg-3 row-cols-1 justify-content-evenly othersCandidates">
+            <div class="row row-cols-lg-3 row-cols-1 justify-content-evenly othersCandidates  mx-0 px-0">
             </div>
         </div>
     </div>
+    <!-- TxnModal -->
+    <%= require("fs").readFileSync(htmlWebpackPlugin.options.HTML_PATH + "txnModal.html" ) %>
+        <!-- RequestModal -->
+        <%= require("fs").readFileSync(htmlWebpackPlugin.options.HTML_PATH + "requestModal.html" ) %>
+
 </body>
 
 </html>

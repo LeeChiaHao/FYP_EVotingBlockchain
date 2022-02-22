@@ -1,9 +1,10 @@
 .candidateCard{
     height: 100%;
+    border-radius: 3rem;
 }
 
 .candidateCard:hover, .active{
-    border: 5px solid black;
+    box-shadow: 2px 2px 0 0.25rem black;
     cursor: pointer;
 }
 
@@ -11,4 +12,9 @@
     text-align: center;
     color: rgb(200, 0, 0);
     font-weight: bold;
+}
+
+.back {
+    position: absolute;
+    top: 5rem;
 }

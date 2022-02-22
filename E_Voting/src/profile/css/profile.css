@@ -10,6 +10,7 @@
 
 .profileContent {
     width: 70%;
+
 }
 
 .profileList{
@@ -24,7 +25,8 @@
     border-bottom: 1px solid black;
 }
 
-.profileList input:disabled{
+.profileList input:disabled,
+.profileList textarea:disabled {
     background-color: #cdc9e4 !important;   
     color: black;
     font-weight: bold;
@@ -32,9 +34,11 @@
     border-bottom: 1px solid black;
 }
 
-.profileList input{
+.profileList input, .profileList textarea{
     border: 3px solid black;
     background-color: rgb(232, 240, 254);
+    word-wrap: break-word !important;
+    word-break: break-word !important;
     border-left-width: 2px !important;
     border-top-width: 2px !important;
 }

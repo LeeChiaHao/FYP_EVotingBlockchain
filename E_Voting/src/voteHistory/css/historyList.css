@@ -1,5 +1,7 @@
 .hList{
     background-color: #cdc9e4;  
+    border-radius: 2rem;
+    border: 1px solid black;
 }
 
 .btn-verify{
@@ -8,5 +10,9 @@
     font-weight: bold;
     background-color: #6c6075;  
     color: white;
-    
+}
+
+.btn-verify:hover{
+    text-decoration: underline;
+    color: white;
 }

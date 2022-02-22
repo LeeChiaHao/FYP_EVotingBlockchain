@@ -44,6 +44,13 @@ export async function headerCSS(page) {
     $(page).addClass("menuSelect")
 }
 
+export function navigate(page) {
+    if (localStorage.getItem("election") == null) {
+        window.location.replace(page)
+    } else {
+        localStorage.removeItem("election")
+    }
+}
 export async function getVotersContract() {
     try {
         const provider = new ethers.providers.Web3Provider(window.ethereum, "any")

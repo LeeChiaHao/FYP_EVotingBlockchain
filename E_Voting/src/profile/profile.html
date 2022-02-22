@@ -29,7 +29,8 @@
                     <ul class="list-group list-group-horizontal profileList">
                         <div class="input-group">
                             <li class="list-group-item profileTitle">Name:</li>
-                            <input class="list-group-item profileContent" id="profileName" disabled required></input>
+                            <textarea class="list-group-item profileContent " id="profileName" disabled
+                                required></textarea>
                             <div class="invalid-feedback">
                                 This name field is required.
                             </div>
@@ -43,7 +44,8 @@
                     <ul class="list-group list-group-horizontal profileList">
                         <div class="input-group">
                             <li class="list-group-item profileTitle">Email:</li>
-                            <input class="list-group-item profileContent" id="profileEmail" disabled required></input>
+                            <textarea class="list-group-item profileContent" id="profileEmail" disabled
+                                required></textarea>
                             <div class="invalid-feedback">
                                 This email field is required.
                             </div>
@@ -56,22 +58,22 @@
 
                     <ul class="list-group list-group-horizontal profileList">
                         <li class="list-group-item profileTitle">Metamask Account: </li>
-                        <input class="list-group-item profileContent" id="profileAddress" disabled></input>
+                        <textarea class="list-group-item profileContent" id="profileAddress" disabled></textarea>
                     </ul>
 
                     <div class="row justify-content-center" id="editArea">
-                        <div class="col-3">
+                        <div class="col-lg-3 col-6">
                             <button class="btn btn-submit w-100 fs-5" onclick="App.editProfile(); return false"
                                 id="editBtn">Edit</button>
                         </div>
                     </div>
 
                     <div class="row justify-content-center" id="submitArea">
-                        <div class="col-3">
+                        <div class="col-lg-3 col-6">
                             <button type="submit" class="btn btn-submit w-100 fs-5" id="submitBtn"
                                 onclick="App.submitProfile(); return false" disabled>Submit</button>
                         </div>
-                        <div class="col-3">
+                        <div class="col-lg-3 col-6">
                             <button type="submit" class="btn btn-submit w-100 fs-5" id="cancelBtn"
                                 onclick="App.cancelProfile(); return false">Cancel</button>
                         </div>

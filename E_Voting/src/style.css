@@ -1,8 +1,15 @@
 html, body{
     background-color: #EBEAF6;
+    width: 100%;
 }
+
 .bodyContainer{
     margin-bottom: 3rem;
+}
+
+.logo {
+    height: 85px;
+    width: 85px;
 }
 
 .header{
@@ -21,16 +28,36 @@ html, body{
 }
 
 .menuSelect {
-    background-color: #EBEAF6;
     border-bottom: 1px solid black;
 }
 
 .menuSelect a{
+    background-color: #EBEAF6;
     color: black !important;
 }
 
+.homePage{
+    font-size: 100px;
+    font-weight: 900;
+    text-shadow: 10px 10px grey;
+}
+
+.card {
+
+}
+
+.backBtn{
+    font-size: 75px
+}
+
+.backBtn:hover{
+    color: #837ae8;
+    cursor: pointer;
+}
+
 .candidate:hover {
-    border: 5px solid black;
+    box-shadow: 0 0 0 0.25rem rgb(17 37 67 / 50%)
+
 }
 
 .candidate {
@@ -104,8 +131,12 @@ html, body{
     background-color: rgb(235, 235, 63);
 }
 
+.electionContent{
+    padding-bottom: 1rem;
+}
+
 .electionContent:hover{
-    border: 5px solid black;
+    box-shadow: 2px 2px 0 0.25rem black;
     cursor: pointer;
 }
 
@@ -124,6 +155,7 @@ html, body{
 .listBackground{
     background-color: bisque;
     justify-content: center;
+    border-radius: 1rem;
 }
 
 .btn-collapse {
@@ -162,4 +194,32 @@ html, body{
 
 .txnImg{
     width: 40%;
+}
+
+#modalYes{
+    background-color: #d96060;
+}
+
+#modalNo{
+    background-color: #3f7ed7;
+}
+
+#modalYes, #modalNo {
+    color: black;
+}
+
+#modalYes:hover, #modalNo:hover {
+    font-weight: bolder;
+    text-decoration: underline;
+    border: 3px solid black;
+}
+
+@media screen and (max-width: 992px) {
+    .logo {
+        height: 80px;
+        width: 80px;
+    }
+    .backBtn {
+        font-size: 50px;
+     }
 }

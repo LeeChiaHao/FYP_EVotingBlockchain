@@ -8,9 +8,12 @@ const App = {
     address: null,
     electionID: null,
     totalCandidate: null,
+    txnModal: null,
+    reqModal: null,
     winner: {},
     votes: {},
     totalVote: BigInt(0),
+
     checkAuth: async () => {
         App.address = await solidity.getVoterAddress()
         var isAuth = await solidity.isAuth(App.address)
@@ -22,10 +25,38 @@ const App = {
         App.contract = await solidity.getElectionsContract()
         App.address = await solidity.getElectionAddress()
         App.electionID = localStorage.getItem("election")
+        solidity.navigate("resultList.html")
 
+        App.txnModal = solidity.txnModal()
+        App.reqModal = solidity.reqModal()
         App.totalCandidate = await App.contract.totalCandidate(App.electionID)
         await App.countWinner(solidity.bigNumberToNumber(App.totalCandidate))
         await App.loadContent()
+        await App.calculate()
+
+    },
+
+    calculate: async () => {
+        $(".results").hide()
+        App.txnModal.show()
+        solidity.txnLoad("Calculating Result")
+        setTimeout(function () {
+
+            $('.modalTitle').text("Vote Result")
+            $(".modalBody").html(`<p> There are total of ` + App.totalCandidate +
+                ` candidates in this election.</p> <p> 
+            At the end, we have <span class="fs-3">` + Object.keys(App.winner).length + ` Winner(s)</span>  in this election.</p>`)
+            $(".modalBtn").text("View result")
+            $(".modalBtn").on("click", () => {
+                App.txnModal.hide()
+
+                App.reqModal.hide()
+                $(".results").show()
+            })
+
+            App.reqModal.show()
+        }, 10)
+
     },
 
     countWinner: async (candidates) => {
@@ -56,7 +87,7 @@ const App = {
         if (len > 1) {
             winnerClass = "col-lg-5 border-0 mb-4"
         } else {
-            winnerClass = "col-lg-11 border-0 mb-4"
+            winnerClass = "col-lg-12 border-0 mb-4"
             $(".winnerCandidates").addClass("justify-content-center")
             $(".winnerCandidates").removeClass("justify-content-between")
         }
@@ -94,8 +125,8 @@ const App = {
                 $(candidate).find(".candidateParty").text(val.party)
                 $(candidate).find(".candidateSlogan").text(val.slogan)
                 var percent = Number(App.votes[x]) / Number(App.totalVote)
-                $(candidate).find(".votePercent").text(percent * 100 + "%")
-                $(candidate).find(".voteNumber").text(App.votes[x] + " votes")
+                $(candidate).find(".votePercent").text(percent * 100 + "% of votes obtained")
+                $(candidate).find(".voteNumber").text("Get " + App.votes[x] + " vote(s)")
             }
             )
         }

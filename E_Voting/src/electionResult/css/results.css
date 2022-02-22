@@ -1,3 +1,8 @@
 .winnerCard{
     border: 6px solid red !important ;
 }
+
+.results{
+    display: none;
+    justify-content: center;
+}

@@ -1,7 +1,7 @@
 import 'bootstrap'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import '../../style.css'
-import '../css/election.css'
+import '../css/elections.css'
 
 const App = {
     contract: null,
@@ -73,6 +73,7 @@ const App = {
 
             })
         }
+        $(".container").removeClass("d-none")
     }
 }
 

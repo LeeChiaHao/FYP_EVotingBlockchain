@@ -19,6 +19,9 @@ const App = {
         App.txnModal = solidity.txnModal()
         App.form = document.querySelector('.validation')
         console.log(App.address)
+        if (await App.contract.isRegister(App.address)) {
+            window.location.replace("/")
+        }
     },
 
     register: async () => {

@@ -1,6 +1,7 @@
 import 'bootstrap'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import '../../style.css'
+import '../css/resultList.css'
 
 const App = {
     contract: null,
