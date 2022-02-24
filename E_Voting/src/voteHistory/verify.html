@@ -10,57 +10,61 @@
 
 <body>
     <!-- header -->
-    <div id="header">
+    <header id="header">
         <%= require("fs").readFileSync(htmlWebpackPlugin.options.HTML_PATH + "header.html" ) %>
-    </div>
+    </header>
+    <main>
+        <div class="container">
+            <div class="row justify-content-around">
+                <div class="col-12 mb-0">
+                    <div class="row">
+                        <div class="col-1 backBtn" onclick="history.back()">
+                            <span class="">&#x2baa;</span>
+                        </div>
+                        <div class="col-lg-10 col-9 text-center m-3">
+                            <h2 class="fs-3 fw-bold ">
+                                Vote History of
+                            </h2>
+                            <h2 class="fs-3 fw-bold elecName ">
 
-    <div class="container">
-        <div class="row justify-content-around">
-            <div class="col-12 mb-0">
-                <div class="row">
-                    <div class="col-1 backBtn" onclick="history.back()">
-                        <span class="">&#x2baa;</span>
-                    </div>
-                    <div class="col-lg-10 col-9 text-center m-3">
-                        <h2 class="fs-3 fw-bold ">
-                            Vote History of
-                        </h2>
-                        <h2 class="fs-3 fw-bold elecName ">
-
-                        </h2>
+                            </h2>
+                        </div>
                     </div>
                 </div>
-            </div>
 
 
-            <div class="col-10 p-3 mb-4 history">
-                <ul class="list-group list-group-horizontal historyList">
-                    <li class="list-group-item title">Candidate Vote:</li>
-                    <li class="list-group-item content historyCandidate"></li>
-                </ul>
+                <div class="col-10 p-3 mb-4 history">
+                    <ul class="list-group list-group-horizontal historyList">
+                        <li class="list-group-item title">Candidate Vote:</li>
+                        <li class="list-group-item content historyCandidate"></li>
+                    </ul>
 
-                <ul class="list-group list-group-horizontal historyList">
-                    <li class="list-group-item title">Time: </li>
-                    <li class="list-group-item content historyTime"></li>
-                </ul>
+                    <ul class="list-group list-group-horizontal historyList">
+                        <li class="list-group-item title">Time: </li>
+                        <li class="list-group-item content historyTime"></li>
+                    </ul>
 
-                <ul class="list-group list-group-horizontal historyList">
-                    <li class="list-group-item title">Transaction ID: </li>
-                    <li class="list-group-item content historyTxn text-break"></li>
-                </ul>
+                    <ul class="list-group list-group-horizontal historyList">
+                        <li class="list-group-item title">Transaction ID: </li>
+                        <li class="list-group-item content historyTxn text-break"></li>
+                    </ul>
 
-                <ul class="list-group list-group-horizontal historyList">
-                    <li class="list-group-item title">Block Number (Block Hash): </li>
-                    <li class="list-group-item content historyBlock text-break"></li>
-                </ul>
+                    <ul class="list-group list-group-horizontal historyList">
+                        <li class="list-group-item title">Block Number (Block Hash): </li>
+                        <li class="list-group-item content historyBlock text-break"></li>
+                    </ul>
+                </div>
             </div>
         </div>
-    </div>
+    </main>
 
-    <!-- TxnModal -->
-    <%= require("fs").readFileSync(htmlWebpackPlugin.options.HTML_PATH + "txnModal.html" ) %>
-        <!-- RequestModal -->
-        <%= require("fs").readFileSync(htmlWebpackPlugin.options.HTML_PATH + "requestModal.html" ) %>
+    <!-- footer -->
+    <%= require("fs").readFileSync(htmlWebpackPlugin.options.HTML_PATH + "footer.html" ) %>
+
+        <!-- TxnModal -->
+        <%= require("fs").readFileSync(htmlWebpackPlugin.options.HTML_PATH + "txnModal.html" ) %>
+            <!-- RequestModal -->
+            <%= require("fs").readFileSync(htmlWebpackPlugin.options.HTML_PATH + "requestModal.html" ) %>
 </body>
 
 </html>

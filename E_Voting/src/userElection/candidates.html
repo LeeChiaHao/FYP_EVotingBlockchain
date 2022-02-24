@@ -10,53 +10,58 @@
 
 <body class="invisible">
     <!-- header -->
-    <div id="header">
+    <header id="header">
         <%= require("fs").readFileSync(htmlWebpackPlugin.options.HTML_PATH + "header.html" ) %>
-    </div>
+    </header>
 
-    <div class="container">
-        <form>
-            <div class="row justify-content-around">
-                <div class="col-12 mb-0">
-                    <div class="row">
-                        <div class="col-1 backBtn" onclick="history.back()">
-                            <span class="back">&#x2baa;</span>
-                        </div>
-                        <div class="col-10 title text-center mt-4">
-                            <h2 class="fs-3 fw-bold">
-                                Select a candidate and confirm your vote
-                            </h2>
+    <main>
+        <div class="container">
+            <form>
+                <div class="row justify-content-around">
+                    <div class="col-12 mb-0">
+                        <div class="row">
+                            <div class="col-1 backBtn" onclick="history.back()">
+                                <span class="back">&#x2baa;</span>
+                            </div>
+                            <div class="col-10 title text-center mt-4">
+                                <h2 class="fs-3 fw-bold">
+                                    Select a candidate and confirm your vote
+                                </h2>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <div class="row allCandidates g-5 mt-2">
+                <div class="row allCandidates g-5 mt-2 justify-content-lg-start justify-content-center">
 
-            </div>
+                </div>
 
-            <div class="row justify-content-around">
-                <div class="col-10">
-                    <div class="noVote fs-3 d-none">
-                        You have voted. Please wait until end of election to check the result.
-                    </div>
-                    <div class="title text-center m-3">
-                        <input type="button" class="fs-4 fw-bold btn btn-submit" id="btn-confirm"
-                            value="Confirm Your Vote" disabled>
+                <div class="row justify-content-around">
+                    <div class="col-10">
+                        <div class="noVote fs-3 d-none">
+                            You have voted. Please wait until end of election to check the result.
+                        </div>
+                        <div class="title text-center m-3">
+                            <input type="button" class="fs-4 fw-bold btn btn-submit" id="btn-confirm"
+                                value="Confirm Your Vote" disabled>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </form>
-        <!-- <button class="decrypt">
+            </form>
+            <!-- <button class="decrypt">
             Decrypt
         </button> -->
+        </div>
+    </main>
 
-    </div>
 
-    <!-- TxnModal -->
-    <%= require("fs").readFileSync(htmlWebpackPlugin.options.HTML_PATH + "txnModal.html" ) %>
-        <!-- RequestModal -->
-        <%= require("fs").readFileSync(htmlWebpackPlugin.options.HTML_PATH + "requestModal.html" ) %>
+    <!-- footer -->
+    <%= require("fs").readFileSync(htmlWebpackPlugin.options.HTML_PATH + "footer.html" ) %>
+
+        <!-- TxnModal -->
+        <%= require("fs").readFileSync(htmlWebpackPlugin.options.HTML_PATH + "txnModal.html" ) %>
+            <!-- RequestModal -->
+            <%= require("fs").readFileSync(htmlWebpackPlugin.options.HTML_PATH + "requestModal.html" ) %>
 </body>
 
 </html>

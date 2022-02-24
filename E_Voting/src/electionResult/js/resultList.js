@@ -16,6 +16,7 @@ const App = {
         await solidity.headerCSS(".eResult")
         App.contract = await solidity.getElectionsContract()
         App.address = await solidity.getElectionAddress()
+        await solidity.navigate("/", "Signature1", false)
         var totalElection = solidity.bigNumberToNumber(await App.contract.totalElection())
         await App.loadElection(totalElection)
     },

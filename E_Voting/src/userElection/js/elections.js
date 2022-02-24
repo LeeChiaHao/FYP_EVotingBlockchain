@@ -16,6 +16,7 @@ const App = {
         await solidity.headerCSS(".castVote")
         App.contract = await solidity.getElectionsContract()
         App.address = await solidity.getElectionAddress()
+        await solidity.navigate("/", "Signature0", false)
         var totalElection = solidity.bigNumberToNumber(await App.contract.totalElection())
         solidity.caretOnClick(2)
         $(".noVote").addClass("show")

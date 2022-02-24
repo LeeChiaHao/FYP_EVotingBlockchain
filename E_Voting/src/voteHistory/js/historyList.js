@@ -16,6 +16,8 @@ const App = {
         await solidity.headerCSS(".vHistory")
         App.contract = await solidity.getElectionsContract()
         App.address = await solidity.getElectionAddress()
+        await solidity.navigate("/", "Signature2", false)
+
         await App.loadHistory()
     },
 

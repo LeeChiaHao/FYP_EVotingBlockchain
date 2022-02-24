@@ -20,7 +20,7 @@ const App = {
         App.contract = await solidity.getElectionsContract()
         App.address = await solidity.getElectionAddress()
         App.electionID = localStorage.getItem("election")
-        solidity.navigate("historyList.html")
+        solidity.navigate("historyList.html", "election", true)
         App.reqModal = new Modal($("#requestModal"))
 
         await App.showModal()

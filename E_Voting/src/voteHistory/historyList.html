@@ -10,24 +10,30 @@
 
 <body>
     <!-- header -->
-    <div id="header">
+    <header id="header">
         <%= require("fs").readFileSync(htmlWebpackPlugin.options.HTML_PATH + "header.html" ) %>
-    </div>
+    </header>
 
-    <div class="container d-none">
-        <div class="row justify-content-around historyList">
-            <div class="col-10 mb-4">
-                <div class="title text-center m-3">
-                    <h2 class="fs-3 fw-bold">
-                        Vote History
-                    </h2>
+    <main>
+        <div class="container d-none">
+            <div class="row justify-content-around historyList">
+                <div class="col-10 mb-4">
+                    <div class="title text-center m-3">
+                        <h2 class="fs-3 fw-bold">
+                            Vote History
+                        </h2>
+                    </div>
+                </div>
+                <div class="card card-body noList">
+                    Do not have any Vote History at this moment.
                 </div>
             </div>
-            <div class="card card-body noList">
-                Do not have any Vote History at this moment.
-            </div>
         </div>
-    </div>
+    </main>
+
+    <%= require("fs").readFileSync(htmlWebpackPlugin.options.HTML_PATH + "footer.html" ) %>
+
+
 </body>
 
 </html>

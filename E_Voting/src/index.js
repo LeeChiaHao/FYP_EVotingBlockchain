@@ -1,8 +1,7 @@
 import 'bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './style.css'
-import { getVotersContract, txnSuccess, txnLoad, setSignature, getSignature, txnModal, reqModal, getVoterAddress } from './global';
-import { Modal } from 'bootstrap';
+import { getVotersContract, txnLoad, setSignature, txnModal, reqModal, getVoterAddress, menuClick } from './global';
 
 const App = {
     contract: null,
@@ -16,6 +15,7 @@ const App = {
         App.loadModal = txnModal()
         App.requestModal = reqModal()
         App.isRegister = await App.contract.isRegister(App.address)
+        menuClick(App.address)
         if (App.address == await App.contract.admin()) {
             window.location.replace("create.html")
         }
@@ -42,7 +42,6 @@ const App = {
                 } else {
                     App.requestModal.hide()
                 }
-
             })
             App.validating()
         })
@@ -65,3 +64,9 @@ window.addEventListener("load", async function () {
 
     App.load()
 })
+
+window.onbeforeunload = function () {
+    window.onunload = function () {
+        localStorage.removeItem("Signature")
+    }
+}

@@ -8,83 +8,92 @@
     <title>Profile</title>
 </head>
 
-<body class="invisible">
+<body class="invisible d-flex flex-column">
     <!-- header -->
-    <div id="header">
-        <%= require("fs").readFileSync(htmlWebpackPlugin.options.HTML_PATH + "header.html" ) %>
-    </div>
+    <header>
+        <div id="header">
+            <%= require("fs").readFileSync(htmlWebpackPlugin.options.HTML_PATH + "header.html" ) %>
+        </div>
+    </header>
 
-    <div class="container">
-        <div class="row justify-content-around">
-            <div class="col-10">
-                <div class="title text-center m-3">
-                    <h2 class="fs-3 fw-bold">
-                        Profile
-                    </h2>
+
+    <main>
+        <div class="container">
+            <div class="row justify-content-around">
+                <div class="col-10">
+                    <div class="title text-center m-3">
+                        <h2 class="fs-3 fw-bold">
+                            Profile
+                        </h2>
+                    </div>
+                </div>
+
+                <div class="col-10 p-2">
+                    <form class="validation">
+                        <ul class="list-group list-group-horizontal profileList">
+                            <div class="input-group">
+                                <li class="list-group-item profileTitle">Name:</li>
+                                <textarea class="list-group-item profileContent " id="profileName" disabled
+                                    required></textarea>
+                                <div class="invalid-feedback">
+                                    This name field is required.
+                                </div>
+                                <div class="valid-feedback">
+                                    Success
+                                </div>
+                            </div>
+
+                        </ul>
+
+                        <ul class="list-group list-group-horizontal profileList">
+                            <div class="input-group">
+                                <li class="list-group-item profileTitle">Email:</li>
+                                <textarea class="list-group-item profileContent" id="profileEmail" disabled
+                                    required></textarea>
+                                <div class="invalid-feedback">
+                                    This email field is required.
+                                </div>
+                                <div class="valid-feedback">
+                                    Success
+                                </div>
+                            </div>
+
+                        </ul>
+
+                        <ul class="list-group list-group-horizontal profileList">
+                            <li class="list-group-item profileTitle">Metamask Account: </li>
+                            <textarea class="list-group-item profileContent" id="profileAddress" disabled></textarea>
+                        </ul>
+
+                        <div class="row justify-content-center" id="editArea">
+                            <div class="col-lg-3 col-6">
+                                <button class="btn btn-submit w-100 fs-5" onclick="App.editProfile(); return false"
+                                    id="editBtn">Edit</button>
+                            </div>
+                        </div>
+
+                        <div class="row justify-content-center" id="submitArea">
+                            <div class="col-lg-3 col-6">
+                                <button type="submit" class="btn btn-submit w-100 fs-5" id="submitBtn"
+                                    onclick="App.submitProfile(); return false" disabled>Submit</button>
+                            </div>
+                            <div class="col-lg-3 col-6">
+                                <button type="submit" class="btn btn-submit w-100 fs-5" id="cancelBtn"
+                                    onclick="App.cancelProfile(); return false">Cancel</button>
+                            </div>
+                        </div>
+                    </form>
                 </div>
             </div>
-
-            <div class="col-10 p-2">
-                <form class="validation">
-                    <ul class="list-group list-group-horizontal profileList">
-                        <div class="input-group">
-                            <li class="list-group-item profileTitle">Name:</li>
-                            <textarea class="list-group-item profileContent " id="profileName" disabled
-                                required></textarea>
-                            <div class="invalid-feedback">
-                                This name field is required.
-                            </div>
-                            <div class="valid-feedback">
-                                Success
-                            </div>
-                        </div>
-
-                    </ul>
-
-                    <ul class="list-group list-group-horizontal profileList">
-                        <div class="input-group">
-                            <li class="list-group-item profileTitle">Email:</li>
-                            <textarea class="list-group-item profileContent" id="profileEmail" disabled
-                                required></textarea>
-                            <div class="invalid-feedback">
-                                This email field is required.
-                            </div>
-                            <div class="valid-feedback">
-                                Success
-                            </div>
-                        </div>
-
-                    </ul>
-
-                    <ul class="list-group list-group-horizontal profileList">
-                        <li class="list-group-item profileTitle">Metamask Account: </li>
-                        <textarea class="list-group-item profileContent" id="profileAddress" disabled></textarea>
-                    </ul>
-
-                    <div class="row justify-content-center" id="editArea">
-                        <div class="col-lg-3 col-6">
-                            <button class="btn btn-submit w-100 fs-5" onclick="App.editProfile(); return false"
-                                id="editBtn">Edit</button>
-                        </div>
-                    </div>
-
-                    <div class="row justify-content-center" id="submitArea">
-                        <div class="col-lg-3 col-6">
-                            <button type="submit" class="btn btn-submit w-100 fs-5" id="submitBtn"
-                                onclick="App.submitProfile(); return false" disabled>Submit</button>
-                        </div>
-                        <div class="col-lg-3 col-6">
-                            <button type="submit" class="btn btn-submit w-100 fs-5" id="cancelBtn"
-                                onclick="App.cancelProfile(); return false">Cancel</button>
-                        </div>
-                    </div>
-                </form>
-            </div>
         </div>
-    </div>
+    </main>
 
-    <!-- TxnModal -->
-    <%= require("fs").readFileSync(htmlWebpackPlugin.options.HTML_PATH + "txnModal.html" ) %>
+    <!-- footer -->
+    <%= require("fs").readFileSync(htmlWebpackPlugin.options.HTML_PATH + "footer.html" ) %>
+
+
+        <!-- TxnModal -->
+        <%= require("fs").readFileSync(htmlWebpackPlugin.options.HTML_PATH + "txnModal.html" ) %>
 
 
 </body>

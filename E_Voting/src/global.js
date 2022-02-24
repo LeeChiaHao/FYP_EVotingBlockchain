@@ -44,11 +44,12 @@ export async function headerCSS(page) {
     $(page).addClass("menuSelect")
 }
 
-export function navigate(page) {
-    if (localStorage.getItem("election") == null) {
+export function navigate(page, item, remove) {
+    if (localStorage.getItem(item) == null) {
         window.location.replace(page)
-    } else {
-        localStorage.removeItem("election")
+    }
+    if (remove) {
+        localStorage.removeItem(item)
     }
 }
 export async function getVotersContract() {
@@ -75,11 +76,32 @@ export async function getVotersContract() {
 export async function isAuth(user) {
     var contract = await getVotersContract()
     console.log(await contract.isRegister(user))
+    await menuClick(user)
     if (await contract.isRegister(user)) {
         return true
     } else {
         return false
     }
+}
+
+export async function menuClick(address) {
+    console.log("AddressL " + address);
+    let sign = await getSignature(address)
+    $(".logo").on("click", async function () {
+        window.localStorage.setItem("Signature", sign)
+        window.location.assign("/")
+    })
+
+    $(".menu").on("click", async function () {
+        let label = $(this).attr("aria-label")
+        window.onbeforeunload = function () {
+            window.onunload = function () {
+                localStorage.clear()
+                window.localStorage.setItem("Signature" + label, sign)
+            }
+        }
+        window.location.assign($(this).attr("data-bs-target"))
+    })
 }
 
 export async function getElectionsContract() {
@@ -240,5 +262,13 @@ export function utcToLocal(utc) {
         result += " AM"
     }
     return result
-
 }
+
+window.addEventListener("load", function () {
+    $(".contact").on("click", function () {
+        var email = "1181100681@student.mmu.edu.my"
+        var subject = "Regarding E-Voting Based Blockchain";
+        var emailBody = ' ';
+        document.location = "mailto:" + email + "?subject=" + subject + "&body=" + emailBody;
+    })
+})

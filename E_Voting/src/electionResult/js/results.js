@@ -25,7 +25,7 @@ const App = {
         App.contract = await solidity.getElectionsContract()
         App.address = await solidity.getElectionAddress()
         App.electionID = localStorage.getItem("election")
-        solidity.navigate("resultList.html")
+        solidity.navigate("resultList.html", "election", true)
 
         App.txnModal = solidity.txnModal()
         App.reqModal = solidity.reqModal()

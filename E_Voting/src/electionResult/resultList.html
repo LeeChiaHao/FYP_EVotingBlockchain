@@ -10,28 +10,35 @@
 
 <body class="invisible">
     <!-- header -->
-    <div id="header">
+    <header id="header">
         <%= require("fs").readFileSync(htmlWebpackPlugin.options.HTML_PATH + "header.html" ) %>
-    </div>
+    </header>
 
-    <div class="container ">
-        <div class="row justify-content-center">
-            <div class="col-10 mb-4">
-                <div class="title text-center m-3 d-none">
-                    <h2 class="fs-3 fw-bold">
-                        Select an election and View the result
-                    </h2>
+    <main>
+        <div class="container ">
+            <div class="row justify-content-center">
+                <div class="col-10 mb-4">
+                    <div class="title text-center m-3 d-none">
+                        <h2 class="fs-3 fw-bold">
+                            Select an election and View the result
+                        </h2>
+                    </div>
                 </div>
             </div>
-        </div>
-        <div class="card card-body noList">
-            Do not have any Elections' result at this moment. When there is any election ends, the result can be check
-            at here.
-        </div>
-        <div class="row gx-5 allElections justify-content-center justify-content-lg-start">
+            <div class="card card-body noList">
+                Do not have any Elections' result at this moment. When there is any election ends, the result
+                can be
+                check
+                at here.
+            </div>
+            <div class="row gx-5 allElections justify-content-center justify-content-lg-start">
 
+            </div>
         </div>
-    </div>
+    </main>
+
+    <%= require("fs").readFileSync(htmlWebpackPlugin.options.HTML_PATH + "footer.html" ) %>
+
 </body>
 
 </html>

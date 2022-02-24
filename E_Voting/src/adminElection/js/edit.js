@@ -27,7 +27,7 @@ const App = {
         await solidity.headerCSS(".listing")
         App.form = document.querySelector("#editForm")
         App.electionID = localStorage.getItem("election")
-        solidity.navigate("list.html")
+        solidity.navigate("list.html", "election", true)
         App.txnModal = new Modal($("#txnModal"))
         App.totalCandidate = await App.contract.totalCandidate(App.electionID)
         App.delCandidate = $('.delCandidate')

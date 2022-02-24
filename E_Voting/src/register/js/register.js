@@ -22,12 +22,31 @@ const App = {
         if (await App.contract.isRegister(App.address)) {
             window.location.replace("/")
         }
+        await App.keyUp()
+    },
+
+    keyUp: async () => {
+        $("#userName").on("keyup", function () {
+            App.form.classList.remove('was-validated')
+        })
+        $("#email").on("keyup", function () {
+            App.form.classList.remove('was-validated')
+            $("#email").parent().find(".valid-feedback, .invalid-feedback").hide()
+
+        })
     },
 
     register: async () => {
         App.form.checkValidity()
+        var emailValid = true
+
+        if (! /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test($("#email").val())) {
+            console.log("Wrong Email Cibai");
+            emailValid = false
+
+        }
         App.form.classList.add('was-validated')
-        if ($(".was-validated:invalid").length == 0) {
+        if ($(".was-validated:invalid").length == 0 && emailValid) {
             try {
                 App.txnModal.show()
                 solidity.txnLoad("Making Transaction")
@@ -45,6 +64,11 @@ const App = {
             } catch (e) {
                 solidity.txnFail()
                 console.log(e)
+            }
+        } else {
+            if (!emailValid) {
+                $("#email").parent().find(".valid-feedback").hide()
+                $("#email").parent().find(".invalid-feedback").show()
             }
         }
     }

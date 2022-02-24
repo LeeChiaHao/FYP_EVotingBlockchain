@@ -32,9 +32,10 @@ const App = {
         App.editArea = $("#editArea")
         App.submitArea = $("#submitArea")
         App.form = document.querySelector('.validation')
+        await solidity.navigate("/", "Signature3", false)
 
         var voter = await App.contract.voters(App.address)
-
+        console.log("Capital letter: " + App.address);
         App.name.val(voter.name)
         App.email.val(voter.email)
         console.log(voter.signature);
@@ -61,9 +62,12 @@ const App = {
         App.tmpEmail = App.email.val()
         App.name.on("keyup", function () {
             App.checkChange(App.tmpName, App.tmpEmail)
+            App.form.classList.remove('was-validated')
         })
         App.email.on("keyup", function () {
             App.checkChange(App.tmpName, App.tmpEmail)
+            App.form.classList.remove('was-validated')
+            $("#profileEmail").parent().find(".valid-feedback, .invalid-feedback").hide()
 
         })
         App.editArea.hide()
@@ -72,8 +76,16 @@ const App = {
 
     submitProfile: async () => {
         App.form.checkValidity()
+        var emailValid = true
+        if (! /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test($("#profileEmail").val())) {
+            console.log("Wrong Email Cibai");
+            emailValid = false
+        }
+
         App.form.classList.add('was-validated')
-        if ($(".was-validated:invalid").length == 0) {
+        if ($(".was-validated:invalid").length == 0 && emailValid) {
+            $("#profileEmail").parent().find(".valid-feedback").show()
+            $("#profileEmail").parent().find(".invalid-feedback").hide()
             App.myModal.show()
             try {
                 App.contract.voters[App.address] = await App.contract.editVoter(App.name.val(), App.email.val()).then(
@@ -88,6 +100,12 @@ const App = {
             $("#modalClose").on("click", function () {
                 window.location.reload()
             })
+        } else {
+            if (!emailValid) {
+                $("#profileEmail").parent().find(".valid-feedback").hide()
+                $("#profileEmail").parent().find(".invalid-feedback").show()
+            }
+
         }
     },
 
