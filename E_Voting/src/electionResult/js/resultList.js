@@ -4,7 +4,8 @@ import '../css/resultList.css'
 const App = {
     contract: null,
     address: null,
-
+    timestamp: [],
+    timeId: {},
     // only registered voters can access
     checkAuth: async () => {
         App.address = await globalFunc.getVoterAddress()
@@ -25,33 +26,47 @@ const App = {
     // load the elections layout
     loadElection: async (total) => {
         var className = "col-lg-4 col-9 border-0 mb-5 electionCard"
-        var elections = []
         for (var x = 0; x < total; x++) {
             console.log("Total" + total)
             var election = await App.contract.elections(x)
             if (election.status == 2) {
-                $(".noList").addClass("d-none")
-                $(".title").removeClass("d-none")
-                $("<div></div>").addClass(className + " election" + x).appendTo(".allElections")
-                $(".election" + x).prop("id", x)
-                $(".election" + x).load("election.html")
-                elections.push(x)
+                console.log(election);
+                var time = globalFunc.bigNumberToNumber(election.endD)
+                console.log("End time: " + time);
+                console.log(typeof (time));
+                App.timestamp.push(time)
+                App.timeId[time] = x;
             }
         }
-        await App.loadElectionData(elections)
+
+        App.timestamp.sort(function (a, b) { return b - a })
+        console.log(App.timestamp);
+        var length = App.timestamp.length
+        for (var x = 0; x < length; x++) {
+            var id = App.timeId[App.timestamp[x]]
+            var election = await App.contract.elections(id)
+            $(".noList").addClass("d-none")
+            $(".title").removeClass("d-none")
+            $("<div></div>").addClass(className + " election" + id).appendTo(".allElections")
+            $(".election" + id).prop("id", id)
+            $(".election" + id).load("election.html")
+        }
+        await App.loadElectionData()
     },
 
     // load the data into layout
-    loadElectionData: async (e) => {
-        for (var x = 0; x < e.length; x++) {
-            console.log("election" + e[x])
-            $(".election" + e[x]).on("click", function () {
+    loadElectionData: async () => {
+        var len = App.timestamp.length
+        for (var x = 0; x < len; x++) {
+            var id = App.timeId[App.timestamp[x]]
+            console.log("election" + id)
+            $(".election" + id).on("click", function () {
                 console.log($(this).attr("id"))
                 localStorage.setItem("election", $(this).attr("id"))
                 window.location.assign("results.html")
             })
-            await App.contract.elections(e[x]).then((val) => {
-                var election = ".election" + e[x]
+            await App.contract.elections(id).then((val) => {
+                var election = ".election" + id
                 $(election).find(".electionTitle").text(val.name)
                 $(election).find(".electionDesc").text(val.desc)
                 $(election).find(".startD").text(globalFunc.utcToLocal(val.startD))

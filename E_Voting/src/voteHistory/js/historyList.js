@@ -35,20 +35,20 @@ const App = {
                     var verify = ethers.utils.verifyMessage(globalFunc.oriMsg(), sign)
                     console.log("Verify: " + verify);
                     await App.contract.verifyTimeID(x, sign).then(async (val) => {
-                        if (val != "") {
+                        if (val != 0) {
                             var num = globalFunc.bigNumberToNumber(val)
                             await App.contract.provider.getBlockWithTransactions(num).then((data) => {
+                                console.log(typeof (data.timestamp));
                                 App.timestamp.push(data.timestamp)
                                 App.timeID[data.timestamp] = x;
                             })
                         }
-
                     })
                 }
             })
         }
 
-        App.timestamp = App.timestamp.sort(function (a, b) { a - b })
+        App.timestamp.sort(function (a, b) { return b - a })
         console.log("Timestamp: " + App.timestamp);
         console.log("Timestamp: " + App.timeID[App.timestamp[0]]);
         console.log(App.timestamp.length)
