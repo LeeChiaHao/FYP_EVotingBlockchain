@@ -48,6 +48,8 @@ const App = {
         App.form.classList.add('was-validated')
         if ($(".was-validated:invalid").length == 0 && emailValid) {
             try {
+                $("#email").parent().find(".valid-feedback").show()
+                $("#email").parent().find(".invalid-feedback").hide()
                 App.txnModal.show()
                 solidity.txnLoad("Making Transaction")
                 console.log($("#userName").val() + $("#email").val())
@@ -56,7 +58,7 @@ const App = {
                         (tx) => tx.wait().then(function () {
                             solidity.txnSuccess()
                             $(".modalClose").on("click", async function () {
-                                localStorage.clear()
+                                // localStorage.clear()
                                 window.location.replace("/")
                             })
                         })

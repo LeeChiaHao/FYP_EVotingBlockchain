@@ -5,11 +5,11 @@ const HtmlWebpackInjector = require('html-webpack-injector');
 const Dotenv = require('dotenv-webpack');
 const webpack = require("webpack")
 
-let template = ['register/', 'adminElection/', 'adminElection/', 'adminElection/', 'profile/',
-    'userElection/', 'userElection/', 'electionResult/', 'electionResult/',
-    'voteHistory/', 'voteHistory/']
+let template = ['register/', 'adminElection/', 'adminElection/', 'adminElection/', 'adminElection/',
+    'profile/', 'userElection/', 'userElection/', 'electionResult/',
+    'electionResult/', 'voteHistory/', 'voteHistory/']
 let count = -1
-let files = ['register', 'create', 'list', 'edit', 'profile', 'elections',
+let files = ['register', 'create', 'list', 'edit', 'view', 'profile', 'elections',
     'candidates', 'resultList', 'results', 'historyList', 'verify'];
 let multipleHtmlPlugins = files.map(name => {
     count++
@@ -27,6 +27,7 @@ module.exports = {
         create_head: "./src/adminElection/js/create.js",
         list_head: "./src/adminElection/js/list.js",
         edit_head: "./src/adminElection/js/edit.js",
+        view_head: "./src/adminElection/js/view.js",
         index_head: "./src/index.js",
         register_head: "./src/register/js/register.js",
         profile_head: "./src/profile/js/profile.js",
@@ -66,8 +67,9 @@ module.exports = {
             { from: "./src/adminElection/createForm.html", to: "createForm.html" },
             { from: "./src/userElection/candidate.html", to: "candidate.html" },
             { from: "./src/commonHTML/election.html", to: "election.html" },
-            { from: "./src/electionResult/result.html", to: "result.html" },
+            { from: "./src/commonHTML/result.html", to: "result.html" },
             { from: "./src/voteHistory/history.html", to: "history.html" },
+            { from: "./src/adminElection/subView.html", to: "subView.html" },
         ]),
         new HtmlWebpackInjector()
 

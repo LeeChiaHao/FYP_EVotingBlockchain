@@ -13,6 +13,7 @@ contract Voters {
     // default to false, when registered, set can turn to login status directly
     mapping(address => bool) public isRegister;
     mapping(address => Voter) public voters;
+    mapping(uint256 => address) public voterAddress;
     // TO DO: voter address => their unique signature
     mapping(address => string) public voterSignature;
 
@@ -59,6 +60,7 @@ contract Voters {
         );
         voters[msg.sender] = Voter(_name, _email, stringSign, msg.sender);
         isRegister[msg.sender] = true;
+        voterAddress[voterCount] = msg.sender;
         voterCount++;
     }
 

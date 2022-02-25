@@ -13,6 +13,7 @@ const App = {
     voted: null,
     totalCandidate: null,
     reqModal: null,
+    isVoted: null,
     checkAuth: async () => {
         App.address = await solidity.getVoterAddress()
         var isAuth = await solidity.isAuth(App.address)
@@ -27,20 +28,21 @@ const App = {
         App.reqModal = solidity.reqModal()
         App.totalCandidate = await App.contract.totalCandidate(App.electionID)
 
-        App.loadCandidate(App.electionID, App.totalCandidate)
         await App.contract.encryptedVerify(App.electionID, await solidity.getSignature(App.address)).then(async (val) => {
             console.log(val)
             if (val == "") {
+                App.isVoted = false;
                 await App.onclickModal()
                 $("#btn-confirm").on("click", async () => {
                     await App.submitVote()
                 })
             } else {
+                App.isVoted = true;
                 $(".noVote").removeClass("d-none")
                 $("#btn-confirm").prop("disabled", true)
-
             }
         })
+        await App.loadCandidate(App.electionID, App.totalCandidate)
         await App.loadModal()
     },
 
@@ -53,6 +55,7 @@ const App = {
         <p class="reqAlert">Please do not share the encryption key with others to protect your vote information.</p>`)
         $(".modalBtn").on("click", async function () {
             App.reqModal.hide()
+            $(".cand").show()
         })
     },
 
@@ -80,13 +83,16 @@ const App = {
             }
             )
         }
-        $(".candidateCard").on("click", function () {
-            $(".candidateCard").removeClass("active")
-            $(".btn-submit").prop("disabled", false)
-            $(this).addClass("active")
-            App.voted = $(this).parent().attr("id")
-            console.log(App.voted)
-        })
+        if (!App.isVoted) {
+            $(".candidateCard").on("click", function () {
+                $(".candidateCard").removeClass("active")
+                $(".btn-submit").prop("disabled", false)
+                $(this).addClass("active")
+                App.voted = $(this).parent().attr("id")
+                console.log(App.voted)
+            })
+        }
+
     },
 
     submitVote: async () => {
@@ -210,6 +216,7 @@ window.addEventListener("load", async function () {
         if (!result) {
             window.location.replace("/")
         } else {
+            $(".cand").hide()
             App.load()
             $('body').removeClass('invisible')
         }

@@ -9,6 +9,7 @@ const App = {
     address: null,
     electionID: null,
     reqModal: null,
+    txnModal: null,
     checkAuth: async () => {
         App.address = await solidity.getVoterAddress()
         var isAuth = await solidity.isAuth(App.address)
@@ -21,7 +22,8 @@ const App = {
         App.address = await solidity.getElectionAddress()
         App.electionID = localStorage.getItem("election")
         solidity.navigate("historyList.html", "election", true)
-        App.reqModal = new Modal($("#requestModal"))
+        App.reqModal = solidity.reqModal()
+        App.txnModal = solidity.txnModal()
 
         await App.showModal()
     },
@@ -38,7 +40,12 @@ const App = {
         $(".option").removeClass("d-none")
         $("#modalYes").text("Verify")
         $("#modalYes").on("click", async function () {
+            App.reqModal.hide()
+            App.txnModal.show()
+            solidity.txnLoad("Verifying")
             await App.verifyVote()
+
+
         })
         $("#modalNo").text("Cancel")
         $("#modalNo").on("click", async function () {
@@ -54,32 +61,50 @@ const App = {
             encrypted = val
         })
 
-        await ethereum.request({
-            method: 'eth_decrypt',
-            params: [encrypted, App.address],
-        }).then(async (plain) => {
-            App.reqModal.hide()
-            console.log(plain)
-            $(".historyCandidate").text(plain)
-            // TODO: electionID, signature
-            await App.contract.verifyTimeID(App.electionID, signature).then(async (val) => {
-                var num = solidity.bigNumberToNumber(val)
-                await App.contract.provider.getBlockWithTransactions(num).then((data) => {
-                    var date = new Date(data.timestamp * 1000)
-                    console.log(data)
-                    console.log(date.toLocaleDateString("en-US"));
-                    $(".historyTime").text(solidity.utcToLocal(data.timestamp))
-                    console.log(data.transactions)
-                    $(".historyTxn").text(data.transactions[0].hash)
-                    $(".historyBlock").text("Block " + num + " (" + data.hash + ")")
-                })
+        try {
+            await ethereum.request({
+                method: 'eth_decrypt',
+                params: [encrypted, App.address],
+            }).then(async (plain) => {
+                App.reqModal.hide()
+                console.log(plain)
+                $(".historyCandidate").text(plain)
+                try {
+                    await App.contract.verifyTimeID(App.electionID, signature).then(async (val) => {
+                        var num = solidity.bigNumberToNumber(val)
+                        await App.contract.provider.getBlockWithTransactions(num).then((data) => {
+                            var date = new Date(data.timestamp * 1000)
+                            console.log(data)
+                            console.log(date.toLocaleDateString("en-US"));
+                            $(".historyTime").text(solidity.utcToLocal(data.timestamp))
+                            console.log(data.transactions)
+                            $(".historyTxn").text(data.transactions[0].hash)
+                            $(".historyBlock").text("Block " + num + " (" + data.hash + ")")
+                            solidity.customMsg(true, "Verify Success")
+                            $(".main").show()
+                        })
+                    })
+                } catch (e) {
+                    solidity.customMsg(false, "Verify Failed")
+                    $(".modalClose").on("click", function () {
+                        window.location.replace("historyList.html")
+                    })
+                }
+
             })
-        })
+        } catch (e) {
+            solidity.customMsg(false, "Verify Failed")
+            $(".modalClose").on("click", function () {
+                window.location.replace("historyList.html")
+            })
+        }
+
     }
 }
 
 window.App = App;
 window.addEventListener("load", async function () {
+    $(".main").hide()
     App.checkAuth().then(function (result) {
         if (!result) {
             window.location.replace("/")

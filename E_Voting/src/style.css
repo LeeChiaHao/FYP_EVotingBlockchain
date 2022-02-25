@@ -97,10 +97,6 @@ main {
     text-shadow: 10px 10px grey;
 }
 
-.card {
-
-}
-
 .backBtn{
     font-size: 75px
 }
@@ -130,16 +126,6 @@ main {
 .registerForm, .electionForm {
     background-color: rgb(174, 112, 175);
     padding: 3.5rem 6rem;
-}
-
-.registerForm span{
-    background-color: #fbe48f;
-    font-weight: bold;
-    border: 2px solid black;
-}
-
-.registerForm input{
-    border: 2px solid black;
 }
 
 /* .profile{
@@ -188,9 +174,11 @@ main {
 
 .electionContent{
     padding-bottom: 1rem;
+    border: 2px solid black;
 }
 
 .electionContent:hover{
+    border: none;
     box-shadow: 2px 2px 0 0.25rem black;
     cursor: pointer;
 }
@@ -206,11 +194,9 @@ main {
     padding: 0.5rem;
 }
 
-
 .listBackground{
     background-color: bisque;
     justify-content: center;
-    border-radius: 1rem;
 }
 
 .btn-collapse {
@@ -232,6 +218,13 @@ main {
 
 .modalBtn, #modalYes, #modalNo{
     width: 40%;
+    border: 3px solid black;
+}
+
+.modalBtn:hover {
+    text-decoration: underline;
+    border: 3px solid black;
+
 }
 
 .caret{
@@ -252,21 +245,33 @@ main {
 }
 
 #modalYes{
-    background-color: #d96060;
+    background-color: #ec2121;
 }
 
 #modalNo{
-    background-color: #3f7ed7;
+    background-color: #5894e8;
+
 }
 
 #modalYes, #modalNo {
-    color: black;
+    color: white;
+    font-weight: bold;
+
 }
 
 #modalYes:hover, #modalNo:hover {
     font-weight: bolder;
     text-decoration: underline;
     border: 3px solid black;
+}
+
+.winnerCard{
+    border: 6px solid red !important ;
+}
+
+.results{
+    display: none;
+    justify-content: center;
 }
 
 @media screen and (max-width: 992px) {

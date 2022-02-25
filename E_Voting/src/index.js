@@ -17,7 +17,7 @@ const App = {
         App.isRegister = await App.contract.isRegister(App.address)
         menuClick(App.address)
         if (App.address == await App.contract.admin()) {
-            window.location.replace("create.html")
+            window.location.replace("list.html")
         }
 
         if (localStorage.getItem("Signature") != null) {
@@ -38,7 +38,7 @@ const App = {
         $(".modalBtn").on("click", async function () {
             await setSignature(App.contract.provider.getSigner()).then(async function () {
                 if (!App.isRegister) {
-                    window.location.assign("register.html")
+                    window.location.replace("register.html")
                 } else {
                     App.requestModal.hide()
                 }
@@ -64,9 +64,3 @@ window.addEventListener("load", async function () {
 
     App.load()
 })
-
-window.onbeforeunload = function () {
-    window.onunload = function () {
-        localStorage.removeItem("Signature")
-    }
-}

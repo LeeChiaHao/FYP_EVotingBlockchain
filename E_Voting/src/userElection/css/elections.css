@@ -1,8 +1,12 @@
-.noV, .noVote, .vote, .voted{
+.noV, .vote , .noVote, .voted{
     /* background-color: black; */
     background-color: bisque;
     color: black;
     border: 1px solid black;
+    border-radius: 0.7rem;
+}
+
+.noList {
     border-radius: 0.7rem;
 }
 

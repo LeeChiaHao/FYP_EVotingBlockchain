@@ -89,11 +89,17 @@ const App = {
                         break
                 }
             })
+            let status = $(election).parent().attr("id")
+            let location
+            if (status == "ongoingE" || status == "initialE") {
+                location = "edit.html"
+            } else {
+                location = "view.html"
+            }
             $(election + " .electionContent").on("click", function () {
                 var id = $(this).parent().attr("id")
-                console.log("ID:" + id)
                 localStorage.setItem("election", id)
-                window.location.assign("edit.html")
+                window.location.assign(location)
             })
         }
         App.startE()
