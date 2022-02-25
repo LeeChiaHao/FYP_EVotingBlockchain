@@ -1,5 +1,3 @@
-import 'bootstrap'
-import 'bootstrap/dist/css/bootstrap.min.css'
 import '../../style.css'
 import '../css/results.css'
 
@@ -14,12 +12,14 @@ const App = {
     votes: {},
     totalVote: BigInt(0),
 
+    // only registered voters can access
     checkAuth: async () => {
         App.address = await globalFunc.getVoterAddress()
         var isAuth = await globalFunc.isAuth(App.address)
         return isAuth
     },
 
+    // load all the content of key object, then call the globalFunc to calculate and view the result
     load: async () => {
         await globalFunc.headerCSS(".eResult")
         App.contract = await globalFunc.getElectionsContract()
@@ -35,8 +35,6 @@ const App = {
         await globalFunc.calculate()
     },
 }
-
-
 
 window.App = App;
 window.addEventListener("load", async function () {

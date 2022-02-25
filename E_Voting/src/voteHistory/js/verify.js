@@ -1,6 +1,3 @@
-import 'bootstrap'
-import { Modal } from 'bootstrap'
-import 'bootstrap/dist/css/bootstrap.min.css'
 import '../../style.css'
 import '../css/verify.css'
 
@@ -10,12 +7,15 @@ const App = {
     electionID: null,
     reqModal: null,
     txnModal: null,
+
+    // only registered voters can access
     checkAuth: async () => {
         App.address = await globalFunc.getVoterAddress()
         var isAuth = await globalFunc.isAuth(App.address)
         return isAuth
     },
 
+    // load all the content of key object
     load: async () => {
         await globalFunc.headerCSS(".vHistory")
         App.contract = await globalFunc.getElectionsContract()
@@ -28,6 +28,7 @@ const App = {
         await App.showModal()
     },
 
+    // the confirm verify modal, if confirm, then all the info will be loaded
     showModal: async () => {
         var elecName = await App.contract.elections(App.electionID)
         $(".elecName").text("Election Name: " + elecName.name)
@@ -44,8 +45,6 @@ const App = {
             App.txnModal.show()
             globalFunc.txnLoad("Verifying")
             await App.verifyVote()
-
-
         })
         $("#modalNo").text("Cancel")
         $("#modalNo").on("click", async function () {
@@ -53,6 +52,7 @@ const App = {
         })
     },
 
+    // verifying the vote and load the data to the form
     verifyVote: async () => {
         var encrypted
         var signature = await globalFunc.getSignature(App.address)
@@ -85,12 +85,11 @@ const App = {
                         })
                     })
                 } catch (e) {
-                    globalFunc.customMsg(false, "Verify Failed")
+                    globalFunc.customMsg(false, "Verify error. Contact us if this keep happening")
                     $(".modalClose").on("click", function () {
                         window.location.replace("historyList.html")
                     })
                 }
-
             })
         } catch (e) {
             globalFunc.customMsg(false, "Verify Failed")
@@ -98,7 +97,6 @@ const App = {
                 window.location.replace("historyList.html")
             })
         }
-
     }
 }
 

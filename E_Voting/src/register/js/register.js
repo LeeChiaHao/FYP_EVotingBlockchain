@@ -1,5 +1,3 @@
-import 'bootstrap';
-import 'bootstrap/dist/css/bootstrap.min.css';
 import '../../style.css'
 import '../css/register.css'
 
@@ -10,9 +8,12 @@ const App = {
     requestModal: null,
     form: null,
 
+    // must sign at the "/" page before register
     checkAuth: async () => {
         return localStorage.getItem("Signature") == null
     },
+
+    // load all the content of key object
     load: async () => {
         App.address = await globalFunc.getVoterAddress()
         App.contract = await globalFunc.getVotersContract()
@@ -25,6 +26,7 @@ const App = {
         await App.keyUp()
     },
 
+    // when input info, remove the validated msg
     keyUp: async () => {
         $("#userName").on("keyup", function () {
             App.form.classList.remove('was-validated')
@@ -36,6 +38,8 @@ const App = {
         })
     },
 
+    // validate the form - cannot empty and valid email
+    // Then, call the createVoter function to make transaction
     register: async () => {
         App.form.checkValidity()
         var emailValid = true

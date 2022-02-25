@@ -1,9 +1,6 @@
-import 'bootstrap'
-import 'bootstrap/dist/css/bootstrap.min.css'
 import { ethers } from 'ethers'
 import '../../style.css'
 import '../css/candidate.css'
-import { Modal } from 'bootstrap';
 import { encrypt } from '@metamask/eth-sig-util'
 
 const App = {
@@ -14,11 +11,19 @@ const App = {
     totalCandidate: null,
     reqModal: null,
     isVoted: null,
+
+    // only registered voters can access
     checkAuth: async () => {
         App.address = await globalFunc.getVoterAddress()
         var isAuth = await globalFunc.isAuth(App.address)
         return isAuth
     },
+
+    /**
+     * load all content of key object
+     * check if this voter has voted in this election, if so, then not allowed to vote anymore
+     * allow or not allow, the candidate info will be loaded
+     */
     load: async () => {
         await globalFunc.headerCSS(".castVote")
         App.contract = await globalFunc.getElectionsContract()
@@ -29,7 +34,6 @@ const App = {
         App.totalCandidate = await App.contract.totalCandidate(App.electionID)
 
         await App.contract.encryptedVerify(App.electionID, await globalFunc.getSignature(App.address)).then(async (val) => {
-            console.log(val)
             if (val == "") {
                 App.isVoted = false;
                 await App.onclickModal()
@@ -46,6 +50,7 @@ const App = {
         await App.loadModal()
     },
 
+    // notify the user some crucial info
     loadModal: async () => {
         $(".modalBtn").text("Okay, I understand.")
         App.reqModal.show()
@@ -59,18 +64,18 @@ const App = {
         })
     },
 
+    // load all the candidates layout
     loadCandidate: async (id, total) => {
         var className = "col-lg-4 col-md-9 border-0 mt-lg-3 mt-5"
         for (var x = 0; x < total; x++) {
             $("<div></div").addClass(className + " candidate" + x).appendTo(".allCandidates")
             $(".candidate" + x).prop("id", x)
             $(".candidate" + x).load("candidate.html")
-            if ((x + 1) == total) {
-                App.loadCandidateData(id, x)
-            }
         }
+        await App.loadCandidateData(id, total)
     },
 
+    // load candidates data and onClick event into the layout
     loadCandidateData: async (id, total) => {
         for (var x = 0; x <= total; x++) {
             await App.contract.electionCandidate(id, x).then((val) => {
@@ -92,15 +97,16 @@ const App = {
                 console.log(App.voted)
             })
         }
-
     },
 
+    // submit the vote, and the confirm modal will show
     submitVote: async () => {
         if (App.voted != null) {
             App.requestModal()
         }
     },
 
+    // confirm candidate selection
     requestModal: async () => {
         $(".sign").addClass("d-none")
         $(".option").removeClass("d-none")
@@ -110,6 +116,9 @@ const App = {
             <h4 class='text-center'> Candidate ` + (parseInt(App.voted) + 1) + "</h4>")
     },
 
+    // if confirm, then will request encryption key from user by calling requestEncrypt function
+    // then homomorphic add using the setVoteGet function
+    // then can call the addVote and make transaction
     onclickModal: async () => {
         $("#modalYes").on("click", async function () {
             App.reqModal.hide()
@@ -149,6 +158,7 @@ const App = {
         })
     },
 
+    // request the encryption key from the user to encrypt the message (the choice of user)
     requestEncrypt: async () => {
         var key
         await ethereum.request({
@@ -160,16 +170,9 @@ const App = {
 
         }).catch((error) => {
             globalFunc.customMsg(false, "Request Encryption Key Failed")
-            return null
-            // if (error.code === 4001) {
-            //     // EIP-1193 userRejectedRequest error
-            //     console.log("We can't encrypt anything without the key.");
-            //     return null
-            // } else {
-            //     console.error(error);
-            // }
+
         })
-        var candidate = "Candidate " + (parseInt(App.voted) + 1)
+        var candidate = "Election " + App.electionID + ";Candidate " + (parseInt(App.voted) + 1)
         console.log(candidate + "Key: " + key)
         var e = encrypt({
             publicKey: key,
@@ -182,17 +185,9 @@ const App = {
         ))
         console.log(encrypted)
         return encrypted
-        // var plain
-        // $(".decrypt").on("click", async function () {
-        //     console.log("hi")
-        //     plain = await ethereum.request({
-        //         method: 'eth_decrypt',
-        //         params: [encrypted, App.address],
-        //     })
-        //     console.log(plain)
-        // })
     },
 
+    // homomorphic add the voteGet 
     setVoteGet: async () => {
         var voteGet = []
         for (var x = 0; x < App.totalCandidate; x++) {
@@ -205,7 +200,6 @@ const App = {
                 }
             })
         }
-        console.log(typeof (voteGet[1]))
         return voteGet
     }
 }

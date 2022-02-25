@@ -1,7 +1,5 @@
-import 'bootstrap';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import './style.css'
 import { getVotersContract, txnLoad, setSignature, txnModal, reqModal, getVoterAddress, menuClick } from './global';
+import './style.css'
 
 const App = {
     contract: null,
@@ -9,6 +7,11 @@ const App = {
     loadModal: null,
     requestModal: null,
     isRegister: null,
+    /**
+     * load all content of key object
+     * check if the localStorage have signature, means this user signed in already, if already register,
+     * can access system directly; if not register, direct to register page
+     */
     load: async () => {
         App.contract = await getVotersContract()
         App.address = await getVoterAddress()
@@ -34,6 +37,8 @@ const App = {
         await App.validateUser()
     },
 
+    // if first time log in, need sign first and if registered, can access system directly
+    // else will go to register page
     validateUser: async () => {
         $(".modalBtn").on("click", async function () {
             await setSignature(App.contract.provider.getSigner()).then(async function () {
@@ -47,6 +52,7 @@ const App = {
         })
     },
 
+    // validate modal show
     validating: async () => {
         App.loadModal.show()
         txnLoad("Validating Identity")
@@ -61,6 +67,5 @@ const App = {
 window.App = App;
 window.addEventListener("load", async function () {
     $('body').removeClass('invisible')
-
     App.load()
 })

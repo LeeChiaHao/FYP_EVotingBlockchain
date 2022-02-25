@@ -1,17 +1,22 @@
-import 'bootstrap'
-import 'bootstrap/dist/css/bootstrap.min.css'
 import '../../style.css'
 import '../css/elections.css'
 
 const App = {
     contract: null,
     address: null,
+
+    // only registered voters can access
     checkAuth: async () => {
         App.address = await globalFunc.getVoterAddress()
         var isAuth = await globalFunc.isAuth(App.address)
         return isAuth
     },
 
+    /**
+     * load all the content of key object
+     * default the noVote will be show
+     * then, load all the available elections
+     */
     load: async () => {
         await globalFunc.headerCSS(".castVote")
         App.contract = await globalFunc.getElectionsContract()
@@ -25,6 +30,7 @@ const App = {
         await App.loadElection(totalElection)
     },
 
+    // load all election's layout based on user voted or not
     loadElection: async (total) => {
         var className = "col-lg-5 col-9 border-0 mb-5 electionCard"
         var elections = []
@@ -55,6 +61,7 @@ const App = {
         await App.loadTitle(elections)
     },
 
+    // Then, load the data to the layout
     loadTitle: async (e) => {
         for (var x = 0; x < e.length; x++) {
             console.log("election" + e[x])
@@ -71,7 +78,6 @@ const App = {
                 if (val.endD != 0) {
                     $(election).find(".endD").text(globalFunc.utcToLocal(val.endD))
                 }
-
             })
         }
         $(".container").removeClass("d-none")

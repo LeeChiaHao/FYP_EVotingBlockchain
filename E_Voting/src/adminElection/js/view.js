@@ -1,6 +1,4 @@
-import 'bootstrap'
 import { Modal } from 'bootstrap';
-import 'bootstrap/dist/css/bootstrap.min.css';
 import '../../style.css'
 import '../css/admin.css'
 
@@ -15,6 +13,8 @@ const App = {
     winner: {},
     votes: {},
     totalVote: BigInt(0),
+
+    // only admin can access this page
     checkAuth: async () => {
         App.contract = await globalFunc.getElectionsContract()
         App.address = await globalFunc.getVoterAddress()
@@ -26,6 +26,11 @@ const App = {
         }
     },
 
+    /**
+     * load all the content of key object
+     * call count the winner, load the content and calculate modal
+     * loadView is let admin see who have vote in this election
+     */
     load: async () => {
         await globalFunc.headerCSS(".listing")
         App.contract = await globalFunc.getElectionsContract()
@@ -42,6 +47,11 @@ const App = {
         await App.loadView()
     },
 
+    /**
+     * show the view modal
+     * first load all the voters address and load the layout
+     * then load the data into the layout and check if they are voted
+     */
     loadView: async () => {
         $(".viewVoter").on("click", function () {
             App.viewModal.show()

@@ -19,7 +19,6 @@ let multipleHtmlPlugins = files.map(name => {
         chunks: [`${name}_head`],  // respective JS files
         HTML_PATH: './src/commonHTML/'
     })
-
 });
 module.exports = {
     mode: 'development',
@@ -38,11 +37,6 @@ module.exports = {
         historyList_head: "./src/voteHistory/js/historyList.js",
         verify_head: "./src/voteHistory/js/verify.js"
     },
-    // resolve: {
-    //     alias: {
-    //         'try': './src/js'
-    //     }
-    // },
     plugins: [
         new Dotenv(),
         new HtmlWebpackPlugin({

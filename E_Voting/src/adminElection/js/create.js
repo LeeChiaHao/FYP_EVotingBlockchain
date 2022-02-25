@@ -1,8 +1,6 @@
-import 'bootstrap';
-import 'bootstrap/dist/css/bootstrap.min.css';
 import '../../style.css'
 import '../css/admin.css'
-import { Modal } from 'bootstrap';
+
 const App = {
     forms: null,
     contract: null,
@@ -10,6 +8,8 @@ const App = {
     totalCandidate: null,
     txnModal: null,
     delCandidate: null,
+
+    // only admin can access this page
     checkAuth: async () => {
         App.contract = await globalFunc.getElectionsContract()
         App.address = await globalFunc.getVoterAddress()
@@ -21,6 +21,9 @@ const App = {
         }
     },
 
+    /**
+     * load all content of key object 
+     */
     load: async () => {
         await globalFunc.headerCSS(".creating")
         App.forms = document.querySelector('.validation')
@@ -29,6 +32,11 @@ const App = {
         App.txnModal = globalFunc.txnModal()
         App.delCandidate = $('.delCandidate')
         App.totalCandidate = 1;
+        await App.addDelBtn()
+    },
+
+    // load on click event of add and del Candidate button, will load certain function to perform add/del
+    addDelBtn: async () => {
         var divCandidate
         $(".addCandidate").on("click", async function () {
             console.log(App.totalCandidate)
@@ -39,7 +47,6 @@ const App = {
             })
             App.totalCandidate++
             console.log(App.delCandidate)
-
             App.delCandidate.removeClass("d-none")
         })
 
@@ -51,6 +58,7 @@ const App = {
         })
     },
 
+    // add candidate, assign proper id to all input elements and display to user
     loadClassName: async (className, num) => {
         num--;
         $(className).children().each(function (index) {
@@ -86,6 +94,7 @@ const App = {
         })
     },
 
+    // del candidate, del the last candidate info
     deleteCandidate: async (num) => {
         num--;
         if (num > 0) {
@@ -98,8 +107,9 @@ const App = {
         }
     },
 
+    // validate the form - cannot empty and must have at least one candidate
+    // Then, call the createElection function to make transaction
     submitForm: async () => {
-        // await App.validateForm()
         App.forms.checkValidity()
         App.forms.classList.add('was-validated')
         console.log($(".was-validated:invalid").length)
@@ -125,8 +135,6 @@ const App = {
                     allCandidates[index] = votes
                     index++;
                 }
-
-                console.log(allCandidates)
                 try {
                     App.txnModal.show()
                     globalFunc.txnLoad("Making Transaction")
@@ -153,20 +161,6 @@ const App = {
                 globalFunc.customMsg(false, "Must have more than 1 candidate for an election")
             }
         }
-
-
-        // var electionID = 0
-        // var totalCandidate = await App.contract.totalCandidate(electionID)
-        // console.log(totalCandidate)
-        // for (var i = 0; i < bigNumberToNumber(totalCandidate); i++) {
-        //     var candidate = await App.contract.electionCandidate(electionID, i)
-        //     console.log(candidate.id)
-        //     console.log(candidate.name)
-        //     console.log(candidate.age)
-        //     console.log(candidate.party)
-        //     console.log(candidate.slogan)
-        // }
-
     },
 }
 

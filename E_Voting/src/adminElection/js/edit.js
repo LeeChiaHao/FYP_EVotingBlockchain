@@ -1,6 +1,3 @@
-import 'bootstrap'
-import { Modal } from 'bootstrap';
-import 'bootstrap/dist/css/bootstrap.min.css';
 import '../../style.css'
 import '../css/admin.css'
 
@@ -12,6 +9,8 @@ const App = {
     electionID: null,
     form: null,
     txnModal: null,
+
+    // only admin can access this page
     checkAuth: async () => {
         App.contract = await globalFunc.getElectionsContract()
         App.address = await globalFunc.getVoterAddress()
@@ -23,6 +22,11 @@ const App = {
         }
     },
 
+    /**
+     * load all content of key object
+     * load all the candidate information to view
+     * load the add/del on click event
+     */
     load: async () => {
         await globalFunc.headerCSS(".listing")
         App.form = document.querySelector("#editForm")
@@ -39,10 +43,10 @@ const App = {
         })
     },
 
+    // load all the layout of candidate info
     loadCandidate: async (id, total) => {
         for (var x = 0; x < total; x++) {
             $("<div></div").addClass("loadCandidate" + x).appendTo(".loadCandidate")
-
             $(".loadCandidate" + x).load("createForm.html", async function () {
                 App.loadCandidateClass(true, ".loadCandidate" + x, x)
             })
@@ -56,29 +60,12 @@ const App = {
         }
     },
 
-    loadAddDel: async () => {
-        $(".addCandidate").on("click", async function () {
-            console.log(App.totalCandidate)
-            var divCandidate = "loadCandidate" + App.totalCandidate
-            $("<div></div>").addClass(divCandidate).appendTo(".loadCandidate")
-            $("." + divCandidate).load("createForm.html", function () {
-                App.loadCandidateClass(false, "." + divCandidate, App.totalCandidate)
-            })
-            App.totalCandidate++
-            console.log(App.delCandidate)
-            App.delCandidate.removeClass("d-none")
-        })
-
-        App.delCandidate.on("click", async function () {
-            if (App.totalCandidate > 0) {
-                App.deleteCandidate(App.totalCandidate)
-                App.totalCandidate--;
-                console.log(App.totalCandidate)
-            }
-        })
-    },
-
-    // true means load from contract, false means add manually
+    /**
+     * when layout load, load the correct className to the layout
+     * true means load from contract, false means add manually
+     * the num will be different, when laod from contract means first loading
+     * load when user add candidate then need to minus 1 to ensure the num is consistent with previous
+     */
     loadCandidateClass: async (bool, className, num) => {
         if (!bool) {
             num--;
@@ -93,7 +80,6 @@ const App = {
                         $(this).text("Candidate" + (num + 1))
 
                     }
-                    // num--
                 }
                 if (y == 1) {
                     switch (index) {
@@ -123,6 +109,7 @@ const App = {
         })
     },
 
+    // load all the data to the layout by finding using className
     loadCandidateData: async (id, total) => {
         var election = await App.contract.elections(id)
         $("#electionName").val(election.name)
@@ -135,8 +122,6 @@ const App = {
                 $(".loadCandidate" + x).find("#gender" + x).find("." + val.gender).prop("checked", true)
                 $(".loadCandidate" + x).find("#partyName" + x).val(val.party)
                 $(".loadCandidate" + x).find("#slogan" + x).val(val.slogan)
-                var vote = BigInt(val.voteGet)
-                var add = globalFunc.encrypt(4)
             }
             )
         }
@@ -148,6 +133,30 @@ const App = {
         }
     },
 
+    // add/del candidate button event, will call the functions when add/del
+    loadAddDel: async () => {
+        $(".addCandidate").on("click", async function () {
+            console.log(App.totalCandidate)
+            var divCandidate = "loadCandidate" + App.totalCandidate
+            $("<div></div>").addClass(divCandidate).appendTo(".loadCandidate")
+            $("." + divCandidate).load("createForm.html", function () {
+                App.loadCandidateClass(false, "." + divCandidate, App.totalCandidate)
+            })
+            App.totalCandidate++
+            console.log(App.delCandidate)
+            App.delCandidate.removeClass("d-none")
+        })
+
+        App.delCandidate.on("click", async function () {
+            if (App.totalCandidate > 0) {
+                App.deleteCandidate(App.totalCandidate)
+                App.totalCandidate--;
+                console.log(App.totalCandidate)
+            }
+        })
+    },
+
+    // del the candidate function, remove the last candidate from the page
     deleteCandidate: async (num) => {
         num--;
         if (num >= 0) {
@@ -160,12 +169,16 @@ const App = {
         }
     },
 
+    // When user want to edit, the save, del or cancel btn will show
     editForm: async () => {
         $("#editBtn").parent().addClass('d-none')
         $("#editForm :input").prop('disabled', false)
         $("#saveBtn, #delBtn, #cancelBtn, .addCandidate, .delCandidate").removeClass('d-none')
     },
 
+    // save the election form function
+    // validate the form - cannot empty and must have at least one candidate
+    // Then, call the createElection function to make transaction
     submitForm: async () => {
         App.form.checkValidity()
         App.form.classList.add('was-validated')
@@ -216,6 +229,7 @@ const App = {
         }
     },
 
+    // delete the whole election
     delForm: async () => {
         try {
             App.txnModal.show()
@@ -223,7 +237,6 @@ const App = {
             await App.contract.deleteElection(App.electionID, 1).then(
                 (tx) => tx.wait().then(function () {
                     globalFunc.txnSuccess()
-                    // window.location.replace("list.html")
                 })
             )
         } catch (e) {
@@ -232,6 +245,7 @@ const App = {
         }
     },
 
+    // cancel the edit 
     cancelForm: async () => {
         window.location.reload()
     }

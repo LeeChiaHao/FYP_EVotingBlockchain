@@ -17,3 +17,8 @@
     text-decoration: underline;
     color: white;
 }
+
+.text-muted {
+    padding-top: 0.5rem;
+    font-weight: bold;
+}

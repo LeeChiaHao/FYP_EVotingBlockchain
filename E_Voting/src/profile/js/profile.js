@@ -1,15 +1,11 @@
-import 'bootstrap'
-import 'bootstrap/dist/css/bootstrap.min.css';
 import '../../style.css'
 import '../css/profile.css'
-import { ethers } from 'ethers';
-import { Modal } from 'bootstrap';
 
 const App = {
     contract: null,
     address: null,
     loginID: null,
-    myModal: null,
+    txnModal: null,
     name: null,
     email: null,
     tmpName: null,
@@ -17,12 +13,18 @@ const App = {
     editArea: null,
     submitArea: null,
     form: null,
+
+    // only registered voters can access
     checkAuth: async () => {
         App.address = await globalFunc.getVoterAddress()
         var isAuth = await globalFunc.isAuth(App.address)
         return isAuth
     },
 
+    /**
+     * loadd all content of key object
+     * load the voters info to the page
+     */
     load: async () => {
         globalFunc.headerCSS(".profile")
         App.contract = await globalFunc.getVotersContract()
@@ -41,20 +43,12 @@ const App = {
         console.log(voter.signature);
 
         $("#profileAddress").val(voter.account)
-        App.myModal = globalFunc.txnModal()
-        // Testing
-
-        // await App.contract.verifySignature("0x0f2f57d792336b3bd79ed7aa9d44ac9c3f4b11a05503c55a7c87a31b5357b2be", await globalFunc.getSignature(App.address))
-        //     .then(function (val) {
-        //         console.log(val);
-        //     });
-        await App.contract.once("verifySigner", (hash, signer) => {
-            console.log("Signer: " + signer)
-            console.log("Signer: " + hash)
-
-        })
+        App.txnModal = globalFunc.txnModal()
     },
 
+    // when user decide edit the profile
+    // then the input will remove disabled and let user edit
+    // address cannot be edit
     editProfile: async () => {
         App.name.prop("disabled", false)
         App.email.prop("disabled", false)
@@ -74,6 +68,9 @@ const App = {
         App.submitArea.addClass("d-flex")
     },
 
+    // when submit, check valid of not empty and valid mail
+    // else submit is not allow
+    // if valid, then will call the editVoter function
     submitProfile: async () => {
         App.form.checkValidity()
         var emailValid = true
@@ -86,7 +83,7 @@ const App = {
         if ($(".was-validated:invalid").length == 0 && emailValid) {
             $("#profileEmail").parent().find(".valid-feedback").show()
             $("#profileEmail").parent().find(".invalid-feedback").hide()
-            App.myModal.show()
+            App.txnModal.show()
             try {
                 App.contract.voters[App.address] = await App.contract.editVoter(App.name.val(), App.email.val()).then(
                     (tx) => tx.wait().then(function () {
@@ -105,10 +102,10 @@ const App = {
                 $("#profileEmail").parent().find(".valid-feedback").hide()
                 $("#profileEmail").parent().find(".invalid-feedback").show()
             }
-
         }
     },
 
+    // cancel edit, then the ori msg will load back and nothing chg
     cancelProfile: async () => {
         App.name.prop("disabled", true)
         App.email.prop("disabled", true)
@@ -118,6 +115,8 @@ const App = {
         App.submitArea.removeClass("d-flex")
     },
 
+    // check when the info has change, then the submit button will allow
+    // else the submit button will always not allow
     checkChange: async (name, email) => {
         if (name == App.name.val() && email == App.email.val()) {
             $("#submitBtn").prop("disabled", true)

@@ -8,10 +8,11 @@ import { Modal } from 'bootstrap';
 import { ethers } from 'ethers';
 import { arrayify, solidityKeccak256 } from 'ethers/lib/utils';
 import * as paillierBigint from 'paillier-bigint';
+// homomorphic encryption setup
 const publicKey = new paillierBigint.PublicKey(BigInt(process.env.publicN), BigInt(process.env.publicG))
 const privateKey = new paillierBigint.PrivateKey(BigInt(process.env.privateLambda), BigInt(process.env.privateMu), publicKey)
-var signature
 
+// set signature function, then the signature will be stored in Voter contract
 export async function setSignature(signer) {
     var msg, verify
     msg = "Hi, Please proof your identity by signing this message. It would not cost any. TQ "
@@ -22,13 +23,22 @@ export async function setSignature(signer) {
     console.log(shamsg);
     let signing = arrayify(shamsg)
     console.log(signing);
-    signature = await signer.signMessage(signing)
+    var signature = await signer.signMessage(shamsg)
     console.log("Signature: " + signature)
     window.localStorage.setItem("Signature", signature)
-    verify = ethers.utils.verifyMessage(msg, signature)
+    verify = ethers.utils.verifyMessage(shamsg, signature)
     console.log("Verify: " + verify)
 }
 
+export function oriMsg() {
+    var msg = "Hi, Please proof your identity by signing this message. It would not cost any. TQ "
+    var shamsg = solidityKeccak256(
+        ["string"],
+        [msg])
+    return shamsg
+}
+
+// get Signature from Voter contract
 export async function getSignature(address) {
     var sign
     await getVotersContract().then(async function (contract) {
@@ -36,14 +46,18 @@ export async function getSignature(address) {
             sign = voter.signature
         })
     })
-
     return sign
 }
 
+// add CSS to the seleceted page's menu
 export async function headerCSS(page) {
     $(page).addClass("menuSelect")
 }
 
+/* 
+    example - result of an election or verifying must be clicked to access
+    cannot access by typing the address else will be navigate
+*/
 export function navigate(page, item, remove) {
     if (localStorage.getItem(item) == null) {
         window.location.replace(page)
@@ -52,6 +66,8 @@ export function navigate(page, item, remove) {
         localStorage.removeItem(item)
     }
 }
+
+// return Voter contract
 export async function getVotersContract() {
     try {
         const provider = new ethers.providers.Web3Provider(window.ethereum, "any")
@@ -73,6 +89,41 @@ export async function getVotersContract() {
     }
 }
 
+// return Elections contract
+export async function getElectionsContract() {
+    try {
+        const provider = new ethers.providers.Web3Provider(window.ethereum, "any")
+        await provider.send("eth_requestAccounts", []);
+        ethereum.on("accountsChanged", function () {
+            localStorage.clear()
+            window.location.replace("/")
+        })
+        const networkId = provider.provider.networkVersion
+        const signer = provider.getSigner()
+        const abi = electionsJSON.abi
+        var network = electionsJSON.networks[networkId]
+        var contract = new ethers.Contract(network.address, abi, signer)
+        return contract
+    } catch (e) {
+        console.log(e)
+    }
+}
+
+// return the current user address when using Voter contract
+export async function getVoterAddress() {
+    var contract = await getVotersContract()
+    var address = contract.provider.getSigner().getAddress()
+    return address
+}
+
+// return the current user address when using Elections contract
+export async function getElectionAddress() {
+    var contract = await getElectionsContract()
+    var address = contract.provider.getSigner().getAddress()
+    return address
+}
+
+// check if the current user address is registered, if not then cannot access some pages
 export async function isAuth(user) {
     var contract = await getVotersContract()
     console.log(await contract.isRegister(user))
@@ -84,6 +135,8 @@ export async function isAuth(user) {
     }
 }
 
+// set the localStorage, so we know if this user has the right to access certain pages
+// need to click the menu to access, typing address may have problem
 export async function menuClick(address) {
     console.log("AddressL " + address);
     let sign = await getSignature(address)
@@ -104,49 +157,22 @@ export async function menuClick(address) {
     })
 }
 
-export async function getElectionsContract() {
-    try {
-        const provider = new ethers.providers.Web3Provider(window.ethereum, "any")
-        await provider.send("eth_requestAccounts", []);
-        ethereum.on("accountsChanged", function () {
-            localStorage.clear()
-            window.location.replace("/")
-        })
-        const networkId = provider.provider.networkVersion
-        const signer = provider.getSigner()
-        const abi = electionsJSON.abi
-        var network = electionsJSON.networks[networkId]
-        var contract = new ethers.Contract(network.address, abi, signer)
-        return contract
-    } catch (e) {
-        console.log(e)
-    }
-}
-
-export async function getVoterAddress() {
-    var contract = await getVotersContract()
-    var address = contract.provider.getSigner().getAddress()
-    return address
-}
-
-export async function getElectionAddress() {
-    var contract = await getElectionsContract()
-    var address = contract.provider.getSigner().getAddress()
-    return address
-}
-
+// convert big number to number
 export function bigNumberToNumber(bn) {
     return ethers.BigNumber.from(bn).toNumber()
 }
-// TODO: convert all to global function
+
+// get txnModal to perform diff function
 export function txnModal() {
     return new Modal($("#txnModal"))
 }
 
+// get reqModal to perform diff function
 export function reqModal() {
     return new Modal($("#requestModal"))
 }
 
+// txnModal show loading icon with custom txt
 export function txnLoad(txt) {
     $("#imgFail").addClass('d-none')
     $("#imgSuccess").addClass('d-none')
@@ -155,6 +181,7 @@ export function txnLoad(txt) {
     $("#modalStatus").text(txt)
 }
 
+// txnModal show success icon
 export function txnSuccess() {
     $("#modalStatus").text("Transaction Success")
     $("#modalClose").removeClass('d-none')
@@ -162,6 +189,7 @@ export function txnSuccess() {
     $("#imgSuccess").removeClass('d-none')
 }
 
+// txnModal show fail icon
 export function txnFail() {
     $("#modalStatus").text("Transaction Fail")
     $("#modalClose").removeClass('d-none')
@@ -169,6 +197,7 @@ export function txnFail() {
     $("#imgFail").removeClass('d-none')
 }
 
+// txnModal show success/fail with custom msg
 export function customMsg(boolean, msg) {
     $("#modalClose").removeClass('d-none')
     $("#modalLoad").addClass('d-none')
@@ -182,6 +211,7 @@ export function customMsg(boolean, msg) {
     }
 }
 
+// encrypt the vote with homomorphic publicKey
 export function encrypt(num) {
     // (asynchronous) creation of a random private, public key pair for the Paillier cryptosystem
     // console.log(homomorphicEncrypt)
@@ -189,25 +219,19 @@ export function encrypt(num) {
     // const { publicKey, privateKey } = await paillierBigint.generateRandomKeys(1024)
 
     return publicKey.encrypt(num)
-    // let num2 = publicKey.encrypt(2)
-    // let total = publicKey.addition(num1, num2)
-
-    // console.log(total)
-    // console.log("2: " + publicKey.encrypt(3))
-    // console.log("Decrypt: " + privateKey.decrypt(total))
-
-
-    // 980679120639244011551600707605314936178007353564515431901220181794877126702237252235932362557004784611988349444012917072356472759499800645734664174176274710247607264755442925790862430302678238844266534853462988251991303431760574796539541720687024080313896778086426076851347880001010709344090680459552518654604734590400372874593964274300968423434720054188356971345714874253032973227925274365853973721511149953124818884469148401465791792438513133145344939279040734275109693392675078106861316214625047158953762794449880948537004556033363657612028890403634910291827367642964156376185066168347249872207480802802582724260n
 }
 
+// homomorphic addition - add two encrypted number
 export function encryptAdd(num1, num2) {
     return publicKey.addition(num1, num2)
 }
 
+// decrypt the encrypted total to get the votes
 export function decrypt(num) {
     return privateKey.decrypt(num)
 }
 
+// check election's status
 export function electionStatus(num) {
     switch (num) {
         case 0:
@@ -221,6 +245,7 @@ export function electionStatus(num) {
     }
 }
 
+// right and left caret when onClick, when click one open, others will close
 export function caretOnClick(choice) {
     var object, object2
     if (choice == 2) {
@@ -252,6 +277,7 @@ export function caretOnClick(choice) {
     })
 }
 
+// convert timestamp of blockchain to understandable time
 export function utcToLocal(utc) {
     var date = new Date(utc * 1000)
     var result = date.getDate() + "/" + (date.getMonth() + 1) + "/" + date.getFullYear() + "  "
@@ -264,27 +290,7 @@ export function utcToLocal(utc) {
     return result
 }
 
-export async function calculate() {
-    $(".results").hide()
-    App.txnModal.show()
-    txnLoad("Calculating Result")
-    setTimeout(function () {
-
-        $('.modalTitle').text("Vote Result")
-        $(".modalBody").html(`<p> There are total of ` + App.totalCandidate +
-            ` candidates in this election.</p> <p> 
-        At the end, we have <span class="fs-3">` + Object.keys(App.winner).length + ` Winner(s)</span>  in this election.</p>`)
-        $(".modalBtn").text("View result")
-        $(".modalBtn").on("click", () => {
-            App.txnModal.hide()
-            App.reqModal.hide()
-            $(".results").show()
-        })
-
-        App.reqModal.show()
-    }, 1000)
-}
-
+// calculate the winner and store the winner voter and its vote in App.winner (an object - dictionary)
 export async function countWinner(candidates) {
     var max = 0
     for (var x = 0; x < candidates; x++) {
@@ -306,6 +312,7 @@ export async function countWinner(candidates) {
     console.log(1 in App.winner);
 }
 
+// load the layout of the the election result, later will load data inside
 export async function loadContent() {
     var othersClass = "col-lg-5 border-0 p-0 mb-5"
     var winnerClass
@@ -335,6 +342,7 @@ export async function loadContent() {
     await loadContentData()
 }
 
+// load all the voters' vote to show to users
 export async function loadContentData() {
     for (var x = 0; x < App.totalCandidate; x++) {
         await App.contract.electionCandidate(App.electionID, x).then((val) => {
@@ -351,6 +359,9 @@ export async function loadContentData() {
             $(candidate).find(".candidateParty").text(val.party)
             $(candidate).find(".candidateSlogan").text(val.slogan)
             var percent = (Number(App.votes[x]) / Number(App.totalVote)).toFixed(4)
+            if (isNaN(percent)) {
+                percent = 0
+            }
             $(candidate).find(".votePercent").text(percent * 100 + "% of votes obtained")
             $(candidate).find(".voteNumber").text("Get " + App.votes[x] + " vote(s)")
         }
@@ -358,6 +369,36 @@ export async function loadContentData() {
     }
 }
 
+// calculating the result and return the results
+export async function calculate() {
+    $(".results").hide()
+    App.txnModal.show()
+    txnLoad("Calculating Result")
+    setTimeout(function () {
+
+        $('.modalTitle').text("Vote Result")
+        var zeroV = ""
+        console.log(Object.values(App.winner));
+        if (Object.values(App.winner).pop() == 0) {
+            zeroV = "<p class='reqAlert'>*No voters vote in this election. Thus all candidates are winner automatically</p>"
+        }
+        $(".modalBody").html(`<p> There are total of ` + App.totalCandidate +
+            ` candidates in this election.</p> <p> 
+        At the end, we have <span class="fs-3">` + Object.keys(App.winner).length
+            + ` Winner(s)</span>  in this election.</p>` + zeroV)
+
+        $(".modalBtn").text("View result")
+        $(".modalBtn").on("click", () => {
+            App.txnModal.hide()
+            App.reqModal.hide()
+            $(".results").show()
+        })
+
+        App.reqModal.show()
+    }, 1000)
+}
+
+// contact us function on footer
 window.addEventListener("load", function () {
     $(".contact").on("click", function () {
         var email = "1181100681@student.mmu.edu.my"

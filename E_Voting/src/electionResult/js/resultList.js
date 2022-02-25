@@ -1,17 +1,18 @@
-import 'bootstrap'
-import 'bootstrap/dist/css/bootstrap.min.css'
 import '../../style.css'
 import '../css/resultList.css'
 
 const App = {
     contract: null,
     address: null,
+
+    // only registered voters can access
     checkAuth: async () => {
         App.address = await globalFunc.getVoterAddress()
         var isAuth = await globalFunc.isAuth(App.address)
         return isAuth
     },
 
+    // load all the content of key object
     load: async () => {
         await globalFunc.headerCSS(".eResult")
         App.contract = await globalFunc.getElectionsContract()
@@ -21,6 +22,7 @@ const App = {
         await App.loadElection(totalElection)
     },
 
+    // load the elections layout
     loadElection: async (total) => {
         var className = "col-lg-4 col-9 border-0 mb-5 electionCard"
         var elections = []
@@ -34,14 +36,13 @@ const App = {
                 $(".election" + x).prop("id", x)
                 $(".election" + x).load("election.html")
                 elections.push(x)
-
             }
         }
-        console.log(elections)
-        await App.loadTitle(elections)
+        await App.loadElectionData(elections)
     },
 
-    loadTitle: async (e) => {
+    // load the data into layout
+    loadElectionData: async (e) => {
         for (var x = 0; x < e.length; x++) {
             console.log("election" + e[x])
             $(".election" + e[x]).on("click", function () {

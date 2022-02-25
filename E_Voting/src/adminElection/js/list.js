@@ -1,11 +1,11 @@
-import 'bootstrap'
-import 'bootstrap/dist/css/bootstrap.min.css';
 import '../../style.css'
 import '../css/admin.css'
 
 const App = {
     contract: null,
     address: null,
+
+    // only admin can access this page
     checkAuth: async () => {
         App.contract = await globalFunc.getElectionsContract()
         App.address = await globalFunc.getVoterAddress()
@@ -16,6 +16,11 @@ const App = {
         }
     },
 
+    /**
+     * load the content of key object
+     * by default the initial election will be open
+     * then call the load all election data function
+     */
     load: async () => {
         await globalFunc.headerCSS(".listing")
         App.contract = await globalFunc.getElectionsContract()
@@ -29,6 +34,7 @@ const App = {
         $(".initial").find('.caret').html("&#9656;")
     },
 
+    // load all the layout of elections data, assign them by following their status
     loadElection: async (total) => {
         var className = "col-lg-5 col-9 border-0 mb-5 electionCard p-3"
         var elections = []
@@ -66,6 +72,7 @@ const App = {
         App.loadData(elections)
     },
 
+    // after layout loaded, load all the data
     loadData: async (e) => {
         for (var x = 0; x < e.length; x++) {
             var election = ".election" + e[x]
@@ -106,10 +113,10 @@ const App = {
         App.endE()
     },
 
+    // start the election function, election will be started if transaction success
     startE: async () => {
         $(".btn-start").on("click", async function () {
             globalFunc.txnModal().show()
-
             var eid = $(this).parent().attr("id")
             try {
                 await App.contract.editStatus(eid, 1).then(
@@ -127,6 +134,7 @@ const App = {
         })
     },
 
+    // end the election function, election will be ended if transaction success
     endE: async () => {
         $(".btn-end").on("click", async function () {
             globalFunc.txnModal().show()

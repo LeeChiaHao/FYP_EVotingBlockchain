@@ -5,16 +5,15 @@
     <!-- Required meta tags -->
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- <script src="index.js"></script> -->
     <title>Home Page</title>
 </head>
 
-<body class="invisible d-flex flex-column h-100">
+<body class="invisible">
     <!-- header -->
     <header id="header" class="d-none">
         <%= require("fs").readFileSync(htmlWebpackPlugin.options.HTML_PATH + "header.html" ) %>
     </header>
-    <header>
+    <div>
         <div class="logIn">
             <nav class="navbar navbar-expand-lg navbar-light header pt-lg-4">
                 <div class="container">
@@ -33,7 +32,7 @@
                 </div>
             </nav>
         </div>
-    </header>
+    </div>
 
 
     <main>
