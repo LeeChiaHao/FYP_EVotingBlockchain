@@ -15,24 +15,24 @@ const App = {
     totalVote: BigInt(0),
 
     checkAuth: async () => {
-        App.address = await solidity.getVoterAddress()
-        var isAuth = await solidity.isAuth(App.address)
+        App.address = await globalFunc.getVoterAddress()
+        var isAuth = await globalFunc.isAuth(App.address)
         return isAuth
     },
 
     load: async () => {
-        await solidity.headerCSS(".eResult")
-        App.contract = await solidity.getElectionsContract()
-        App.address = await solidity.getElectionAddress()
+        await globalFunc.headerCSS(".eResult")
+        App.contract = await globalFunc.getElectionsContract()
+        App.address = await globalFunc.getElectionAddress()
         App.electionID = localStorage.getItem("election")
-        solidity.navigate("resultList.html", "election", true)
+        globalFunc.navigate("resultList.html", "election", true)
 
-        App.txnModal = solidity.txnModal()
-        App.reqModal = solidity.reqModal()
+        App.txnModal = globalFunc.txnModal()
+        App.reqModal = globalFunc.reqModal()
         App.totalCandidate = await App.contract.totalCandidate(App.electionID)
-        await solidity.countWinner(solidity.bigNumberToNumber(App.totalCandidate))
-        await solidity.loadContent()
-        await solidity.calculate()
+        await globalFunc.countWinner(globalFunc.bigNumberToNumber(App.totalCandidate))
+        await globalFunc.loadContent()
+        await globalFunc.calculate()
     },
 }
 

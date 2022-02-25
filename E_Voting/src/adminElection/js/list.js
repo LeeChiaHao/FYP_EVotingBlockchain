@@ -7,8 +7,8 @@ const App = {
     contract: null,
     address: null,
     checkAuth: async () => {
-        App.contract = await solidity.getElectionsContract()
-        App.address = await solidity.getVoterAddress()
+        App.contract = await globalFunc.getElectionsContract()
+        App.address = await globalFunc.getVoterAddress()
         if (App.address == await App.contract.admin()) {
             return true
         } else {
@@ -17,13 +17,13 @@ const App = {
     },
 
     load: async () => {
-        await solidity.headerCSS(".listing")
-        App.contract = await solidity.getElectionsContract()
-        App.address = await solidity.getElectionAddress()
-        var totalElection = solidity.bigNumberToNumber(await App.contract.totalElection())
+        await globalFunc.headerCSS(".listing")
+        App.contract = await globalFunc.getElectionsContract()
+        App.address = await globalFunc.getElectionAddress()
+        var totalElection = globalFunc.bigNumberToNumber(await App.contract.totalElection())
         // if election.status == 3 (ABORT), means this election has been deteted
         await App.loadElection(totalElection)
-        solidity.caretOnClick(3)
+        globalFunc.caretOnClick(3)
         $(".initialE").addClass("show")
         $(".initial").find('.caret').removeClass("left")
         $(".initial").find('.caret').html("&#9656;")
@@ -73,10 +73,10 @@ const App = {
                 $(election).find(".electionTitle").text(val.name)
                 $(election).find(".electionDesc").text(val.desc)
                 if (val.startD != 0) {
-                    $(election).find(".startD").text(solidity.utcToLocal(val.startD))
+                    $(election).find(".startD").text(globalFunc.utcToLocal(val.startD))
                 }
                 if (val.endD != 0) {
-                    $(election).find(".endD").text(solidity.utcToLocal(val.endD))
+                    $(election).find(".endD").text(globalFunc.utcToLocal(val.endD))
                 }
                 switch (val.status) {
                     case 0:
@@ -108,17 +108,17 @@ const App = {
 
     startE: async () => {
         $(".btn-start").on("click", async function () {
-            solidity.txnModal().show()
+            globalFunc.txnModal().show()
 
             var eid = $(this).parent().attr("id")
             try {
                 await App.contract.editStatus(eid, 1).then(
                     (tx) => tx.wait().then(function () {
-                        solidity.customMsg(true, "Election Started Successfully")
+                        globalFunc.customMsg(true, "Election Started Successfully")
                     })
                 )
             } catch (e) {
-                solidity.customMsg(false, "Transaction Fail. Election still maintain Init Status")
+                globalFunc.customMsg(false, "Transaction Fail. Election still maintain Init Status")
                 console.log(e)
             }
             $("#modalClose").on("click", function () {
@@ -129,17 +129,17 @@ const App = {
 
     endE: async () => {
         $(".btn-end").on("click", async function () {
-            solidity.txnModal().show()
+            globalFunc.txnModal().show()
 
             var eid = $(this).parent().attr("id")
             try {
                 await App.contract.editStatus(eid, 2).then(
                     (tx) => tx.wait().then(function () {
-                        solidity.customMsg(true, "Election Ended Successfully")
+                        globalFunc.customMsg(true, "Election Ended Successfully")
                     })
                 )
             } catch (e) {
-                solidity.customMsg(false, "Transaction Fail. Election still maintain Init Status")
+                globalFunc.customMsg(false, "Transaction Fail. Election still maintain Init Status")
                 console.log(e)
             }
             $("#modalClose").on("click", function () {

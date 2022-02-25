@@ -18,21 +18,21 @@ const App = {
     submitArea: null,
     form: null,
     checkAuth: async () => {
-        App.address = await solidity.getVoterAddress()
-        var isAuth = await solidity.isAuth(App.address)
+        App.address = await globalFunc.getVoterAddress()
+        var isAuth = await globalFunc.isAuth(App.address)
         return isAuth
     },
 
     load: async () => {
-        solidity.headerCSS(".profile")
-        App.contract = await solidity.getVotersContract()
-        App.address = await solidity.getVoterAddress()
+        globalFunc.headerCSS(".profile")
+        App.contract = await globalFunc.getVotersContract()
+        App.address = await globalFunc.getVoterAddress()
         App.name = $("#profileName")
         App.email = $("#profileEmail")
         App.editArea = $("#editArea")
         App.submitArea = $("#submitArea")
         App.form = document.querySelector('.validation')
-        await solidity.navigate("/", "Signature3", false)
+        await globalFunc.navigate("/", "Signature3", false)
 
         var voter = await App.contract.voters(App.address)
         console.log("Capital letter: " + App.address);
@@ -41,10 +41,10 @@ const App = {
         console.log(voter.signature);
 
         $("#profileAddress").val(voter.account)
-        App.myModal = new Modal($("#txnModal"))
+        App.myModal = globalFunc.txnModal()
         // Testing
 
-        // await App.contract.verifySignature("0x0f2f57d792336b3bd79ed7aa9d44ac9c3f4b11a05503c55a7c87a31b5357b2be", await solidity.getSignature(App.address))
+        // await App.contract.verifySignature("0x0f2f57d792336b3bd79ed7aa9d44ac9c3f4b11a05503c55a7c87a31b5357b2be", await globalFunc.getSignature(App.address))
         //     .then(function (val) {
         //         console.log(val);
         //     });
@@ -90,11 +90,11 @@ const App = {
             try {
                 App.contract.voters[App.address] = await App.contract.editVoter(App.name.val(), App.email.val()).then(
                     (tx) => tx.wait().then(function () {
-                        solidity.customMsg(true, "Transaction Success. Profile updated successfully.")
+                        globalFunc.customMsg(true, "Transaction Success. Profile updated successfully.")
                     })
                 )
             } catch (e) {
-                solidity.customMsg(false, "Transaction Fail. Profile update failed.")
+                globalFunc.customMsg(false, "Transaction Fail. Profile update failed.")
                 console.log(e)
             }
             $("#modalClose").on("click", function () {

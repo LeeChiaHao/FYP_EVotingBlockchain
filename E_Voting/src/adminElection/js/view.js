@@ -16,8 +16,8 @@ const App = {
     votes: {},
     totalVote: BigInt(0),
     checkAuth: async () => {
-        App.contract = await solidity.getElectionsContract()
-        App.address = await solidity.getVoterAddress()
+        App.contract = await globalFunc.getElectionsContract()
+        App.address = await globalFunc.getVoterAddress()
         console.log(await App.contract.admin())
         if (App.address == await App.contract.admin()) {
             return true
@@ -27,18 +27,18 @@ const App = {
     },
 
     load: async () => {
-        await solidity.headerCSS(".listing")
-        App.contract = await solidity.getElectionsContract()
-        App.address = await solidity.getElectionAddress()
+        await globalFunc.headerCSS(".listing")
+        App.contract = await globalFunc.getElectionsContract()
+        App.address = await globalFunc.getElectionAddress()
         App.electionID = localStorage.getItem("election")
-        // solidity.navigate("list.html", "election", true)
-        App.txnModal = solidity.txnModal()
-        App.reqModal = solidity.reqModal()
+        // globalFunc.navigate("list.html", "election", true)
+        App.txnModal = globalFunc.txnModal()
+        App.reqModal = globalFunc.reqModal()
         App.viewModal = new Modal($("#viewModal"))
         App.totalCandidate = await App.contract.totalCandidate(App.electionID)
-        await solidity.countWinner(solidity.bigNumberToNumber(App.totalCandidate))
-        await solidity.loadContent()
-        await solidity.calculate()
+        await globalFunc.countWinner(globalFunc.bigNumberToNumber(App.totalCandidate))
+        await globalFunc.loadContent()
+        await globalFunc.calculate()
         await App.loadView()
     },
 
@@ -47,7 +47,7 @@ const App = {
             App.viewModal.show()
         })
 
-        var voters = await solidity.getVotersContract();
+        var voters = await globalFunc.getVotersContract();
         var totalV = await voters.voterCount()
         var table = $(".viewBody:last-child")
         var len = $(".viewBody tr").length

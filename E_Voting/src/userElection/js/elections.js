@@ -7,18 +7,18 @@ const App = {
     contract: null,
     address: null,
     checkAuth: async () => {
-        App.address = await solidity.getVoterAddress()
-        var isAuth = await solidity.isAuth(App.address)
+        App.address = await globalFunc.getVoterAddress()
+        var isAuth = await globalFunc.isAuth(App.address)
         return isAuth
     },
 
     load: async () => {
-        await solidity.headerCSS(".castVote")
-        App.contract = await solidity.getElectionsContract()
-        App.address = await solidity.getElectionAddress()
-        await solidity.navigate("/", "Signature0", false)
-        var totalElection = solidity.bigNumberToNumber(await App.contract.totalElection())
-        solidity.caretOnClick(2)
+        await globalFunc.headerCSS(".castVote")
+        App.contract = await globalFunc.getElectionsContract()
+        App.address = await globalFunc.getElectionAddress()
+        await globalFunc.navigate("/", "Signature0", false)
+        var totalElection = globalFunc.bigNumberToNumber(await App.contract.totalElection())
+        globalFunc.caretOnClick(2)
         $(".noVote").addClass("show")
         $(".noV").find(".caret").removeClass("left")
         $(".noV").find(".caret").html("&#9656;")
@@ -34,7 +34,7 @@ const App = {
             if (election.status == 1) {
                 var append
                 var e = ".election" + x
-                await App.contract.encryptedVerify(x, await solidity.getSignature(App.address)).then((val) => {
+                await App.contract.encryptedVerify(x, await globalFunc.getSignature(App.address)).then((val) => {
                     if (val != "") {
                         console.log("Value: " + val)
                         append = ".voted"
@@ -67,9 +67,9 @@ const App = {
                 var election = ".election" + e[x]
                 $(election).find(".electionTitle").text(val.name)
                 $(election).find(".electionDesc").text(val.desc)
-                $(election).find(".startD").text(solidity.utcToLocal(val.startD))
+                $(election).find(".startD").text(globalFunc.utcToLocal(val.startD))
                 if (val.endD != 0) {
-                    $(election).find(".endD").text(solidity.utcToLocal(val.endD))
+                    $(election).find(".endD").text(globalFunc.utcToLocal(val.endD))
                 }
 
             })

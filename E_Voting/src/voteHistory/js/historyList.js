@@ -7,16 +7,16 @@ const App = {
     contract: null,
     address: null,
     checkAuth: async () => {
-        App.address = await solidity.getVoterAddress()
-        var isAuth = await solidity.isAuth(App.address)
+        App.address = await globalFunc.getVoterAddress()
+        var isAuth = await globalFunc.isAuth(App.address)
         return isAuth
     },
 
     load: async () => {
-        await solidity.headerCSS(".vHistory")
-        App.contract = await solidity.getElectionsContract()
-        App.address = await solidity.getElectionAddress()
-        await solidity.navigate("/", "Signature2", false)
+        await globalFunc.headerCSS(".vHistory")
+        App.contract = await globalFunc.getElectionsContract()
+        App.address = await globalFunc.getElectionAddress()
+        await globalFunc.navigate("/", "Signature2", false)
 
         await App.loadHistory()
     },
@@ -28,7 +28,7 @@ const App = {
         for (var x = totalE - 1; x >= 0; x--) {
             await App.contract.elections(x).then(async (election) => {
                 if (election.status == 2) {
-                    var sign = await solidity.getSignature(App.address)
+                    var sign = await globalFunc.getSignature(App.address)
                     console.log(sign)
                     await App.contract.encryptedVerify(x, sign).then((val) => {
                         if (val != "") {

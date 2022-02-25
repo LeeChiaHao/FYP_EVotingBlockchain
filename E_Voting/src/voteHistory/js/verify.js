@@ -11,19 +11,19 @@ const App = {
     reqModal: null,
     txnModal: null,
     checkAuth: async () => {
-        App.address = await solidity.getVoterAddress()
-        var isAuth = await solidity.isAuth(App.address)
+        App.address = await globalFunc.getVoterAddress()
+        var isAuth = await globalFunc.isAuth(App.address)
         return isAuth
     },
 
     load: async () => {
-        await solidity.headerCSS(".vHistory")
-        App.contract = await solidity.getElectionsContract()
-        App.address = await solidity.getElectionAddress()
+        await globalFunc.headerCSS(".vHistory")
+        App.contract = await globalFunc.getElectionsContract()
+        App.address = await globalFunc.getElectionAddress()
         App.electionID = localStorage.getItem("election")
-        solidity.navigate("historyList.html", "election", true)
-        App.reqModal = solidity.reqModal()
-        App.txnModal = solidity.txnModal()
+        globalFunc.navigate("historyList.html", "election", true)
+        App.reqModal = globalFunc.reqModal()
+        App.txnModal = globalFunc.txnModal()
 
         await App.showModal()
     },
@@ -42,7 +42,7 @@ const App = {
         $("#modalYes").on("click", async function () {
             App.reqModal.hide()
             App.txnModal.show()
-            solidity.txnLoad("Verifying")
+            globalFunc.txnLoad("Verifying")
             await App.verifyVote()
 
 
@@ -55,7 +55,7 @@ const App = {
 
     verifyVote: async () => {
         var encrypted
-        var signature = await solidity.getSignature(App.address)
+        var signature = await globalFunc.getSignature(App.address)
         await App.contract.encryptedVerify(App.electionID, signature).then((val) => {
             console.log(val)
             encrypted = val
@@ -71,21 +71,21 @@ const App = {
                 $(".historyCandidate").text(plain)
                 try {
                     await App.contract.verifyTimeID(App.electionID, signature).then(async (val) => {
-                        var num = solidity.bigNumberToNumber(val)
+                        var num = globalFunc.bigNumberToNumber(val)
                         await App.contract.provider.getBlockWithTransactions(num).then((data) => {
                             var date = new Date(data.timestamp * 1000)
                             console.log(data)
                             console.log(date.toLocaleDateString("en-US"));
-                            $(".historyTime").text(solidity.utcToLocal(data.timestamp))
+                            $(".historyTime").text(globalFunc.utcToLocal(data.timestamp))
                             console.log(data.transactions)
                             $(".historyTxn").text(data.transactions[0].hash)
                             $(".historyBlock").text("Block " + num + " (" + data.hash + ")")
-                            solidity.customMsg(true, "Verify Success")
+                            globalFunc.customMsg(true, "Verify Success")
                             $(".main").show()
                         })
                     })
                 } catch (e) {
-                    solidity.customMsg(false, "Verify Failed")
+                    globalFunc.customMsg(false, "Verify Failed")
                     $(".modalClose").on("click", function () {
                         window.location.replace("historyList.html")
                     })
@@ -93,7 +93,7 @@ const App = {
 
             })
         } catch (e) {
-            solidity.customMsg(false, "Verify Failed")
+            globalFunc.customMsg(false, "Verify Failed")
             $(".modalClose").on("click", function () {
                 window.location.replace("historyList.html")
             })

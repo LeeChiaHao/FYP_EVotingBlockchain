@@ -11,8 +11,8 @@ const App = {
     txnModal: null,
     delCandidate: null,
     checkAuth: async () => {
-        App.contract = await solidity.getElectionsContract()
-        App.address = await solidity.getVoterAddress()
+        App.contract = await globalFunc.getElectionsContract()
+        App.address = await globalFunc.getVoterAddress()
         console.log(await App.contract.admin())
         if (App.address == await App.contract.admin()) {
             return true
@@ -22,11 +22,11 @@ const App = {
     },
 
     load: async () => {
-        await solidity.headerCSS(".creating")
+        await globalFunc.headerCSS(".creating")
         App.forms = document.querySelector('.validation')
-        App.contract = await solidity.getElectionsContract()
-        App.address = await solidity.getElectionAddress()
-        App.txnModal = new Modal($("#txnModal"))
+        App.contract = await globalFunc.getElectionsContract()
+        App.address = await globalFunc.getElectionAddress()
+        App.txnModal = globalFunc.txnModal()
         App.delCandidate = $('.delCandidate')
         App.totalCandidate = 1;
         var divCandidate
@@ -121,7 +121,7 @@ const App = {
                     index++;
                     allCandidates[index] = $("#slogan" + i).val()
                     index++;
-                    votes = solidity.encrypt(0).toString()
+                    votes = globalFunc.encrypt(0).toString()
                     allCandidates[index] = votes
                     index++;
                 }
@@ -129,11 +129,11 @@ const App = {
                 console.log(allCandidates)
                 try {
                     App.txnModal.show()
-                    solidity.txnLoad("Making Transaction")
-                    var eid = solidity.bigNumberToNumber(await App.contract.totalElection())
+                    globalFunc.txnLoad("Making Transaction")
+                    var eid = globalFunc.bigNumberToNumber(await App.contract.totalElection())
                     await App.contract.createElection(eid, $("#electionName").val(), $("#description").val(), allCandidates).then(
                         (tx) => tx.wait().then(function () {
-                            solidity.txnSuccess()
+                            globalFunc.txnSuccess()
                             $("#modalClose").on("click", function () {
                                 window.location.replace("list.html")
                             })
@@ -141,7 +141,7 @@ const App = {
                     )
                 } catch (e) {
                     console.log(e)
-                    solidity.txnFail()
+                    globalFunc.txnFail()
                 }
 
                 // way of receive emitted event from contract
@@ -150,7 +150,7 @@ const App = {
                 })
             } else {
                 App.txnModal.show()
-                solidity.customMsg(false, "Must have more than 1 candidate for an election")
+                globalFunc.customMsg(false, "Must have more than 1 candidate for an election")
             }
         }
 

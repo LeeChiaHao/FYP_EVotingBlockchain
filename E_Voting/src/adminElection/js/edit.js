@@ -13,8 +13,8 @@ const App = {
     form: null,
     txnModal: null,
     checkAuth: async () => {
-        App.contract = await solidity.getElectionsContract()
-        App.address = await solidity.getVoterAddress()
+        App.contract = await globalFunc.getElectionsContract()
+        App.address = await globalFunc.getVoterAddress()
         console.log(await App.contract.admin())
         if (App.address == await App.contract.admin()) {
             return true
@@ -24,11 +24,11 @@ const App = {
     },
 
     load: async () => {
-        await solidity.headerCSS(".listing")
+        await globalFunc.headerCSS(".listing")
         App.form = document.querySelector("#editForm")
         App.electionID = localStorage.getItem("election")
-        solidity.navigate("list.html", "election", true)
-        App.txnModal = new Modal($("#txnModal"))
+        globalFunc.navigate("list.html", "election", true)
+        App.txnModal = globalFunc.txnModal()
         App.totalCandidate = await App.contract.totalCandidate(App.electionID)
         App.delCandidate = $('.delCandidate')
 
@@ -136,7 +136,7 @@ const App = {
                 $(".loadCandidate" + x).find("#partyName" + x).val(val.party)
                 $(".loadCandidate" + x).find("#slogan" + x).val(val.slogan)
                 var vote = BigInt(val.voteGet)
-                var add = solidity.encrypt(4)
+                var add = globalFunc.encrypt(4)
             }
             )
         }
@@ -187,22 +187,22 @@ const App = {
                     index++;
                     allCandidates[index] = $("#slogan" + i).val()
                     index++;
-                    votes = solidity.encrypt(0).toString()
+                    votes = globalFunc.encrypt(0).toString()
                     allCandidates[index] = votes
                     index++;
                 }
                 console.log(allCandidates)
                 try {
                     App.txnModal.show()
-                    solidity.txnLoad("Making Transaction")
+                    globalFunc.txnLoad("Making Transaction")
                     await App.contract.editElection(App.electionID, $("#electionName").val(), $("#description").val(), allCandidates).then(
                         (tx) => tx.wait().then(function () {
-                            solidity.txnSuccess()
+                            globalFunc.txnSuccess()
                         })
                     )
                 } catch (e) {
                     console.log(e)
-                    solidity.txnFail()
+                    globalFunc.txnFail()
                 }
 
                 // way of receive emitted event from contract
@@ -211,7 +211,7 @@ const App = {
                 })
             } else {
                 App.txnModal.show()
-                solidity.customMsg(false, "Must have more than 1 candidate for an election")
+                globalFunc.customMsg(false, "Must have more than 1 candidate for an election")
             }
         }
     },
@@ -219,16 +219,16 @@ const App = {
     delForm: async () => {
         try {
             App.txnModal.show()
-            solidity.txnLoad("Making Transaction")
+            globalFunc.txnLoad("Making Transaction")
             await App.contract.deleteElection(App.electionID, 1).then(
                 (tx) => tx.wait().then(function () {
-                    solidity.txnSuccess()
+                    globalFunc.txnSuccess()
                     // window.location.replace("list.html")
                 })
             )
         } catch (e) {
             console.log(e);
-            solidity.txnFail()
+            globalFunc.txnFail()
         }
     },
 

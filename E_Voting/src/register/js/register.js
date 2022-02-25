@@ -14,9 +14,9 @@ const App = {
         return localStorage.getItem("Signature") == null
     },
     load: async () => {
-        App.address = await solidity.getVoterAddress()
-        App.contract = await solidity.getVotersContract()
-        App.txnModal = solidity.txnModal()
+        App.address = await globalFunc.getVoterAddress()
+        App.contract = await globalFunc.getVotersContract()
+        App.txnModal = globalFunc.txnModal()
         App.form = document.querySelector('.validation')
         console.log(App.address)
         if (await App.contract.isRegister(App.address)) {
@@ -51,12 +51,12 @@ const App = {
                 $("#email").parent().find(".valid-feedback").show()
                 $("#email").parent().find(".invalid-feedback").hide()
                 App.txnModal.show()
-                solidity.txnLoad("Making Transaction")
+                globalFunc.txnLoad("Making Transaction")
                 console.log($("#userName").val() + $("#email").val())
                 await App.contract.createVoter($("#userName").val(), $("#email").val()
                     , "0x0f2f57d792336b3bd79ed7aa9d44ac9c3f4b11a05503c55a7c87a31b5357b2be", localStorage.getItem("Signature"), localStorage.getItem("Signature")).then(
                         (tx) => tx.wait().then(function () {
-                            solidity.txnSuccess()
+                            globalFunc.txnSuccess()
                             $(".modalClose").on("click", async function () {
                                 // localStorage.clear()
                                 window.location.replace("/")
@@ -64,7 +64,7 @@ const App = {
                         })
                     )
             } catch (e) {
-                solidity.txnFail()
+                globalFunc.txnFail()
                 console.log(e)
             }
         } else {

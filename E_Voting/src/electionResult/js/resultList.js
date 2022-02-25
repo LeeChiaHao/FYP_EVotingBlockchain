@@ -7,17 +7,17 @@ const App = {
     contract: null,
     address: null,
     checkAuth: async () => {
-        App.address = await solidity.getVoterAddress()
-        var isAuth = await solidity.isAuth(App.address)
+        App.address = await globalFunc.getVoterAddress()
+        var isAuth = await globalFunc.isAuth(App.address)
         return isAuth
     },
 
     load: async () => {
-        await solidity.headerCSS(".eResult")
-        App.contract = await solidity.getElectionsContract()
-        App.address = await solidity.getElectionAddress()
-        await solidity.navigate("/", "Signature1", false)
-        var totalElection = solidity.bigNumberToNumber(await App.contract.totalElection())
+        await globalFunc.headerCSS(".eResult")
+        App.contract = await globalFunc.getElectionsContract()
+        App.address = await globalFunc.getElectionAddress()
+        await globalFunc.navigate("/", "Signature1", false)
+        var totalElection = globalFunc.bigNumberToNumber(await App.contract.totalElection())
         await App.loadElection(totalElection)
     },
 
@@ -53,8 +53,8 @@ const App = {
                 var election = ".election" + e[x]
                 $(election).find(".electionTitle").text(val.name)
                 $(election).find(".electionDesc").text(val.desc)
-                $(election).find(".startD").text(solidity.utcToLocal(val.startD))
-                $(election).find(".endD").text(solidity.utcToLocal(val.endD))
+                $(election).find(".startD").text(globalFunc.utcToLocal(val.startD))
+                $(election).find(".endD").text(globalFunc.utcToLocal(val.endD))
 
             })
         }

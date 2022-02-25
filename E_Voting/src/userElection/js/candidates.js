@@ -15,20 +15,20 @@ const App = {
     reqModal: null,
     isVoted: null,
     checkAuth: async () => {
-        App.address = await solidity.getVoterAddress()
-        var isAuth = await solidity.isAuth(App.address)
+        App.address = await globalFunc.getVoterAddress()
+        var isAuth = await globalFunc.isAuth(App.address)
         return isAuth
     },
     load: async () => {
-        await solidity.headerCSS(".castVote")
-        App.contract = await solidity.getElectionsContract()
-        App.address = await solidity.getElectionAddress()
+        await globalFunc.headerCSS(".castVote")
+        App.contract = await globalFunc.getElectionsContract()
+        App.address = await globalFunc.getElectionAddress()
         App.electionID = localStorage.getItem("election")
-        solidity.navigate("elections.html", "election", true)
-        App.reqModal = solidity.reqModal()
+        globalFunc.navigate("elections.html", "election", true)
+        App.reqModal = globalFunc.reqModal()
         App.totalCandidate = await App.contract.totalCandidate(App.electionID)
 
-        await App.contract.encryptedVerify(App.electionID, await solidity.getSignature(App.address)).then(async (val) => {
+        await App.contract.encryptedVerify(App.electionID, await globalFunc.getSignature(App.address)).then(async (val) => {
             console.log(val)
             if (val == "") {
                 App.isVoted = false;
@@ -113,26 +113,26 @@ const App = {
     onclickModal: async () => {
         $("#modalYes").on("click", async function () {
             App.reqModal.hide()
-            solidity.txnModal().show()
-            solidity.txnLoad("Requesting Encryption Key")
-            var signature = await solidity.getSignature(App.address)
+            globalFunc.txnModal().show()
+            globalFunc.txnLoad("Requesting Encryption Key")
+            var signature = await globalFunc.getSignature(App.address)
             var encrypt
             await App.requestEncrypt().then(async (re) => {
                 encrypt = re
                 console.log("Encrypt: " + encrypt)
                 if (encrypt != null) {
                     console.log("Don't Enter");
-                    solidity.txnLoad("Making Transaction")
+                    globalFunc.txnLoad("Making Transaction")
                     var voteGet = await App.setVoteGet()
                     try {
                         await App.contract.addVote(App.electionID, signature, encrypt, voteGet).then(
                             (tx) => tx.wait().then(() => {
-                                solidity.txnSuccess()
+                                globalFunc.txnSuccess()
                             })
                         )
                     } catch (e) {
                         console.log(e)
-                        solidity.txnFail()
+                        globalFunc.txnFail()
                     }
                 } else {
                     console.log("Key Failed")
@@ -159,7 +159,7 @@ const App = {
             console.log(key)
 
         }).catch((error) => {
-            solidity.customMsg(false, "Request Encryption Key Failed")
+            globalFunc.customMsg(false, "Request Encryption Key Failed")
             return null
             // if (error.code === 4001) {
             //     // EIP-1193 userRejectedRequest error
@@ -199,9 +199,9 @@ const App = {
             await App.contract.electionCandidate(App.electionID, x).then((val) => {
                 var vote = BigInt(val.voteGet)
                 if (x == App.voted) {
-                    voteGet.push(solidity.encryptAdd(solidity.encrypt(1), vote).toString())
+                    voteGet.push(globalFunc.encryptAdd(globalFunc.encrypt(1), vote).toString())
                 } else {
-                    voteGet.push(solidity.encryptAdd(solidity.encrypt(0), vote).toString())
+                    voteGet.push(globalFunc.encryptAdd(globalFunc.encrypt(0), vote).toString())
                 }
             })
         }

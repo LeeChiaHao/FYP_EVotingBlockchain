@@ -54,7 +54,7 @@ module.exports = {
         // global import in every js file
         new webpack.ProvidePlugin({
             '$': 'jQuery',
-            'solidity': '../../global.js',
+            'globalFunc': '../../global.js',
             'votersJSON': "../build/contracts/Voters.json",
             "electionsJSON": "../build/contracts/Elections.json"
         }),
