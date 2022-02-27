@@ -28,6 +28,15 @@ const App = {
         $(".noV").find(".caret").removeClass("left")
         $(".noV").find(".caret").html("&#9656;")
         await App.loadElection(totalElection)
+        let sign = await globalFunc.getSignature(App.address)
+        $(".resultClick").on("click", async function () {
+            window.onbeforeunload = function () {
+                window.onunload = function () {
+                    localStorage.clear()
+                    window.localStorage.setItem("Signature1", sign)
+                }
+            }
+        })
     },
 
     // load all election's layout based on user voted or not
@@ -40,21 +49,24 @@ const App = {
             if (election.status == 1) {
                 var append
                 var e = ".election" + x
-                await App.contract.encryptedVerify(x, await globalFunc.getSignature(App.address)).then((val) => {
-                    if (val != "") {
-                        console.log("Value: " + val)
-                        append = ".voted"
-                    } else {
-                        append = ".noVote"
-                    }
-                    $(append).find(".noList").addClass("d-none")
-                    $(append).find(".list").removeClass("d-none")
+                if (await globalFunc.getCanVote(App.address, x)) {
+                    await App.contract.encryptedVerify(x, await globalFunc.getSignature(App.address)).then((val) => {
+                        if (val != "") {
+                            console.log("Value: " + val)
+                            append = ".voted"
+                        } else {
+                            append = ".noVote"
+                        }
+                        $(append).find(".noList").addClass("d-none")
+                        $(append).find(".list").removeClass("d-none")
 
-                    $("<div></div>").addClass(className + " election" + x).appendTo(append)
-                    $(e).prop("id", x)
-                    $(e).load("election.html")
-                    elections.push(x)
-                })
+                        $("<div></div>").addClass(className + " election" + x).appendTo(append)
+                        $(e).prop("id", x)
+                        $(e).load("election.html")
+                        elections.push(x)
+                    })
+                }
+
             }
         }
         console.log(elections)

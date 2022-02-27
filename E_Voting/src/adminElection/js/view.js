@@ -9,7 +9,7 @@ const App = {
     totalCandidate: null,
     txnModal: null,
     reqModal: null,
-    viewModal: null,
+    voterModal: null,
     winner: {},
     votes: {},
     totalVote: BigInt(0),
@@ -39,54 +39,17 @@ const App = {
         // globalFunc.navigate("list.html", "election", true)
         App.txnModal = globalFunc.txnModal()
         App.reqModal = globalFunc.reqModal()
-        App.viewModal = new Modal($("#viewModal"))
+        App.voterModal = globalFunc.voterModal()
         App.totalCandidate = await App.contract.totalCandidate(App.electionID)
         await globalFunc.countWinner(globalFunc.bigNumberToNumber(App.totalCandidate))
         await globalFunc.loadContent()
         await globalFunc.calculate()
-        await App.loadView()
-    },
-
-    /**
-     * show the view modal
-     * first load all the voters address and load the layout
-     * then load the data into the layout and check if they are voted
-     */
-    loadView: async () => {
+        await globalFunc.loadView(App.electionID, true)
+        await globalFunc.onSearch()
         $(".viewVoter").on("click", function () {
-            App.viewModal.show()
+            App.voterModal.show()
         })
-
-        var voters = await globalFunc.getVotersContract();
-        var totalV = await voters.voterCount()
-        var table = $(".viewBody:last-child")
-        var len = $(".viewBody tr").length
-        var address = []
-        console.log(table)
-        for (var i = 0; i < totalV; i++) {
-            await voters.voterAddress(i).then(async function (add) {
-                address.push(add)
-                var className = "tableRow" + len
-                table.append('<tr class="' + className + '"></tr > ')
-                $('.' + className).load("subView.html")
-                len++
-            })
-        }
-
-        for (var x = 0; x < len; x++) {
-            var isVote = await voters.isVoted(address[x], App.electionID)
-            var voter = await voters.voters(address[x])
-            var className = ".tableRow" + x
-
-            $(className).find(".num").text(x + 1)
-            $(className).find(".address").text(voter.account)
-            $(className).find(".name").text(voter.name)
-            $(className).find(".mail").text(voter.email)
-            if (isVote) {
-                $(className).find("input").attr("checked", true)
-            }
-        }
-    }
+    },
 }
 
 window.App = App;

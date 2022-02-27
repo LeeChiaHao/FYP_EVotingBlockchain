@@ -63,7 +63,8 @@ module.exports = {
             { from: "./src/commonHTML/election.html", to: "election.html" },
             { from: "./src/commonHTML/result.html", to: "result.html" },
             { from: "./src/voteHistory/history.html", to: "history.html" },
-            { from: "./src/adminElection/subView.html", to: "subView.html" },
+            { from: "./src/commonHTMl/voterModal.html", to: "voterModal.html" },
+            { from: "./src/commonHTMl/subVoter.html", to: "subVoter.html" },
         ]),
         new HtmlWebpackInjector()
 

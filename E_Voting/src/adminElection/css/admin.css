@@ -173,8 +173,8 @@ input[type=checkbox] + label:active:before {
     transform: scale(0);
   }
 input[type=checkbox]:checked + label:before {
-    background-color: MediumSeaGreen;
-    border-color: MediumSeaGreen;
+    background-color: #bfb;
+    border-color: #bfb;
     color: #fff;
 }
 
@@ -185,7 +185,21 @@ input[type=checkbox]:disabled + label:before {
 
 input[type=checkbox]:checked:disabled + label:before {
     transform: scale(1);
-    background-color: #bfb;
+    background-color: #3bc83b;
+}
+
+#searchIcon {
+    width: 5%;
+}
+#search {
+    width: 90%;
+    padding: 0.5rem 1rem;
+    margin-left: 0.5rem;
+}
+
+.confirm {
+    display: flex;
+    justify-content: center;
 }
 
 @media screen and (max-width: 576px) {
@@ -197,5 +211,10 @@ input[type=checkbox]:checked:disabled + label:before {
     }
     .election-input-group span{
         justify-content: center;
+    }
+    #search {
+        width: 85%;
+    margin-left: 1rem;
+
     }
 }

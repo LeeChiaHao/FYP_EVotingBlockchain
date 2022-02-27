@@ -19,7 +19,6 @@ const App = {
         App.contract = await globalFunc.getVotersContract()
         App.txnModal = globalFunc.txnModal()
         App.form = document.querySelector('.validation')
-        console.log(App.address)
         if (await App.contract.isRegister(App.address)) {
             window.location.replace("/")
         }
@@ -45,9 +44,7 @@ const App = {
         var emailValid = true
 
         if (! /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test($("#email").val())) {
-            console.log("Wrong Email Cibai");
             emailValid = false
-
         }
         App.form.classList.add('was-validated')
         if ($(".was-validated:invalid").length == 0 && emailValid) {
@@ -56,7 +53,6 @@ const App = {
                 $("#email").parent().find(".invalid-feedback").hide()
                 App.txnModal.show()
                 globalFunc.txnLoad("Making Transaction")
-                console.log($("#userName").val() + $("#email").val())
                 await App.contract.createVoter($("#userName").val(), $("#email").val()
                     , "0x0f2f57d792336b3bd79ed7aa9d44ac9c3f4b11a05503c55a7c87a31b5357b2be", localStorage.getItem("Signature"), localStorage.getItem("Signature")).then(
                         (tx) => tx.wait().then(function () {
@@ -69,7 +65,6 @@ const App = {
                     )
             } catch (e) {
                 globalFunc.txnFail()
-                console.log(e)
             }
         } else {
             if (!emailValid) {

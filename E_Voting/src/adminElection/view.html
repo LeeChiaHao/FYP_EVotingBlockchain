@@ -34,12 +34,12 @@
                 </div>
 
                 <div class="row mb-4">
-                    <div class="col-9 title">
+                    <div class="col-lg-9 col-6 title">
                         <h2 class="fw-bold">
                             Winner:
                         </h2>
                     </div>
-                    <div class="col-3">
+                    <div class="col-lg-3 col-6">
                         <button class="viewVoter">View Voters</button>
                     </div>
                 </div>
@@ -61,44 +61,14 @@
         </div>
     </main>
 
-    <div class="modal fade" id="viewModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-        aria-labelledby="viewModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-xl">
-            <div class="modal-content h-100">
-                <div class="modal-header">
-                    <h4 class="modal-title mx-auto">
-                        Voters
-                    </h4>
-                    <div class="modal-header" id="">
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                </div>
-                <div class="modal-body">
-                    <table class="table">
-                        <thead>
-                            <tr>
-                                <th scope="col">No</th>
-                                <th scope="col">Account</th>
-                                <th scope="col">Username</th>
-                                <th scope="col">E-mail</th>
-                                <th scope="col">Voted</th>
-                            </tr>
-                        </thead>
-                        <tbody class="viewBody">
-
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-    </div>
     <!-- footer -->
     <%= require("fs").readFileSync(htmlWebpackPlugin.options.HTML_PATH + "footer.html" ) %>
-
-        <!-- TxnModal -->
-        <%= require("fs").readFileSync(htmlWebpackPlugin.options.HTML_PATH + "txnModal.html" ) %>
-            <!-- RequestModal -->
-            <%= require("fs").readFileSync(htmlWebpackPlugin.options.HTML_PATH + "requestModal.html" ) %>
+        <!-- voterModal -->
+        <%= require("fs").readFileSync(htmlWebpackPlugin.options.HTML_PATH + "voterModal.html" ) %>
+            <!-- TxnModal -->
+            <%= require("fs").readFileSync(htmlWebpackPlugin.options.HTML_PATH + "txnModal.html" ) %>
+                <!-- RequestModal -->
+                <%= require("fs").readFileSync(htmlWebpackPlugin.options.HTML_PATH + "requestModal.html" ) %>
 
 </body>
 

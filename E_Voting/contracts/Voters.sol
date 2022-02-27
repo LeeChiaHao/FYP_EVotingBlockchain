@@ -12,15 +12,26 @@ contract Voters {
 
     // default to false, when registered, set can turn to login status directly
     mapping(address => bool) public isRegister;
+
+    // the login address => the Voter struct info
     mapping(address => Voter) public voters;
+
+    // voter id => voters address, when want to load all voters
     mapping(uint256 => address) public voterAddress;
-    // TO DO: voter address => their unique signature
+
+    // voter address and their signature, set at verifySignature()
     mapping(address => string) public voterSignature;
 
+    // check if this voter, at this election, has right to vote
+    mapping(address => mapping(uint256 => bool)) public canVote;
+
+    // check if this voter, at this election, vote or not
     mapping(address => mapping(uint256 => bool)) public isVoted;
-    // TO DO: address => signature, then require the address must be same with this function's sender
+
+    // total voter
     uint256 public voterCount = 0;
 
+    // use to ensure parameter is not empty
     modifier notEmpty(string memory _name, string memory _email) {
         require(
             keccak256(abi.encodePacked(_name)) !=
@@ -45,6 +56,7 @@ contract Voters {
         createVoter creates a new voter
         :param _name: voter's name
         :param _email: voter's email
+        :hashMsg, signature, string sign: use at verifySignature()
      */
     function createVoter(
         string calldata _name,
@@ -88,6 +100,16 @@ contract Voters {
         isVoted[_voter][id] = true;
     }
 
+    function setCanVote(uint256 id, address addr) public {
+        require(tx.origin == admin);
+        canVote[addr][id] = true;
+    }
+
+    /**
+     * hashMsg - the hashed message that a voter sign
+     * byte signature - use to split to r, s and v
+     * stringSign - when it is verified, store the signature
+     */
     function verifySignature(
         bytes32 hashMsg,
         bytes memory signature,

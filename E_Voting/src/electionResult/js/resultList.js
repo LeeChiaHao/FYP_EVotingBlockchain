@@ -28,15 +28,18 @@ const App = {
         var className = "col-lg-4 col-9 border-0 mb-5 electionCard"
         for (var x = 0; x < total; x++) {
             console.log("Total" + total)
-            var election = await App.contract.elections(x)
-            if (election.status == 2) {
-                console.log(election);
-                var time = globalFunc.bigNumberToNumber(election.endD)
-                console.log("End time: " + time);
-                console.log(typeof (time));
-                App.timestamp.push(time)
-                App.timeId[time] = x;
+            if (await globalFunc.getCanVote(App.address, x)) {
+                var election = await App.contract.elections(x)
+                if (election.status == 2) {
+                    console.log(election);
+                    var time = globalFunc.bigNumberToNumber(election.endD)
+                    console.log("End time: " + time);
+                    console.log(typeof (time));
+                    App.timestamp.push(time)
+                    App.timeId[time] = x;
+                }
             }
+
         }
 
         App.timestamp.sort(function (a, b) { return b - a })

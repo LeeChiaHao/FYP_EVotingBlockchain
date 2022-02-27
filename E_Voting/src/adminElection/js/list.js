@@ -4,11 +4,12 @@ import '../css/admin.css'
 const App = {
     contract: null,
     address: null,
-
+    voterModal: null,
     // only admin can access this page
     checkAuth: async () => {
         App.contract = await globalFunc.getElectionsContract()
         App.address = await globalFunc.getVoterAddress()
+        App.voterModal = globalFunc.voterModal()
         if (App.address == await App.contract.admin()) {
             return true
         } else {
@@ -27,6 +28,8 @@ const App = {
         App.address = await globalFunc.getElectionAddress()
         var totalElection = globalFunc.bigNumberToNumber(await App.contract.totalElection())
         // if election.status == 3 (ABORT), means this election has been deteted
+        await globalFunc.loadView(0, false)
+        await globalFunc.onSearch()
         await App.loadElection(totalElection)
         globalFunc.caretOnClick(3)
         $(".initialE").addClass("show")
@@ -47,7 +50,6 @@ const App = {
             }
             var e = ".election" + x
             var append
-            console.log(election.status);
             switch (election.status) {
                 case 0:
                     append = ".initialE"
@@ -61,7 +63,6 @@ const App = {
                 default:
                     break
             }
-            console.log(append)
             $(append).find(".noList").addClass("d-none")
             $(append).find(".list").removeClass("d-none")
             $("<div></div>").addClass(className + " election" + x).appendTo(append)
@@ -109,28 +110,99 @@ const App = {
                 window.location.assign(location)
             })
         }
-        App.startE()
+        App.eligible()
         App.endE()
     },
 
     // start the election function, election will be started if transaction success
-    startE: async () => {
-        $(".btn-start").on("click", async function () {
-            globalFunc.txnModal().show()
-            var eid = $(this).parent().attr("id")
-            try {
-                await App.contract.editStatus(eid, 1).then(
-                    (tx) => tx.wait().then(function () {
-                        globalFunc.customMsg(true, "Election Started Successfully")
-                    })
-                )
-            } catch (e) {
-                globalFunc.customMsg(false, "Transaction Fail. Election still maintain Init Status")
-                console.log(e)
-            }
-            $("#modalClose").on("click", function () {
-                window.location.reload()
+    eligible: async () => {
+        var len = $(".viewBody tr").length
+        console.log(len)
+        if (len != 0) {
+            $(".vFooter").removeClass("d-none")
+            var table = $(".viewBody:last-child")
+            var className = "allowAll"
+            table.append('<tr class="' + className + '"></tr > ')
+            className = "." + className
+            await $(className).load("subVoter.html", function () {
+                $(className).find(".num").text("")
+                $(className).find(".address").text("")
+                $(className).find(".name").text("")
+                $(className).find(".mail").text("")
+                $(className).find("input").attr("name", "checkAll")
+                $(className).find("input").attr("id", "checkAll")
+                $(className).find("input").attr("disabled", false)
+                $(className).find("input").attr("checked", true)
+                $(className).find("label").attr("for", "checkAll")
+                $(className).find("label").attr("class", "checkAll")
+                $(className).find("label").text("Disallow All")
+                console.log(len);
+                $("#checkAll").on("change", function () {
+                    if ($(this).is(":checked")) {
+                        for (var i = 0; i < len; i++) {
+                            var voter = "#voter" + i
+                            if (!$(voter).is(":checked")) {
+                                $(voter).trigger('click')
+                            }
+                        }
+                        $(className).find("label").text("Disallow All")
+                    } else {
+                        for (var i = 0; i < len; i++) {
+                            var voter = "#voter" + i
+                            if ($(voter).is(":checked")) {
+                                $(voter).trigger('click')
+                            }
+                        }
+                        $(className).find("label").text("Allow All")
+                    }
+                })
             })
+        }
+        $(".btn-start").on("click", async function () {
+            var elect = await App.contract.elections($(this).parent().attr("id"))
+            $(".modal-title").text("Set Eligible voters for Election: " + elect.name)
+            $(".modalBtn").attr("id", $(this).parent().attr("id"))
+            App.voterModal.show()
+        })
+        await App.startE()
+    },
+
+    startE: async () => {
+        $(".modalBtn").on("click", async function () {
+            App.voterModal.hide()
+            globalFunc.txnModal().show()
+            globalFunc.txnLoad("Making Transaction")
+            var eid = $(this).attr("id")
+            var len = ($(".viewBody tr").length) - 1
+            var voters = []
+
+            for (var x = 0; x < len; x++) {
+                var voter = "#voter" + x
+                var row = ".tableRow" + x
+
+                if ($(voter).is(":checked")) {
+                    voters.push($(row).find('.address').text())
+                }
+            }
+
+            if (voters.length == 0) {
+                globalFunc.customMsg(false, "Must have at least 1 voter allow to vote")
+            } else {
+                console.log(voters);
+                try {
+                    await App.contract.editStatus(eid, 1, voters).then(
+                        (tx) => tx.wait().then(function () {
+                            globalFunc.customMsg(true, "Election Started Successfully")
+                        })
+                    )
+                } catch (e) {
+                    globalFunc.customMsg(false, "Transaction Fail. Election still maintain Init Status")
+                    console.log(e)
+                }
+                $("#modalClose").on("click", function () {
+                    window.location.reload()
+                })
+            }
         })
     },
 
@@ -138,10 +210,11 @@ const App = {
     endE: async () => {
         $(".btn-end").on("click", async function () {
             globalFunc.txnModal().show()
+            globalFunc.txnLoad("Making Transaction")
 
             var eid = $(this).parent().attr("id")
             try {
-                await App.contract.editStatus(eid, 2).then(
+                await App.contract.editStatus(eid, 2, []).then(
                     (tx) => tx.wait().then(function () {
                         globalFunc.customMsg(true, "Election Ended Successfully")
                     })

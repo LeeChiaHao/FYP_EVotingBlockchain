@@ -38,9 +38,6 @@ contract Elections {
     // election ID, then the voter's signature (so can be verify by anyone), then the encrypted string that can only be decrypted by voter
     mapping(uint256 => mapping(string => string)) public encryptedVerify;
 
-    // to do: store the signature (?), so can verify the vote, else u dun know who got vote before (if just use the encryptedVerify)
-    mapping(uint256 => mapping(address => bool)) public voterVerify;
-
     // voter's signature --> then block number, so can retrieve time and transaction ID
     mapping(uint256 => mapping(string => uint256)) public verifyTimeID;
 
@@ -50,21 +47,25 @@ contract Elections {
     // election ID => totalCandidate inside that election
     mapping(uint256 => uint256) public totalCandidate;
 
+    // total elections created
     uint256 public totalElection = 0;
-    uint256 public totalVerify = 0;
-    event electionInfo(uint256 e, uint256 c);
-    event candidateLen(uint256 len);
 
+    // when create election, view election ID and candidates
+    event electionInfo(uint256 eID, uint256 candidateLen);
+
+    // construct Voter contract and admin
     constructor(address voters) public {
         votersContract = Voters(voters);
         admin = msg.sender;
     }
 
+    // make sure only admin can perform certain function
     modifier onlyAdmin() {
         require(msg.sender == admin, "Only admin can perform this action.");
         _;
     }
 
+    // make sure some parameter is not empty
     modifier notEmpty(
         string memory _name,
         string memory _desc,
@@ -82,6 +83,7 @@ contract Elections {
         _;
     }
 
+    // make sure the election id is valid
     modifier idValid(uint256 _id) {
         require(
             keccak256(abi.encodePacked(elections[_id].name)) !=
@@ -90,11 +92,6 @@ contract Elections {
         );
         _;
     }
-
-    // function check() public view returns (bool) {
-    //     return
-    //         votersContract.isRegister(0xe4Bf5c1B1c80c90720D95563923122cC16880E52);
-    // }
 
     /**
         createElection will create a new election and add in elections mapping
@@ -162,6 +159,8 @@ contract Elections {
     /**
         deleteElection will empty the elections mapping
         :param id: election's id that want to del    
+        :param del: the candidate info that we delete from. eg del = 2
+        , we del candidate 2 to the last candidate in this election
      */
     function deleteElection(uint256 id, uint256 del)
         public
@@ -189,16 +188,19 @@ contract Elections {
         }
     }
 
+    event printVoters(address[] hasRightVoter);
+
     /**
         editStatus can edit the election's status
         :param id: election's id
         :param status: election's new status
+        :param voters: voter's address that is allowed to vote
      */
-    function editStatus(uint256 id, uint256 status)
-        external
-        onlyAdmin
-        idValid(id)
-    {
+    function editStatus(
+        uint256 id,
+        uint256 status,
+        address[] calldata voters
+    ) external onlyAdmin idValid(id) {
         Election storage tmp = elections[id];
         require(tmp.status != ElectionStatus(3));
         if (status == 1) {
@@ -206,6 +208,15 @@ contract Elections {
                 tmp.status == ElectionStatus(0),
                 "Election must be initial status before start."
             );
+            emit printVoters(voters);
+            uint256 vLength = voters.length;
+            for (uint256 x = 0; x < vLength; x++) {
+                require(
+                    votersContract.isRegister(voters[x]) == true,
+                    "Only registered voters can has right to vote"
+                );
+                votersContract.setCanVote(id, voters[x]);
+            }
             tmp.startD = block.timestamp;
         }
         if (status == 2) {
@@ -219,12 +230,16 @@ contract Elections {
         elections[id] = tmp;
     }
 
+    // see voters signature
+    event seeVoterSignature(string signSend, string signStore);
+
     /**
-
+     * add Vote anonymously(know who address is voting but do not know who they vote)
+     * param: id - the election ID
+     * param: sign - the voter's signature
+     * param: encrypted - encrypted msg (only voter can decrypt and understand)
+     * param: votesGet - the candidates votes (homomorphically encrypt)
      */
-    // event seeContent(bytes store, bytes send);
-    event seeContent2(string store, string send);
-
     function addVote(
         uint256 id,
         string calldata sign,
@@ -235,11 +250,11 @@ contract Elections {
             votersContract.isRegister(msg.sender) == true,
             "Voter need to register before vote"
         );
-        // emit seeContent(
-        //     abi.encodePacked(votersContract.voterSignature(msg.sender)),
-        //     abi.encodePacked(sign)
-        // );
-        emit seeContent2(votersContract.voterSignature(msg.sender), sign);
+        require(
+            votersContract.canVote(msg.sender, id) == true,
+            "Voter does not have right to vote in this election"
+        );
+        emit seeVoterSignature(votersContract.voterSignature(msg.sender), sign);
 
         require(
             keccak256(
@@ -257,11 +272,7 @@ contract Elections {
                 keccak256(abi.encodePacked("")),
             "Vote infomation cannot be empty"
         );
-        // another way
-        // require(
-        //     voterVerify[id][msg.sender] == false,
-        //     "Voter cannot vote twice"
-        // );\
+
         require(
             votersContract.isVoted(msg.sender, id) == false,
             "Voter cannot vote twice"
@@ -273,14 +284,10 @@ contract Elections {
         require(msg.sender != admin, "Admin is not allowed to vote");
         require(votesGet.length == totalCandidate[id], "Vote invalid");
 
-        voterVerify[id][msg.sender] = true;
-        totalVerify++;
-
         verifyTimeID[id][sign] = block.number;
         encryptedVerify[id][sign] = encrypted;
         uint256 candidateLength = totalCandidate[id];
         for (uint256 x = 0; x < candidateLength; x++) {
-            emit candidateLen(candidateLength);
             Candidate memory candidate = electionCandidate[id][x];
             candidate.voteGet = votesGet[x];
             electionCandidate[id][x] = candidate;

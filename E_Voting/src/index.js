@@ -18,11 +18,11 @@ const App = {
         App.loadModal = txnModal()
         App.requestModal = reqModal()
         App.isRegister = await App.contract.isRegister(App.address)
-        menuClick(App.address)
         if (App.address == await App.contract.admin()) {
             window.location.replace("list.html")
         }
 
+        menuClick(App.address)
         if (localStorage.getItem("Signature") != null) {
             console.log(App.isRegister);
             if (App.isRegister) {

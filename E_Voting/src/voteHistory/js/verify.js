@@ -68,7 +68,7 @@ const App = {
             }).then(async (plain) => {
                 App.reqModal.hide()
                 console.log(plain)
-                $(".historyCandidate").text(plain)
+                $(".historyCandidate").text(plain.split(";")[1])
                 try {
                     await App.contract.verifyTimeID(App.electionID, signature).then(async (val) => {
                         var num = globalFunc.bigNumberToNumber(val)

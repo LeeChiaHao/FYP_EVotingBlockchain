@@ -23,10 +23,10 @@ export async function setSignature(signer) {
     console.log(shamsg);
     let signing = arrayify(shamsg)
     console.log(signing);
-    var signature = await signer.signMessage(shamsg)
+    var signature = await signer.signMessage(signing)
     console.log("Signature: " + signature)
     window.localStorage.setItem("Signature", signature)
-    verify = ethers.utils.verifyMessage(shamsg, signature)
+    verify = ethers.utils.verifyMessage(signing, signature)
     console.log("Verify: " + verify)
 }
 
@@ -170,6 +170,11 @@ export function txnModal() {
 // get reqModal to perform diff function
 export function reqModal() {
     return new Modal($("#requestModal"))
+}
+
+// get voterModal to perform diff function
+export function voterModal() {
+    return new Modal($("#voterModal"))
 }
 
 // txnModal show loading icon with custom txt
@@ -396,6 +401,86 @@ export async function calculate() {
 
         App.reqModal.show()
     }, 1000)
+}
+
+/**
+ * first load all the voters address and load the layout
+ * then load the data into the layout
+ */
+export async function loadView(id, able) {
+    var voters = await getVotersContract();
+    var totalV = await voters.voterCount()
+    var table = $(".viewBody:last-child")
+    var len = $(".viewBody tr").length
+    var address = []
+    if (totalV == 0) {
+        table.append("<div class='fs-4 text-center'> No Register voter now. Please encourage the voters to register.")
+    }
+    for (var i = 0; i < totalV; i++) {
+        await voters.voterAddress(i).then(async function (add) {
+            address.push(add)
+            var className = "tableRow" + len
+            table.append('<tr class="' + className + '"></tr > ')
+            $('.' + className).load("subVoter.html")
+            len++
+        })
+    }
+    console.log("Length: " + len);
+
+    for (var x = 0; x < len; x++) {
+        var isVote = false
+        if (able) {
+            isVote = await voters.isVoted(address[x], id)
+        }
+        var voter = await voters.voters(address[x])
+        var className = ".tableRow" + x
+        console.log(className);
+        $(className).find(".num").text(x + 1)
+        $(className).find(".address").text(voter.account)
+        $(className).find(".name").text(voter.name)
+        $(className).find(".mail").text(voter.email)
+        $(className).find("input").attr("disabled", able)
+        $(className).find("input").attr("name", "voter" + x)
+        $(className).find("input").attr("id", "voter" + x)
+        $(className).find("label").attr("for", "voter" + x)
+        $(className).find("input").attr("checked", true)
+
+        if (able) {
+            if (!isVote) {
+                $(className).find("input").attr("checked", false)
+                if (!await voters.canVote(address[x], id)) {
+                    $(className).find("label").text("(Not allow to vote)")
+                }
+            }
+        }
+    }
+    onSearch()
+}
+
+// load the on keyup search function
+export async function onSearch() {
+    $("#search").on("keyup", function () {
+        var input = $(this).val().toUpperCase()
+        $('tr').each(function () {
+            if (!$(this).hasClass("first")) {
+                var target = ""
+                $(this).children().each(function () {
+                    target += $(this).text().toUpperCase()
+                })
+                if (target.indexOf(input) > -1) {
+                    $(this).show()
+                } else {
+                    $(this).hide()
+                }
+            }
+        })
+    })
+}
+
+export async function getCanVote(add, id) {
+    var contract = await getVotersContract()
+    var canVote = await contract.canVote(add, id)
+    return canVote
 }
 
 // contact us function on footer
