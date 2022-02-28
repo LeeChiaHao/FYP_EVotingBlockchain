@@ -38,6 +38,17 @@ export function oriMsg() {
     return shamsg
 }
 
+export function verifySignature(signature, address) {
+    var msg = arrayify(oriMsg())
+    try {
+        var verify = ethers.utils.verifyMessage(msg, signature)
+        console.log("Verify: " + verify);
+        return verify == address
+    } catch (e) {
+        return false
+    }
+}
+
 // get Signature from Voter contract
 export async function getSignature(address) {
     var sign
@@ -141,7 +152,13 @@ export async function menuClick(address) {
     console.log("AddressL " + address);
     let sign = await getSignature(address)
     $(".logo").on("click", async function () {
-        window.localStorage.setItem("Signature", sign)
+        window.onbeforeunload = function () {
+            window.onunload = function () {
+                localStorage.clear()
+                window.localStorage.setItem("Signature", sign)
+            }
+        }
+
         window.location.assign("/")
     })
 

@@ -92,10 +92,14 @@ main {
 }
 
 .homePage{
-    font-size: 100px;
-    font-weight: 900;
-    text-shadow: 10px 10px grey;
+    background-size: 150px;
+    background-repeat: no-repeat;
+    background-position:right top;
+    overflow: hidden;
+    margin: 0;
+    border-radius: 25px;
 }
+
 
 .backBtn{
     font-size: 75px
@@ -288,5 +292,8 @@ main {
      }
     .foot1, .foot2 {
         text-align: center;
+    }
+    .homePage {
+        background-size: 80px;
     }
 }

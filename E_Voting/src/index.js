@@ -1,4 +1,4 @@
-import { getVotersContract, txnLoad, setSignature, txnModal, reqModal, getVoterAddress, menuClick } from './global';
+import { getVotersContract, txnLoad, setSignature, txnModal, reqModal, getVoterAddress, menuClick, verifySignature } from './global';
 import './style.css'
 
 const App = {
@@ -19,22 +19,32 @@ const App = {
         App.requestModal = reqModal()
         App.isRegister = await App.contract.isRegister(App.address)
         if (App.address == await App.contract.admin()) {
-            window.location.replace("list.html")
+            window.location.replace("admin.html")
         }
 
         menuClick(App.address)
-        if (localStorage.getItem("Signature") != null) {
-            console.log(App.isRegister);
-            if (App.isRegister) {
-                $(".logIn").addClass("d-none")
-                $("#header").removeClass("d-none")
+        var sign = localStorage.getItem("Signature")
+        if (sign != null) {
+            if (verifySignature(sign, App.address)) {
+                console.log(App.isRegister);
+                if (App.isRegister) {
+                    $(".logIn").addClass("d-none")
+                    $("#header").removeClass("d-none")
+                    $("main").show()
+                } else {
+                    App.requestModal.show()
+                }
             } else {
+                localStorage.clear()
                 App.requestModal.show()
             }
+
         } else {
+            localStorage.clear()
             App.requestModal.show()
         }
         await App.validateUser()
+        await App.linkClick()
     },
 
     // if first time log in, need sign first and if registered, can access system directly
@@ -48,7 +58,7 @@ const App = {
                     App.requestModal.hide()
                 }
             })
-            App.validating()
+            await App.validating()
         })
     },
 
@@ -60,12 +70,38 @@ const App = {
             App.loadModal.hide()
             $(".logIn").addClass("d-none")
             $("#header").removeClass("d-none")
+            $("main").show()
         }, 2000))
+    },
+
+    linkClick: async () => {
+        var vContract = await getVotersContract()
+        var userName = await vContract.voters(App.address)
+        $(".userName").text(userName.name)
+        $('.link').on("click", function () {
+            var sign = localStorage.getItem("Signature")
+            var id = $(this).attr("id")
+            window.onbeforeunload = function () {
+                window.onunload = function () {
+                    localStorage.clear()
+                    window.localStorage.setItem("Signature" + id, sign)
+                }
+            }
+        })
     }
 };
 
 window.App = App;
 window.addEventListener("load", async function () {
     $('body').removeClass('invisible')
+    $("main").hide()
     App.load()
 })
+
+window.onbeforeunload = function () {
+    window.onunload = function () {
+        var sign = localStorage.getItem("Signature")
+        localStorage.clear()
+        window.localStorage.setItem("register", sign)
+    }
+}

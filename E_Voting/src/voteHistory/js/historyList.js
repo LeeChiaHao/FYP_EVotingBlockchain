@@ -7,6 +7,7 @@ const App = {
     address: null,
     timestamp: [],
     timeID: {},
+    txnModal: null,
     // only registered voters can access
     checkAuth: async () => {
         App.address = await globalFunc.getVoterAddress()
@@ -20,8 +21,14 @@ const App = {
         App.contract = await globalFunc.getElectionsContract()
         App.address = await globalFunc.getElectionAddress()
         await globalFunc.navigate("/", "Signature2", false)
+        App.txnModal = await globalFunc.txnModal()
+        globalFunc.txnLoad("Loading")
+        App.txnModal.show()
         await App.sortDesc()
         await App.loadHistory()
+        setTimeout(function () {
+            App.txnModal.hide()
+        }, 500)
     },
 
     // sort the voter voted time descending so the latest vote will show at upmost
@@ -56,8 +63,6 @@ const App = {
 
     // load all the voted Election and a button event
     loadHistory: async () => {
-        var elections = []
-        var totalE = await App.contract.totalElection()
         var length = App.timestamp.length
         var className = "col-10 hList p-3 mb-5"
         for (var x = 0; x < length; x++) {
@@ -94,7 +99,6 @@ const App = {
             localStorage.setItem("election", $(this).attr("id"))
             window.location.assign("verify.html")
         })
-        $(".container").removeClass("d-none")
     }
 }
 

@@ -5,6 +5,7 @@ const App = {
     contract: null,
     address: null,
     voterModal: null,
+    txnModal: null,
     // only admin can access this page
     checkAuth: async () => {
         App.contract = await globalFunc.getElectionsContract()
@@ -26,6 +27,9 @@ const App = {
         await globalFunc.headerCSS(".listing")
         App.contract = await globalFunc.getElectionsContract()
         App.address = await globalFunc.getElectionAddress()
+        App.txnModal = globalFunc.txnModal()
+        globalFunc.txnLoad("Loading")
+        App.txnModal.show()
         var totalElection = globalFunc.bigNumberToNumber(await App.contract.totalElection())
         // if election.status == 3 (ABORT), means this election has been deteted
         await globalFunc.loadView(0, false)
@@ -110,6 +114,7 @@ const App = {
                 window.location.assign(location)
             })
         }
+        App.txnModal.hide()
         App.eligible()
         App.endE()
     },

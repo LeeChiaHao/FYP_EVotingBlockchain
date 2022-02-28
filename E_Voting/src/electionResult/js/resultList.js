@@ -4,6 +4,7 @@ import '../css/resultList.css'
 const App = {
     contract: null,
     address: null,
+    txnModal: null,
     timestamp: [],
     timeId: {},
     // only registered voters can access
@@ -19,8 +20,15 @@ const App = {
         App.contract = await globalFunc.getElectionsContract()
         App.address = await globalFunc.getElectionAddress()
         await globalFunc.navigate("/", "Signature1", false)
+        App.txnModal = await globalFunc.txnModal()
+        globalFunc.txnLoad("Loading")
+        App.txnModal.show()
         var totalElection = globalFunc.bigNumberToNumber(await App.contract.totalElection())
         await App.loadElection(totalElection)
+        setTimeout(function () {
+            App.txnModal.hide()
+        }, 500)
+
     },
 
     // load the elections layout

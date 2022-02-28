@@ -34,23 +34,63 @@
         </div>
     </div>
 
-
     <main>
         <div class="container mt-5">
-            <div class="row justify-content-center homePage">
-                Hello World
+            <div class="row justify-content-center ">
+                <div class="col-9">
+                    <div class="card card-body homePage" style="background-image: url('logo2.png');">
+                        <p class="fs-4 fw-bold">
+                            Welcome,
+                            <span class="userName"></span>
+                        </p>
+                        <div class="pl-4">
+                            <p>
+                                This is an E-Voting based Blockchain system.
+                            </p>
+                            <p>
+                                By using our system, we provide the user:
+                            </p>
+                            <ol>
+                                <li>Authenticity</li>
+                                <li>Anonymity</li>
+                                <li>Accuracy</li>
+                                <li>Verifiability</li>
+                            </ol>
+                            <p>When using our system, please ensure your Metamask account is always
+                                connected.
+                            </p>
+                            <p>
+                                Here is the brief intro of our functions:
+                            </p>
+                            <ul>
+                                <li>To view all the available elections and cast a vote, click <a href="elections.html"
+                                        class="link" id="0">Cast a Vote</a>.</li>
+                                <li>
+                                    To view the end elections' result, click <a href="resultList.html" class="link"
+                                        id="1">Election Result</a>.
+                                </li>
+                                <li>
+                                    To view your vote history and verify, click <a href="historyList.html" class="link"
+                                        id="2">Vote History</a>.
+                                </li>
+                                <li>
+                                    To view or edit your profile, click <a href="profile.html" class="link"
+                                        id="3">Profile</a>.
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </main>
 
     <!-- footer -->
     <%= require("fs").readFileSync(htmlWebpackPlugin.options.HTML_PATH + "footer.html" ) %>
-
         <!-- TxnModal -->
         <%= require("fs").readFileSync(htmlWebpackPlugin.options.HTML_PATH + "txnModal.html" ) %>
             <!-- RequestModal -->
             <%= require("fs").readFileSync(htmlWebpackPlugin.options.HTML_PATH + "requestModal.html" ) %>
-
 </body>
 
 </html>

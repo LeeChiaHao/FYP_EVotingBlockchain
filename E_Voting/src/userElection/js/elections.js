@@ -4,6 +4,7 @@ import '../css/elections.css'
 const App = {
     contract: null,
     address: null,
+    txnModal: null,
 
     // only registered voters can access
     checkAuth: async () => {
@@ -21,6 +22,9 @@ const App = {
         await globalFunc.headerCSS(".castVote")
         App.contract = await globalFunc.getElectionsContract()
         App.address = await globalFunc.getElectionAddress()
+        App.txnModal = await globalFunc.txnModal()
+        globalFunc.txnLoad("Loading")
+        App.txnModal.show()
         await globalFunc.navigate("/", "Signature0", false)
         var totalElection = globalFunc.bigNumberToNumber(await App.contract.totalElection())
         globalFunc.caretOnClick(2)
@@ -92,7 +96,7 @@ const App = {
                 }
             })
         }
-        $(".container").removeClass("d-none")
+        App.txnModal.hide()
     }
 }
 

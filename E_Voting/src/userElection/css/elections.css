@@ -19,3 +19,7 @@
 .noVote .electionTitle{
     background-color: #a59fec;
 }
+
+.voted .electionTitle {
+    background-color: #6659f6;
+}

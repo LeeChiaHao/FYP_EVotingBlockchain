@@ -6,10 +6,10 @@ const Dotenv = require('dotenv-webpack');
 const webpack = require("webpack")
 
 let template = ['register/', 'adminElection/', 'adminElection/', 'adminElection/', 'adminElection/',
-    'profile/', 'userElection/', 'userElection/', 'electionResult/',
+    'adminElection/', 'profile/', 'userElection/', 'userElection/', 'electionResult/',
     'electionResult/', 'voteHistory/', 'voteHistory/']
 let count = -1
-let files = ['register', 'create', 'list', 'edit', 'view', 'profile', 'elections',
+let files = ['register', 'admin', 'create', 'list', 'edit', 'view', 'profile', 'elections',
     'candidates', 'resultList', 'results', 'historyList', 'verify'];
 let multipleHtmlPlugins = files.map(name => {
     count++
@@ -23,6 +23,7 @@ let multipleHtmlPlugins = files.map(name => {
 module.exports = {
     mode: 'development',
     entry: {
+        admin_head: "./src/adminElection/js/admin.js",
         create_head: "./src/adminElection/js/create.js",
         list_head: "./src/adminElection/js/list.js",
         edit_head: "./src/adminElection/js/edit.js",
@@ -58,6 +59,7 @@ module.exports = {
             { from: "./src/img/male.png", to: "male.png" },
             { from: "./src/img/female.png", to: "female.png" },
             { from: "./src/img/logo.png", to: "logo.png" },
+            { from: "./src/img/logo2.png", to: "logo2.png" },
             { from: "./src/adminElection/createForm.html", to: "createForm.html" },
             { from: "./src/userElection/candidate.html", to: "candidate.html" },
             { from: "./src/commonHTML/election.html", to: "election.html" },

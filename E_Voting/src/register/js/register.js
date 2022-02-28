@@ -10,7 +10,7 @@ const App = {
 
     // must sign at the "/" page before register
     checkAuth: async () => {
-        return localStorage.getItem("Signature") == null
+        return localStorage.getItem("register") == null
     },
 
     // load all the content of key object
@@ -54,11 +54,13 @@ const App = {
                 App.txnModal.show()
                 globalFunc.txnLoad("Making Transaction")
                 await App.contract.createVoter($("#userName").val(), $("#email").val()
-                    , "0x0f2f57d792336b3bd79ed7aa9d44ac9c3f4b11a05503c55a7c87a31b5357b2be", localStorage.getItem("Signature"), localStorage.getItem("Signature")).then(
+                    , "0x0f2f57d792336b3bd79ed7aa9d44ac9c3f4b11a05503c55a7c87a31b5357b2be", localStorage.getItem("register"), localStorage.getItem("register")).then(
                         (tx) => tx.wait().then(function () {
                             globalFunc.txnSuccess()
                             $(".modalClose").on("click", async function () {
-                                // localStorage.clear()
+                                var sign = localStorage.getItem("register")
+                                localStorage.clear()
+                                localStorage.setItem("Signature", sign)
                                 window.location.replace("/")
                             })
                         })
