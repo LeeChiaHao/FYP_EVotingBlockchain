@@ -141,7 +141,7 @@ const App = {
                     var eid = globalFunc.bigNumberToNumber(await App.contract.totalElection())
                     await App.contract.createElection(eid, $("#electionName").val(), $("#description").val(), allCandidates).then(
                         (tx) => tx.wait().then(function () {
-                            globalFunc.txnSuccess()
+                            globalFunc.customMsg(true, "Election created successfully.")
                             $("#modalClose").on("click", function () {
                                 window.location.replace("list.html")
                             })
@@ -149,7 +149,7 @@ const App = {
                     )
                 } catch (e) {
                     console.log(e)
-                    globalFunc.txnFail()
+                    globalFunc.customMsg(false, "Election creation failed.")
                 }
 
                 // way of receive emitted event from contract

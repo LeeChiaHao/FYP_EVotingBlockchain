@@ -210,12 +210,12 @@ const App = {
                     globalFunc.txnLoad("Making Transaction")
                     await App.contract.editElection(App.electionID, $("#electionName").val(), $("#description").val(), allCandidates).then(
                         (tx) => tx.wait().then(function () {
-                            globalFunc.txnSuccess()
+                            globalFunc.customMsg(true, "Election info updated successfully.")
                         })
                     )
                 } catch (e) {
                     console.log(e)
-                    globalFunc.txnFail()
+                    globalFunc.customMsg(false, "Election info updated failed.")
                 }
 
                 // way of receive emitted event from contract
@@ -236,12 +236,12 @@ const App = {
             globalFunc.txnLoad("Making Transaction")
             await App.contract.deleteElection(App.electionID, 1).then(
                 (tx) => tx.wait().then(function () {
-                    globalFunc.txnSuccess()
+                    globalFunc.customMsg(true, "Election deleted successfully.")
                 })
             )
         } catch (e) {
             console.log(e);
-            globalFunc.txnFail()
+            globalFunc.customMsg(true, "Election deletion failed.")
         }
     },
 

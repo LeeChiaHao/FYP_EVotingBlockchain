@@ -45,6 +45,8 @@ const App = {
                         if (val != 0) {
                             var num = globalFunc.bigNumberToNumber(val)
                             await App.contract.provider.getBlockWithTransactions(num).then((data) => {
+                                $(".noList").addClass("d-none")
+                                $(".title").removeClass("d-none")
                                 console.log(typeof (data.timestamp));
                                 App.timestamp.push(data.timestamp)
                                 App.timeID[data.timestamp] = x;

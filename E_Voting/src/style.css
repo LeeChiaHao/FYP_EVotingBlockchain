@@ -100,6 +100,9 @@ main {
     border-radius: 25px;
 }
 
+.noList {
+    border-radius: 0.7rem;
+}
 
 .backBtn{
     font-size: 75px
@@ -112,7 +115,6 @@ main {
 
 .candidate:hover {
     box-shadow: 0 0 0 0.25rem rgb(17 37 67 / 50%)
-
 }
 
 .candidate {
@@ -267,6 +269,7 @@ main {
     font-weight: bolder;
     text-decoration: underline;
     border: 3px solid black;
+    font-size: large;
 }
 
 .winnerCard{

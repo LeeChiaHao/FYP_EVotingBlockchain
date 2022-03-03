@@ -126,27 +126,32 @@ const App = {
             globalFunc.txnLoad("Requesting Encryption Key")
             var signature = await globalFunc.getSignature(App.address)
             var encrypt
-            await App.requestEncrypt().then(async (re) => {
-                encrypt = re
-                console.log("Encrypt: " + encrypt)
-                if (encrypt != null) {
-                    console.log("Don't Enter");
-                    globalFunc.txnLoad("Making Transaction")
-                    var voteGet = await App.setVoteGet()
-                    try {
-                        await App.contract.addVote(App.electionID, signature, encrypt, voteGet).then(
-                            (tx) => tx.wait().then(() => {
-                                globalFunc.txnSuccess()
-                            })
-                        )
-                    } catch (e) {
-                        console.log(e)
-                        globalFunc.txnFail()
+            if (globalFunc.verifySignature(signature, App.address)) {
+                await App.requestEncrypt().then(async (re) => {
+                    encrypt = re
+                    console.log("Encrypt: " + encrypt)
+                    if (encrypt != null) {
+                        console.log("Don't Enter");
+                        globalFunc.txnLoad("Making Transaction")
+                        var voteGet = await App.setVoteGet()
+                        try {
+                            await App.contract.addVote(App.electionID, signature, encrypt, voteGet).then(
+                                (tx) => tx.wait().then(() => {
+                                    globalFunc.customMsg(true, "Your vote had been recorded.")
+                                })
+                            )
+                        } catch (e) {
+                            console.log(e)
+                            globalFunc.customMsg(false, "Transaction failed. Your vote is not recorded.")
+                        }
+                    } else {
+                        console.log("Key Failed")
                     }
-                } else {
-                    console.log("Key Failed")
-                }
-            })
+                })
+            } else {
+                globalFunc.customMsg(false, "Something is wrong. Please contact the owner")
+            }
+
         })
 
         $("#modalNo").on("click", async function () {

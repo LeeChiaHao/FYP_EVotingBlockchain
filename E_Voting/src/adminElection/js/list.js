@@ -114,7 +114,9 @@ const App = {
                 window.location.assign(location)
             })
         }
-        App.txnModal.hide()
+        setTimeout(function () {
+            App.txnModal.hide()
+        }, 500)
         App.eligible()
         App.endE()
     },
@@ -197,7 +199,7 @@ const App = {
                 try {
                     await App.contract.editStatus(eid, 1, voters).then(
                         (tx) => tx.wait().then(function () {
-                            globalFunc.customMsg(true, "Election Started Successfully")
+                            globalFunc.customMsg(true, "Election Started Successfully.")
                         })
                     )
                 } catch (e) {

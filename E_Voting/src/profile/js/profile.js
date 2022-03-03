@@ -87,7 +87,7 @@ const App = {
             try {
                 App.contract.voters[App.address] = await App.contract.editVoter(App.name.val(), App.email.val()).then(
                     (tx) => tx.wait().then(function () {
-                        globalFunc.customMsg(true, "Transaction Success. Profile updated successfully.")
+                        globalFunc.customMsg(true, "Profile updated successfully.")
                     })
                 )
             } catch (e) {

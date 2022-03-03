@@ -56,46 +56,50 @@ const App = {
     verifyVote: async () => {
         var encrypted
         var signature = await globalFunc.getSignature(App.address)
-        await App.contract.encryptedVerify(App.electionID, signature).then((val) => {
-            console.log(val)
-            encrypted = val
-        })
+        if (globalFunc.verifySignature(signature, App.address)) {
+            await App.contract.encryptedVerify(App.electionID, signature).then((val) => {
+                console.log(val)
+                encrypted = val
+            })
 
-        try {
-            await ethereum.request({
-                method: 'eth_decrypt',
-                params: [encrypted, App.address],
-            }).then(async (plain) => {
-                App.reqModal.hide()
-                console.log(plain)
-                $(".historyCandidate").text(plain.split(";")[1])
-                try {
-                    await App.contract.verifyTimeID(App.electionID, signature).then(async (val) => {
-                        var num = globalFunc.bigNumberToNumber(val)
-                        await App.contract.provider.getBlockWithTransactions(num).then((data) => {
-                            var date = new Date(data.timestamp * 1000)
-                            console.log(data)
-                            console.log(date.toLocaleDateString("en-US"));
-                            $(".historyTime").text(globalFunc.utcToLocal(data.timestamp))
-                            console.log(data.transactions)
-                            $(".historyTxn").text(data.transactions[0].hash)
-                            $(".historyBlock").text("Block " + num + " (" + data.hash + ")")
-                            globalFunc.customMsg(true, "Verify Success")
-                            $(".main").show()
+            try {
+                await ethereum.request({
+                    method: 'eth_decrypt',
+                    params: [encrypted, App.address],
+                }).then(async (plain) => {
+                    App.reqModal.hide()
+                    console.log(plain)
+                    $(".historyCandidate").text(plain.split(";")[1])
+                    try {
+                        await App.contract.verifyTimeID(App.electionID, signature).then(async (val) => {
+                            var num = globalFunc.bigNumberToNumber(val)
+                            await App.contract.provider.getBlockWithTransactions(num).then((data) => {
+                                var date = new Date(data.timestamp * 1000)
+                                console.log(data)
+                                console.log(date.toLocaleDateString("en-US"));
+                                $(".historyTime").text(globalFunc.utcToLocal(data.timestamp))
+                                console.log(data.transactions)
+                                $(".historyTxn").text(data.transactions[0].hash)
+                                $(".historyBlock").text("Block " + num + " (" + data.hash + ")")
+                                globalFunc.customMsg(true, "Verify Success")
+                                $(".main").show()
+                            })
                         })
-                    })
-                } catch (e) {
-                    globalFunc.customMsg(false, "Verify error. Contact us if this keep happening")
-                    $(".modalClose").on("click", function () {
-                        window.location.replace("historyList.html")
-                    })
-                }
-            })
-        } catch (e) {
-            globalFunc.customMsg(false, "Verify Failed")
-            $(".modalClose").on("click", function () {
-                window.location.replace("historyList.html")
-            })
+                    } catch (e) {
+                        globalFunc.customMsg(false, "Verify error. Contact us if this keep happening")
+                        $(".modalClose").on("click", function () {
+                            window.location.replace("historyList.html")
+                        })
+                    }
+                })
+            } catch (e) {
+                globalFunc.customMsg(false, "Verify Failed")
+                $(".modalClose").on("click", function () {
+                    window.location.replace("historyList.html")
+                })
+            }
+        } else {
+            globalFunc.customMsg(false, "Something is wrong. Please contact the owner")
         }
     }
 }

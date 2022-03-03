@@ -45,7 +45,7 @@ const App = {
 
     // load all election's layout based on user voted or not
     loadElection: async (total) => {
-        var className = "col-lg-5 col-9 border-0 mb-5 electionCard"
+        var className = "col-lg-5 col-9 border-0 my-4 electionCard"
         var elections = []
         for (var x = 0; x < total; x++) {
             console.log("Total" + total)
@@ -70,7 +70,6 @@ const App = {
                         elections.push(x)
                     })
                 }
-
             }
         }
         console.log(elections)
@@ -96,7 +95,9 @@ const App = {
                 }
             })
         }
-        App.txnModal.hide()
+        setTimeout(function () {
+            App.txnModal.hide()
+        }, 500)
     }
 }
 

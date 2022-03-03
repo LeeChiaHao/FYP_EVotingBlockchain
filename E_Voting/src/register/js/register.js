@@ -56,7 +56,7 @@ const App = {
                 await App.contract.createVoter($("#userName").val(), $("#email").val()
                     , "0x0f2f57d792336b3bd79ed7aa9d44ac9c3f4b11a05503c55a7c87a31b5357b2be", localStorage.getItem("register"), localStorage.getItem("register")).then(
                         (tx) => tx.wait().then(function () {
-                            globalFunc.txnSuccess()
+                            globalFunc.customMsg(true, "Registration Success.")
                             $(".modalClose").on("click", async function () {
                                 var sign = localStorage.getItem("register")
                                 localStorage.clear()
@@ -66,7 +66,7 @@ const App = {
                         })
                     )
             } catch (e) {
-                globalFunc.txnFail()
+                globalFunc.customMsg(false, "Transaction failed. Registration failed.")
             }
         } else {
             if (!emailValid) {
