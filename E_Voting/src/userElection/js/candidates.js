@@ -66,7 +66,7 @@ const App = {
 
     // load all the candidates layout
     loadCandidate: async (id, total) => {
-        var className = "col-lg-4 col-md-9 border-0 mt-lg-3 mt-5"
+        var className = "col-lg-4 col-md-9 border-0 mt-lg-4 mt-5"
         for (var x = 0; x < total; x++) {
             $("<div></div").addClass(className + " candidate" + x).appendTo(".allCandidates")
             $(".candidate" + x).prop("id", x)
@@ -77,6 +77,8 @@ const App = {
 
     // load candidates data and onClick event into the layout
     loadCandidateData: async (id, total) => {
+        var election = await App.contract.elections(id)
+        $(".eName").text("Election: " + election.name)
         for (var x = 0; x <= total; x++) {
             await App.contract.electionCandidate(id, x).then((val) => {
                 $(".candidate" + x).find(".candidateGender").prop("src", val.gender + ".png")
@@ -172,10 +174,8 @@ const App = {
         }).then((result) => {
             key = result
             console.log(key)
-
         }).catch((error) => {
             globalFunc.customMsg(false, "Request Encryption Key Failed")
-
         })
         var candidate = "Election " + App.electionID + ";Candidate " + (parseInt(App.voted) + 1)
         console.log(candidate + "Key: " + key)

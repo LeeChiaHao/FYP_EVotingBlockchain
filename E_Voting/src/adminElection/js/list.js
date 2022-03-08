@@ -142,7 +142,7 @@ const App = {
                 $(className).find("input").attr("checked", true)
                 $(className).find("label").attr("for", "checkAll")
                 $(className).find("label").attr("class", "checkAll")
-                $(className).find("label").text("Disallow All")
+                $(className).find("label").text("Allow All")
                 console.log(len);
                 $("#checkAll").on("change", function () {
                     if ($(this).is(":checked")) {
@@ -152,7 +152,6 @@ const App = {
                                 $(voter).trigger('click')
                             }
                         }
-                        $(className).find("label").text("Disallow All")
                     } else {
                         for (var i = 0; i < len; i++) {
                             var voter = "#voter" + i
@@ -160,7 +159,6 @@ const App = {
                                 $(voter).trigger('click')
                             }
                         }
-                        $(className).find("label").text("Allow All")
                     }
                 })
             })

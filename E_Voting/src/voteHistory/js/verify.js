@@ -31,7 +31,7 @@ const App = {
     // the confirm verify modal, if confirm, then all the info will be loaded
     showModal: async () => {
         var elecName = await App.contract.elections(App.electionID)
-        $(".elecName").text("Election Name: " + elecName.name)
+        $(".elecName").text("Election: " + elecName.name)
         App.reqModal.show()
         $('.modalTitle').text("Verify Vote")
         $('.modalBody').html(`<p>Please click the verify button below to verify your vote.</p> 

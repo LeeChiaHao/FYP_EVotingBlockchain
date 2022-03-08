@@ -82,9 +82,7 @@ export function navigate(page, item, remove) {
 export async function getVotersContract() {
     try {
         const provider = new ethers.providers.Web3Provider(window.ethereum, "any")
-        await provider.send("eth_requestAccounts", []).then(function (val) {
-            console.log("Test: " + val);
-        });
+        await provider.send("eth_requestAccounts", [])
         ethereum.on("accountsChanged", function () {
             localStorage.clear()
             window.location.replace("/")
@@ -235,11 +233,6 @@ export function customMsg(boolean, msg) {
 
 // encrypt the vote with homomorphic publicKey
 export function encrypt(num) {
-    // (asynchronous) creation of a random private, public key pair for the Paillier cryptosystem
-    // console.log(homomorphicEncrypt)
-    // console.log(BigInt("1234n"))
-    // const { publicKey, privateKey } = await paillierBigint.generateRandomKeys(1024)
-
     return publicKey.encrypt(num)
 }
 
@@ -360,7 +353,7 @@ export async function loadContent() {
     }
 
     var elec = await App.contract.elections(App.electionID)
-    $(".elecName").text("Election Name: " + elec.name)
+    $(".elecName").text("Election: " + elec.name)
     await loadContentData()
 }
 
@@ -397,7 +390,6 @@ export async function calculate() {
     App.txnModal.show()
     txnLoad("Calculating Result")
     setTimeout(function () {
-
         $('.modalTitle').text("Vote Result")
         var zeroV = ""
         console.log(Object.values(App.winner));
@@ -417,7 +409,7 @@ export async function calculate() {
         })
 
         App.reqModal.show()
-    }, 1000)
+    }, 1500)
 }
 
 /**

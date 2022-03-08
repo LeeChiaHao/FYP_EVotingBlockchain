@@ -29,6 +29,28 @@
                             </div>
                             <form class="form electionForm validation" onsubmit="App.submitForm(); return false;"
                                 novalidate id="editForm">
+                                <div class="noEdit fs-3 d-none">
+                                    Election started. Information are not allowed to edit.
+                                </div>
+                                <div class="row g-3 justify-content-center mb-4">
+                                    <div class="col-4">
+                                        <button type="submit" class="btn btn-submit w-100 d-none"
+                                            id="saveBtn">Save</button>
+                                    </div>
+                                    <div class="col-4">
+                                        <button class="btn btn-submit w-100" id="editBtn"
+                                            onclick="App.editForm(); return false;" disabled>Edit</button>
+                                    </div>
+                                    <div class="col-4">
+                                        <button class="btn btn-submit w-100 d-none" id="delBtn"
+                                            onclick="App.delForm();return false;">Delete Election</button>
+                                    </div>
+                                    <div class="col-4">
+                                        <button class="btn btn-submit w-100 d-none" id="cancelBtn"
+                                            onclick="App.cancelForm();return false;">Cancel Edit</button>
+                                    </div>
+                                </div>
+
                                 <div class="input-group mb-3 election-input-group">
                                     <span class="input-group-text col-lg-3 col-4" id="">Election Name</span>
                                     <input type="text" class="form-control" placeholder="Election Name"
@@ -66,27 +88,7 @@
                                         <div class="delCandidate ms-auto d-none">Delete Candidate</div>
                                     </div>
                                 </div>
-                                <div class="row g-3 justify-content-center mt-3">
-                                    <div class="col-4">
-                                        <button type="submit" class="btn btn-submit w-100 d-none"
-                                            id="saveBtn">Save</button>
-                                    </div>
-                                    <div class="col-4">
-                                        <button class="btn btn-submit w-100" id="editBtn"
-                                            onclick="App.editForm(); return false;" disabled>Edit</button>
-                                    </div>
-                                    <div class="col-4">
-                                        <button class="btn btn-submit w-100 d-none" id="delBtn"
-                                            onclick="App.delForm();return false;">Delete Election</button>
-                                    </div>
-                                    <div class="col-4">
-                                        <button class="btn btn-submit w-100 d-none" id="cancelBtn"
-                                            onclick="App.cancelForm();return false;">Cancel Edit</button>
-                                    </div>
-                                </div>
-                                <div class="noEdit fs-3 d-none">
-                                    Election started. Information are not allowed to edit.
-                                </div>
+
                             </form>
                         </div>
                     </div>

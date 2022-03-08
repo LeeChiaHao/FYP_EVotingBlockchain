@@ -160,15 +160,17 @@ main {
     border: 2px solid #198574;
 }
 .valid-feedback{
-    font-size: medium;
+    font-size: large;
     font-weight: bold;
     text-align: end;
+    color: #39ec99;
 }
 
 .invalid-feedback{
-    font-size: medium;
+    font-size: large;
     font-weight: bold;
     text-align: end;
+    color: #d40216;
 }
 
 .electionTitle{
@@ -251,11 +253,11 @@ main {
 }
 
 #modalYes{
-    background-color: #ec2121;
+    background-color: #1877fc;
 }
 
 #modalNo{
-    background-color: #5894e8;
+    background-color: #f64343;
 
 }
 
