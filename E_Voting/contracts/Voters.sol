@@ -67,10 +67,11 @@ contract Voters {
     ) external notEmpty(_name, _email) {
         require(isRegister[msg.sender] == false, "Voter registered already.");
         require(
-            verifySignature(hashMsg, signature, stringSign) == msg.sender,
+            verifySignature(hashMsg, signature) == msg.sender,
             "This voter's signature is not verified"
         );
         voters[msg.sender] = Voter(_name, _email, stringSign, msg.sender);
+        voterSignature[msg.sender] = stringSign;
         isRegister[msg.sender] = true;
         voterAddress[voterCount] = msg.sender;
         voterCount++;
@@ -87,10 +88,6 @@ contract Voters {
     {
         require(isRegister[msg.sender] == true);
         Voter memory voter = voters[msg.sender];
-        require(
-            voter.account == msg.sender,
-            "Only the owner can edit their own profile"
-        );
         voter.name = _name;
         voter.email = _email;
         voters[msg.sender] = voter;
@@ -110,11 +107,10 @@ contract Voters {
      * byte signature - use to split to r, s and v
      * stringSign - when it is verified, store the signature
      */
-    function verifySignature(
-        bytes32 hashMsg,
-        bytes memory signature,
-        string memory stringSign
-    ) public returns (address) {
+    function verifySignature(bytes32 hashMsg, bytes memory signature)
+        public
+        returns (address)
+    {
         bytes32 signedHash = keccak256(
             abi.encodePacked("\x19Ethereum Signed Message:\n32", hashMsg)
         );
@@ -130,9 +126,7 @@ contract Voters {
         if (v < 27) v += 27;
 
         address signer = ecrecover(signedHash, v, r, s);
-        require(signer == msg.sender);
         emit verifySigner(hashMsg, signer);
-        voterSignature[signer] = stringSign;
         return signer;
     }
 }

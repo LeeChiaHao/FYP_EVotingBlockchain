@@ -262,11 +262,7 @@ contract Elections {
             ) == keccak256(abi.encodePacked(sign)),
             "The signature verification failed"
         );
-        require(
-            keccak256(abi.encodePacked(sign)) !=
-                keccak256(abi.encodePacked("")),
-            "Vote infomation cannot be empty"
-        );
+
         require(
             keccak256(abi.encodePacked(encrypted)) !=
                 keccak256(abi.encodePacked("")),
