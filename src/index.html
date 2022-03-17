@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Home Page</title>
+</head>
+
+<body class="invisible">
+    <!-- header -->
+    <header id="header" class="d-none">
+        <%= require("fs").readFileSync(htmlWebpackPlugin.options.HTML_PATH + "header.html" ) %>
+    </header>
+    <div>
+        <div class="logIn">
+            <nav class="navbar navbar-expand-lg navbar-light header pt-lg-4">
+                <div class="container">
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#register"
+                        aria-controls="register" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon mr-auto"></span>
+                    </button>
+                    <div class="collapse navbar-collapse row" id="register">
+                        <ul
+                            class="navbar-nav mb-2 mb-lg-0 text-lg-center text-md-start fs-3 ps-3 justify-content-center">
+                            <li class="nav-item col-lg-4 col-md-12">
+                                <a class="nav-link" href="#">Checking Account...</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </div>
+
+    <main>
+        <div class="container mt-4">
+            <div class="row justify-content-center ">
+                <div class="col-9">
+                    <div class="card card-body homePage" style="background-image: url('logo2.png');">
+                        <p class="fs-4 fw-bold">
+                            Welcome,
+                            <span class="userName"></span>
+                        </p>
+                        <div class="pl-4">
+                            <p>
+                                This is an E-Voting based Blockchain system.
+                            </p>
+                            <p>
+                                By using our system, we provide the user:
+                            </p>
+                            <ol>
+                                <li>Authenticity</li>
+                                <li>Anonymity</li>
+                                <li>Accuracy</li>
+                                <li>Verifiability</li>
+                            </ol>
+                            <p>When using our system, please ensure your Metamask account is always
+                                connected.
+                            </p>
+                            <p>
+                                All pop-up window from Metamask must be performed as it is the way of communicating with
+                                blokchcain.
+                            </p>
+                            <p>
+                                Here is the brief intro of our functions:
+                            </p>
+                            <ul>
+                                <li>To view all the available elections and cast a vote, click <a href="elections.html"
+                                        class="link" id="0">Cast a Vote</a>.</li>
+                                <li>
+                                    To view the end elections' result, click <a href="resultList.html" class="link"
+                                        id="1">Election Result</a>.
+                                </li>
+                                <li>
+                                    To view your vote history and verify, click <a href="historyList.html" class="link"
+                                        id="2">Vote History</a>.
+                                </li>
+                                <li>
+                                    To view or edit your profile, click <a href="profile.html" class="link"
+                                        id="3">Profile</a>.
+                                </li>
+                            </ul>
+                            <p>
+                                If there are any problems, please <a class="contact">contact us</a> immediately.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- footer -->
+    <%= require("fs").readFileSync(htmlWebpackPlugin.options.HTML_PATH + "footer.html" ) %>
+        <!-- TxnModal -->
+        <%= require("fs").readFileSync(htmlWebpackPlugin.options.HTML_PATH + "txnModal.html" ) %>
+            <!-- RequestModal -->
+            <%= require("fs").readFileSync(htmlWebpackPlugin.options.HTML_PATH + "requestModal.html" ) %>
+</body>
+
+</html>

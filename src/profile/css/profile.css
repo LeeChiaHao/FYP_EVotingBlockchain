@@ -1,0 +1,48 @@
+
+.history{
+    /* background-color: rgb(174, 112, 175); */
+}
+
+.profileTitle {
+    width: 30%;
+    padding: 1rem;
+}
+
+.profileContent {
+    width: 70%;
+
+}
+
+.profileList{
+    margin: 2rem;
+}
+
+.profileList li{
+    background-color: #cdc9e4;  
+    color: black;
+    font-weight: bold;
+    border: none;
+    border-bottom: 1px solid black;
+}
+
+.profileList input:disabled,
+.profileList textarea:disabled {
+    background-color: #cdc9e4 !important;   
+    color: black;
+    font-weight: bold;
+    border: none;
+    border-bottom: 1px solid black;
+}
+
+.profileList input, .profileList textarea{
+    border: 3px solid black;
+    background-color: rgb(232, 240, 254);
+    word-wrap: break-word !important;
+    word-break: break-word !important;
+    border-left-width: 2px !important;
+    border-top-width: 2px !important;
+}
+
+#submitArea{
+    display:  none;
+}

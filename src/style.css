@@ -1,0 +1,304 @@
+html, body{
+    background-color: #EBEAF6;
+    width: 100%;
+    height: 100%;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+    margin-bottom: 5rem;
+}
+
+.footer {
+    padding: 1rem 0rem;
+    background-color: #e2d7d7;
+    margin: 0rem;
+    font-family:'PremierSans-Regular', Arial, 'Helvetica Neue', Helvetica, sans-serif;
+    font-size: 0.8rem;
+
+}
+
+.foot1{
+    text-align: left;
+    margin-bottom: 0rem;
+}
+
+.foot1 li {
+    display: inline-block;
+    position: relative;
+    margin-right: 1rem;
+    padding-right: 1rem;
+    vertical-align: middle;
+}
+
+.foot2{
+    text-align: right;
+}
+.contact {
+    cursor: pointer;
+}
+
+.after::after {
+    background: #2f2f2f;
+    content: '';
+    height: .3rem;
+    right: 0;
+    position: absolute;
+    top: 50%;
+    transform: translate(50%, -50%);
+    width: .3rem;
+}
+
+.bodyContainer{
+    margin-bottom: 3rem;
+}
+
+.logo {
+    height: 85px;
+    width: 85px;
+}
+
+.logo:hover{
+    cursor: pointer;
+}
+
+.header{
+    background-color: #441d66;
+}
+
+#menuItem ul li a, #register ul li a{
+    color: white;
+}
+
+#menuItem ul li:hover *{
+    background-color: #EBEAF6;
+    color: black;
+    border-right: 1px solid black;
+    border-left: 1px solid black;
+    cursor: pointer;
+}
+
+.menuSelect {
+    border-bottom: 1px solid black;
+}
+
+.menuSelect a{
+    background-color: #EBEAF6;
+    color: black !important;
+}
+
+.homePage{
+    background-size: 150px;
+    background-repeat: no-repeat;
+    background-position:right top;
+    overflow: hidden;
+    margin: 0;
+    border-radius: 25px;
+}
+
+.noList {
+    border-radius: 0.7rem;
+}
+
+.backBtn{
+    font-size: 75px
+}
+
+.backBtn:hover{
+    color: #837ae8;
+    cursor: pointer;
+}
+
+.candidate:hover {
+    box-shadow: 0 0 0 0.25rem rgb(17 37 67 / 50%)
+}
+
+.candidate {
+    height: 100%;
+}
+
+.candidateTitle {
+    width: 40%;
+}
+
+.candidateContent, .historyContent {
+    width: 60%;
+}
+
+.registerForm, .electionForm {
+    background-color: rgb(174, 112, 175);
+    padding: 3.5rem 6rem;
+}
+
+/* .profile{
+    background-color: rgb(138, 224, 229);  
+} */
+
+.btn-submit{
+    color: black;
+    background-color: #b371b3;
+    border: 2px solid #74449b;
+    font-weight: bold;
+    font-size: large;
+}
+
+.btn-submit:hover{
+    background-color: #74449b;
+    border: 2px solid #b371b3;
+    color: white;
+}
+
+.btn-submit:disabled{
+    text-decoration: line-through;
+}
+
+.form-control:valid {
+    border: 2px solid #198574;
+}
+.valid-feedback{
+    font-size: large;
+    font-weight: bold;
+    text-align: end;
+    color: #39ec99;
+}
+
+.invalid-feedback{
+    font-size: large;
+    font-weight: bold;
+    text-align: end;
+    color: #d40216;
+}
+
+.electionTitle{
+    font-size: x-large;
+    font-weight: bolder;
+    text-align: center;
+    background-color: rgb(235, 235, 63);
+}
+
+.electionContent{
+    padding-bottom: 1rem;
+    border: 2px solid black;
+}
+
+.electionContent:hover{
+    border: none;
+    box-shadow: 3px 3px 0 0.25rem black;
+    cursor: pointer;
+}
+
+.list {
+    font-weight: bolder;
+    text-align: center;
+    font-size: x-large;
+    padding: 0.5rem 0rem;
+}
+
+.voted .list {
+    padding: 0.5rem;
+}
+
+.listBackground{
+    background-color: bisque;
+    justify-content: center;
+}
+
+.btn-collapse {
+    text-align: left;
+    font-weight: bolder;
+    font-size: large;
+    position: relative;
+    width: 100%;
+}
+
+.sign, .option {
+    display: flex;
+    justify-content: center;
+}
+
+.option{
+    justify-content:space-around;
+}
+
+.modalBtn, #modalYes, #modalNo{
+    width: 40%;
+    border: 3px solid black;
+}
+
+.modalBtn:hover {
+    text-decoration: underline;
+    border: 3px solid black;
+
+}
+
+.caret{
+    position:absolute;
+    right: 1rem;
+    bottom: -0.7rem;
+    color: black;
+    font-size: xxx-large;
+}
+
+.reqAlert{
+    color: red;
+    font-weight: bold;
+}
+
+.txnImg{
+    width: 40%;
+}
+
+#modalYes{
+    background-color: #1877fc;
+}
+
+#modalNo{
+    background-color: #f64343;
+
+}
+
+#modalYes, #modalNo {
+    color: white;
+    font-weight: bold;
+
+}
+
+#modalYes:hover, #modalNo:hover {
+    font-weight: bolder;
+    text-decoration: underline;
+    border: 3px solid black;
+    font-size: large;
+}
+
+.winnerCard{
+    border: 6px solid red !important ;
+}
+
+.results{
+    display: none;
+    justify-content: center;
+}
+
+@media screen and (max-width: 992px) {
+    .logo {
+        height: 80px;
+        width: 80px;
+    }
+    .backBtn {
+        font-size: 50px;
+     }
+
+     .foot1 li:first-child {
+         display: block;
+     }
+    .foot1, .foot2 {
+        text-align: center;
+    }
+    .homePage {
+        background-size: 80px;
+    }
+}

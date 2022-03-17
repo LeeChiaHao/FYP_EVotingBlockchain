@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Election Result</title>
+</head>
+
+<body class="">
+    <!-- header -->
+    <header id="header">
+        <%= require("fs").readFileSync(htmlWebpackPlugin.options.HTML_PATH + "adminHeader.html" ) %>
+    </header>
+
+    <main>
+        <div class="container results">
+            <div class="row mx-0 px-0">
+                <div class="col-12 mb-0">
+                    <div class="row">
+                        <div class="col-1 backBtn" onclick="history.back()">
+                            <span class="">&#x2baa;</span>
+                        </div>
+                        <div class="col-lg-10 col-9 title text-center m-3">
+                            <h2 class="fs-3 fw-bold">
+                                Election Result
+                            </h2>
+                            <h2 class="fs-3 fw-bold elecName">
+                            </h2>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row mb-4">
+                    <div class="col-lg-9 col-6 title">
+                        <h2 class="fw-bold">
+                            Winner:
+                        </h2>
+                    </div>
+                    <div class="col-lg-3 col-6">
+                        <button class="viewVoter">View Voters</button>
+                    </div>
+                </div>
+
+                <div class="row winnerCandidates gx-5 justify-content-evenly  mx-0 px-0">
+                </div>
+
+                <div class="col-12 mb-4 others">
+                    <div class="title m-3">
+                        <h2 class="fw-bold">
+                            Others Candidate:
+                        </h2>
+                    </div>
+                </div>
+
+                <div class="row row-cols-lg-3 row-cols-1 justify-content-evenly othersCandidates  mx-0 px-0">
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- footer -->
+    <%= require("fs").readFileSync(htmlWebpackPlugin.options.HTML_PATH + "footer.html" ) %>
+        <!-- voterModal -->
+        <%= require("fs").readFileSync(htmlWebpackPlugin.options.HTML_PATH + "voterModal.html" ) %>
+            <!-- TxnModal -->
+            <%= require("fs").readFileSync(htmlWebpackPlugin.options.HTML_PATH + "txnModal.html" ) %>
+                <!-- RequestModal -->
+                <%= require("fs").readFileSync(htmlWebpackPlugin.options.HTML_PATH + "requestModal.html" ) %>
+
+</body>
+
+</html>

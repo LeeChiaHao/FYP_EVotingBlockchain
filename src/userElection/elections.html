@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Cast Vote</title>
+</head>
+
+<body class="invisible">
+    <!-- header -->
+    <header id="header">
+        <%= require("fs").readFileSync(htmlWebpackPlugin.options.HTML_PATH + "header.html" ) %>
+    </header>
+
+    <main>
+        <div class="container mb-5">
+            <div class="row justify-content-center">
+                <div class="col-10 mb-4">
+                    <div class="title text-center m-3">
+                        <h2 class="fs-3 fw-bold">
+                            Select an election and cast your vote
+                        </h2>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-4 col-12">
+                    <div class="row justify-content-evenly">
+                        <div class="col-lg-12 col-6 mb-4 me-lg-2">
+                            <button class="btn btn-collapse noV w-100" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#noVote" aria-expanded="false" aria-controls="noVote">
+                                Status: Yet to Vote<b class="caret ps-3 left">&#9666;</b>
+                            </button>
+                        </div>
+                        <div class="col-lg-12 col-6 mb-4 me-lg-2">
+                            <button class="btn btn-collapse vote w-100" type="button" data-bs-toggle="collapse"
+                                data-bs-target="#voted" aria-expanded="false" aria-controls="voted">
+                                Status: Voted<b class="caret ps-3 left">&#9666;</b>
+                            </button>
+                        </div>
+                    </div>
+
+                </div>
+                <div class="col-lg-8 col-12">
+                    <div class="row noVote collapse listBackground" id="noVote">
+                        <div class="card card-body noList">
+                            Do not have any Yet to Vote Elections at this moment.
+                        </div>
+                        <div class="list d-none">
+                            Election(s) to vote
+                        </div>
+                    </div>
+
+                    <div class="row voted collapse listBackground" id="voted">
+                        <div class="card card-body noList">
+                            Do not have any Voted Elections at this moment.
+                        </div>
+                        <div class="list d-none">
+                            <div>
+                                Voted Election(s)
+                            </div>
+                            <h5>Please wait until the election(s) end. Then, you can check the result at
+                                <a href="resultList.html" class="resultClick">here</a>.
+                            </h5>
+                        </div>
+                    </div>
+                </div>
+
+
+            </div>
+
+
+            <div class="row gx-5 allElections">
+
+            </div>
+        </div>
+    </main>
+
+    <!-- footer -->
+    <%= require("fs").readFileSync(htmlWebpackPlugin.options.HTML_PATH + "footer.html" ) %>
+        <!-- TxnModal -->
+        <%= require("fs").readFileSync(htmlWebpackPlugin.options.HTML_PATH + "txnModal.html" ) %>
+
+</body>
+
+</html>

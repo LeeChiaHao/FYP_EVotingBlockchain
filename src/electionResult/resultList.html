@@ -1,0 +1,46 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Election Result</title>
+</head>
+
+<body class="invisible">
+    <!-- header -->
+    <header id="header">
+        <%= require("fs").readFileSync(htmlWebpackPlugin.options.HTML_PATH + "header.html" ) %>
+    </header>
+
+    <main>
+        <div class="container ">
+            <div class="row justify-content-center">
+                <div class="col-10 mb-4">
+                    <div class="title text-center m-3 d-none">
+                        <h2 class="fs-3 fw-bold">
+                            Select an election and View the result
+                        </h2>
+                    </div>
+                </div>
+            </div>
+            <div class="card card-body noList">
+                Do not have any Elections' result at this moment. When there is any election ends, the result
+                can be
+                check
+                at here.
+            </div>
+            <div class="row gx-5 allElections justify-content-center justify-content-lg-start">
+
+            </div>
+        </div>
+    </main>
+
+    <%= require("fs").readFileSync(htmlWebpackPlugin.options.HTML_PATH + "footer.html" ) %>
+        <!-- TxnModal -->
+        <%= require("fs").readFileSync(htmlWebpackPlugin.options.HTML_PATH + "txnModal.html" ) %>
+
+</body>
+
+</html>

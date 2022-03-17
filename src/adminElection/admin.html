@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Create Election</title>
+</head>
+
+<body class="invisible">
+    <!-- header -->
+    <header id="header">
+        <%= require("fs").readFileSync(htmlWebpackPlugin.options.HTML_PATH + "adminHeader.html" ) %>
+    </header>
+
+    <main>
+        <div class="container mt-5">
+            <div class="row justify-content-center ">
+                <div class="col-9">
+                    <div class="card card-body homePage" style="background-image: url('logo2.png');">
+                        <p class="fs-4 fw-bold">
+                            Welcome, Admin
+                        </p>
+                        <div class="pl-4">
+                            <p>
+                                This is an E-Voting based Blockchain system.
+                            </p>
+                            <p>
+                                By using our system, we provide the user:
+                            </p>
+                            <ol>
+                                <li>Authenticity</li>
+                                <li>Anonymity</li>
+                                <li>Accuracy</li>
+                                <li>Verifiability</li>
+                            </ol>
+                            <p>When using our system, please ensure your Metamask account is always
+                                connected.
+                            </p>
+                            <p>
+                                Here is the brief intro of our functions:
+                            </p>
+                            <ul>
+                                <li>To create a new election, click <a href="create.html" class="link"">Create an
+                                        election</a>.</li>
+                                <li>
+                                    To view or edit status of created election, click <a href=" list.html"
+                                        class="link">List of election</a>.
+                                </li>
+                            </ul>
+                            <p>
+                                If there are any problems, please <a class="contact">contact us</a> immediately.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+
+    <!-- footer -->
+    <%= require("fs").readFileSync(htmlWebpackPlugin.options.HTML_PATH + "footer.html" ) %>
+
+        <!-- TxnModal -->
+        <%= require("fs").readFileSync(htmlWebpackPlugin.options.HTML_PATH + "txnModal.html" ) %>
+</body>

@@ -1,0 +1,220 @@
+.btn-submit{
+    color: white;
+    background-color: #603c2c;
+    border: 2px solid #cd9542;
+}
+
+.btn-submit:hover{
+    background-color: #cd9542;
+    border: 2px solid #603c2c;
+    color: black;
+}
+
+.candidate-label{
+    font-size: large;
+    text-align: center;
+    font-weight: bold;
+}
+
+.addCandidate, .delCandidate{
+    color: #603c2c;
+    font-weight: bold;
+    text-decoration: underline;
+}
+
+.addCandidate:hover, .delCandidate:hover{
+    /* color: rgb(26, 44, 84); */
+    color: #fbe48f;
+    cursor: pointer;
+}
+
+.election-input-group span, .election-input-group input:read-only{
+    background-color: #fbe48f;
+    font-weight: bold;
+    border: 2px solid black;
+    white-space: normal;
+}
+
+.election-input-group input {
+    border: 2px solid black;
+}
+
+.noEdit{
+    text-align: center;
+    color: rgb(200, 0, 0);
+    font-weight: bold;
+}
+
+.back {
+    position: absolute;
+    top: 5rem;
+}
+
+.btn-collapse, .initialE, .ongoingE, .endE {
+    background-color: bisque;
+    color: black;
+    border: 1px solid black;
+    border-radius: 0.7rem;
+}
+
+.noList {
+    border-radius: .7rem;
+}
+
+.btn-collapse:hover, .btn-collapse:focus {
+    background-color: bisque;
+    color: black;
+    box-shadow: 0 0 0 0.25rem rgb(255 0 0 / 50%)
+}
+
+#initialE .electionTitle, #initialE .btn-start{
+    background-color: #c6c3e9;
+}
+
+#ongoingE .electionTitle, #ongoingE .btn-end {
+    background-color: #a59fec;
+}
+
+#endE .electionTitle {
+    background-color: #6659f6;
+}
+
+.btn-start, .btn-end{
+    border: 2px solid black;
+    width: 100%;
+    margin-top: 0.5rem;
+}
+
+.btn-start:hover, .btn-end:hover{
+    background-color: #7b73da  !important;
+    font-weight: bold;
+}
+
+.radio {
+    height: auto !important;
+    padding: 0px;
+    border: 1px solid black;
+    background-color: rgb(170, 166, 166);
+}
+
+.radio input {
+    width: 50%;
+    height: 100%;
+    appearance: none;
+    cursor: pointer;
+    padding: 6px;
+    color: black;
+    font-size: 14px;
+    margin-right: -4px !important;
+    background-color: rgb(170, 166, 166) !important;
+}
+.radio .form-control {
+    display: inline-block;
+}
+   
+.radio input:before {
+    content: attr(label);
+    display: inline-block;
+    text-align: center;
+    width: 100%;
+}
+
+.radio input:checked {
+    background-color: #fbe48f !important;
+}
+
+.viewVoter {
+    width: 100%;
+    padding: 0.5rem;
+    background-color: #6659f6;
+    border: 1px solid black;
+    border-radius: 0.5rem;
+    font-size: large;
+    font-weight: bold;
+    color: white;
+}
+
+.viewVoter:hover {
+    text-decoration: underline;
+}
+
+.voted:hover {
+    cursor: default;
+}
+
+input[type=checkbox] + label {
+    display: block;
+    margin: 0.2em;
+    cursor: pointer;
+    padding: 0.2em;
+}
+  
+input[type=checkbox] {
+    display: none;
+}
+
+input[type=checkbox] + label:before {
+    content: "\2714";
+    border: 0.1em solid #000;
+    border-radius: 0.2em;
+    display: inline-block;
+    width: 2em;
+    height: 2em;
+    padding-left: 0.2em;
+    padding-bottom: 0.3em;
+    margin-right: 0.2em;
+    vertical-align: bottom;
+    color: transparent;
+    transition: .2s;
+    cursor:default;
+}
+
+input[type=checkbox] + label:active:before {
+    transform: scale(0);
+  }
+input[type=checkbox]:checked + label:before {
+    background-color: #bfb;
+    border-color: #bfb;
+    color: #fff;
+}
+
+input[type=checkbox]:disabled + label:before {
+    transform: scale(1);
+    border-color: #aaa;
+}
+
+input[type=checkbox]:checked:disabled + label:before {
+    transform: scale(1);
+    background-color: #3bc83b;
+}
+
+#searchIcon {
+    width: 5%;
+}
+#search {
+    width: 90%;
+    padding: 0.5rem 1rem;
+    margin-left: 0.5rem;
+}
+
+.confirm {
+    display: flex;
+    justify-content: center;
+}
+
+@media screen and (max-width: 576px) {
+    .caret{
+        right: -0.5rem;
+    }
+    .electionForm {
+        padding: 1rem;
+    }
+    .election-input-group span{
+        justify-content: center;
+    }
+    #search {
+        width: 85%;
+    margin-left: 1rem;
+
+    }
+}
