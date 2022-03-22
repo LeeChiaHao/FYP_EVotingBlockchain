@@ -38,16 +38,13 @@ const App = {
             await App.contract.elections(x).then(async (election) => {
                 if (election.status == 2) {
                     var sign = await globalFunc.getSignature(App.address)
-                    console.log(sign)
                     var verify = ethers.utils.verifyMessage(globalFunc.oriMsg(), sign)
-                    console.log("Verify: " + verify);
                     await App.contract.verifyTimeID(x, sign).then(async (val) => {
                         if (val != 0) {
                             var num = globalFunc.bigNumberToNumber(val)
                             await App.contract.provider.getBlockWithTransactions(num).then((data) => {
                                 $(".noList").addClass("d-none")
                                 $(".title").removeClass("d-none")
-                                console.log(typeof (data.timestamp));
                                 App.timestamp.push(data.timestamp)
                                 App.timeID[data.timestamp] = x;
                             })
@@ -58,9 +55,6 @@ const App = {
         }
 
         App.timestamp.sort(function (a, b) { return b - a })
-        console.log("Timestamp: " + App.timestamp);
-        console.log("Timestamp: " + App.timeID[App.timestamp[0]]);
-        console.log(App.timestamp.length)
     },
 
     // load all the voted Election and a button event
@@ -69,9 +63,7 @@ const App = {
         var className = "col-10 hList p-3 mb-5"
         for (var x = 0; x < length; x++) {
             var id = App.timeID[App.timestamp[x]]
-            console.log(id);
             await App.contract.elections(id).then(async (e) => {
-                console.log("Election" + e);
                 var sign = await globalFunc.getSignature(App.address)
                 await App.contract.encryptedVerify(id, sign).then((val) => {
                     if (val != "") {
@@ -88,7 +80,6 @@ const App = {
             var id = App.timeID[App.timestamp[x]]
 
             await App.contract.elections(id).then((election) => {
-                console.log(election)
                 var time = globalFunc.utcToLocal(App.timestamp[x]).split(" ")
                 $(".election" + id).find(".historyTitle").text((x + 1) + ". " + election.name)
                 $(".election" + id).find(".text-muted").html("&nbsp;Voted at: " + time[0])
@@ -97,7 +88,6 @@ const App = {
         }
 
         $(".btn-verify").on("click", function () {
-            console.log($(this).attr("id"))
             localStorage.setItem("election", $(this).attr("id"))
             window.location.assign("verify.html")
         })

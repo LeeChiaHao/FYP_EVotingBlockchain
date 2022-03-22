@@ -46,7 +46,6 @@ const App = {
         var className = "col-lg-5 col-9 border-0 mb-5 electionCard p-3"
         var elections = []
         for (var x = 0; x < total; x++) {
-            console.log("Total" + x)
             var election = await App.contract.elections(x)
             // if no candidate, means this election has been delete, so no need load new electionCard
             if (election.status == 3) {
@@ -124,7 +123,6 @@ const App = {
     // start the election function, election will be started if transaction success
     eligible: async () => {
         var len = $(".viewBody tr").length
-        console.log(len)
         if (len != 0) {
             $(".vFooter").removeClass("d-none")
             var table = $(".viewBody:last-child")
@@ -143,7 +141,6 @@ const App = {
                 $(className).find("label").attr("for", "checkAll")
                 $(className).find("label").attr("class", "checkAll")
                 $(className).find("label").text("Allow All")
-                console.log(len);
                 $("#checkAll").on("change", function () {
                     if ($(this).is(":checked")) {
                         for (var i = 0; i < len; i++) {
@@ -193,7 +190,6 @@ const App = {
             if (voters.length == 0) {
                 globalFunc.customMsg(false, "Must have at least 1 voter allow to vote")
             } else {
-                console.log(voters);
                 try {
                     await App.contract.editStatus(eid, 1, voters).then(
                         (tx) => tx.wait().then(function () {
@@ -202,7 +198,6 @@ const App = {
                     )
                 } catch (e) {
                     globalFunc.customMsg(false, "Transaction Fail. Election still maintain Init Status")
-                    console.log(e)
                 }
                 $("#modalClose").on("click", function () {
                     window.location.reload()
@@ -226,7 +221,6 @@ const App = {
                 )
             } catch (e) {
                 globalFunc.customMsg(false, "Transaction Fail. Election still maintain Init Status")
-                console.log(e)
             }
             $("#modalClose").on("click", function () {
                 window.location.reload()

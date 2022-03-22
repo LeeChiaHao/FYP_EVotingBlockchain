@@ -96,7 +96,6 @@ const App = {
                 $(".btn-submit").prop("disabled", false)
                 $(this).addClass("active")
                 App.voted = $(this).parent().attr("id")
-                console.log(App.voted)
             })
         }
     },
@@ -131,9 +130,7 @@ const App = {
             if (globalFunc.verifySignature(signature, App.address)) {
                 await App.requestEncrypt().then(async (re) => {
                     encrypt = re
-                    console.log("Encrypt: " + encrypt)
                     if (encrypt != null) {
-                        console.log("Don't Enter");
                         globalFunc.txnLoad("Making Transaction")
                         var voteGet = await App.setVoteGet()
                         try {
@@ -143,11 +140,9 @@ const App = {
                                 })
                             )
                         } catch (e) {
-                            console.log(e)
                             globalFunc.customMsg(false, "Transaction failed. Your vote is not recorded.")
                         }
                     } else {
-                        console.log("Key Failed")
                     }
                 })
             } else {
@@ -173,22 +168,18 @@ const App = {
             params: [App.address],
         }).then((result) => {
             key = result
-            console.log(key)
         }).catch((error) => {
             globalFunc.customMsg(false, "Request Encryption Key Failed")
         })
         var candidate = "Election " + App.electionID + ";Candidate " + (parseInt(App.voted) + 1)
-        console.log(candidate + "Key: " + key)
         var e = encrypt({
             publicKey: key,
             data: candidate,
             version: 'x25519-xsalsa20-poly1305'
         })
-        console.log(Buffer[1]);
         var encrypted = ethers.utils.hexlify(Buffer.from(
             JSON.stringify(e)
         ))
-        console.log(encrypted)
         return encrypted
     },
 

@@ -37,10 +37,8 @@ const App = {
         await globalFunc.navigate("/", "Signature3", false)
 
         var voter = await App.contract.voters(App.address)
-        console.log("Capital letter: " + App.address);
         App.name.val(voter.name)
         App.email.val(voter.email)
-        console.log(voter.signature);
 
         $("#profileAddress").val(voter.account)
         App.txnModal = globalFunc.txnModal()
@@ -75,7 +73,6 @@ const App = {
         App.form.checkValidity()
         var emailValid = true
         if (! /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test($("#profileEmail").val())) {
-            console.log("Wrong Email Cibai");
             emailValid = false
         }
 
@@ -92,7 +89,6 @@ const App = {
                 )
             } catch (e) {
                 globalFunc.customMsg(false, "Transaction Fail. Profile update failed.")
-                console.log(e)
             }
             $("#modalClose").on("click", function () {
                 window.location.reload()

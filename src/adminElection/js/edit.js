@@ -14,7 +14,6 @@ const App = {
     checkAuth: async () => {
         App.contract = await globalFunc.getElectionsContract()
         App.address = await globalFunc.getVoterAddress()
-        console.log(await App.contract.admin())
         if (App.address == await App.contract.admin()) {
             return true
         } else {
@@ -50,9 +49,6 @@ const App = {
             $(".loadCandidate" + x).load("createForm.html", async function () {
                 App.loadCandidateClass(true, ".loadCandidate" + x, x)
             })
-            await App.contract.electionCandidate(id, x).then((val) => {
-                console.log(val.name)
-            })
 
             if ((x + 1) == total) {
                 App.loadCandidateData(id, x)
@@ -70,7 +66,6 @@ const App = {
         if (!bool) {
             num--;
         }
-        console.log(className)
         $(className).children().each(function (index) {
             $(this).children().each(function (y) {
                 if ($(this).is("label")) {
@@ -136,14 +131,12 @@ const App = {
     // add/del candidate button event, will call the functions when add/del
     loadAddDel: async () => {
         $(".addCandidate").on("click", async function () {
-            console.log(App.totalCandidate)
             var divCandidate = "loadCandidate" + App.totalCandidate
             $("<div></div>").addClass(divCandidate).appendTo(".loadCandidate")
             $("." + divCandidate).load("createForm.html", function () {
                 App.loadCandidateClass(false, "." + divCandidate, App.totalCandidate)
             })
             App.totalCandidate++
-            console.log(App.delCandidate)
             App.delCandidate.removeClass("d-none")
         })
 
@@ -151,7 +144,6 @@ const App = {
             if (App.totalCandidate > 0) {
                 App.deleteCandidate(App.totalCandidate)
                 App.totalCandidate--;
-                console.log(App.totalCandidate)
             }
         })
     },
@@ -160,7 +152,6 @@ const App = {
     deleteCandidate: async (num) => {
         num--;
         if (num >= 0) {
-            console.log(".loadCandidate" + num)
             $(".loadCandidate" + num).empty()
             $(".loadCandidate" + num).remove()
             if ((num - 1) == (-1)) {
@@ -182,7 +173,6 @@ const App = {
     submitForm: async () => {
         App.form.checkValidity()
         App.form.classList.add('was-validated')
-        console.log($(".was-validated:invalid").length)
         if ($(".was-validated:invalid").length == 0) {
             if (App.totalCandidate >= 1) {
                 var allCandidates = []
@@ -194,7 +184,6 @@ const App = {
                     allCandidates[index] = $("#age" + i).val()
                     index++;
                     allCandidates[index] = $("input[type='radio'][name='gender" + i + "']:checked").val()
-                    console.log(allCandidates[index]);
                     index++;
                     allCandidates[index] = $("#partyName" + i).val()
                     index++;
@@ -204,7 +193,6 @@ const App = {
                     allCandidates[index] = votes
                     index++;
                 }
-                console.log(allCandidates)
                 try {
                     App.txnModal.show()
                     globalFunc.txnLoad("Making Transaction")
@@ -214,14 +202,13 @@ const App = {
                         })
                     )
                 } catch (e) {
-                    console.log(e)
                     globalFunc.customMsg(false, "Election info updated failed.")
                 }
 
                 // way of receive emitted event from contract
-                await App.contract.once("electionInfo", (e, c) => {
-                    console.log(e + " ==== " + c)
-                })
+                // await App.contract.once("electionInfo", (e, c) => {
+                //     console.log(e + " ==== " + c)
+                // })
             } else {
                 App.txnModal.show()
                 globalFunc.customMsg(false, "Must have more than 1 candidate for an election")
@@ -240,7 +227,6 @@ const App = {
                 })
             )
         } catch (e) {
-            console.log(e);
             globalFunc.customMsg(true, "Election deletion failed.")
         }
     },

@@ -13,7 +13,6 @@ const App = {
     checkAuth: async () => {
         App.contract = await globalFunc.getElectionsContract()
         App.address = await globalFunc.getVoterAddress()
-        console.log(await App.contract.admin())
         if (App.address == await App.contract.admin()) {
             return true
         } else {
@@ -39,14 +38,12 @@ const App = {
     addDelBtn: async () => {
         var divCandidate
         $(".addCandidate").on("click", async function () {
-            console.log(App.totalCandidate)
             divCandidate = "loadCandidate" + App.totalCandidate
             $("<div></div>").addClass(divCandidate).appendTo(".loadCandidate")
             $("." + divCandidate).load("createForm.html", function () {
                 App.loadClassName("." + divCandidate, App.totalCandidate)
             })
             App.totalCandidate++
-            console.log(App.delCandidate)
             App.delCandidate.removeClass("d-none")
         })
 
@@ -98,7 +95,6 @@ const App = {
     deleteCandidate: async (num) => {
         num--;
         if (num > 0) {
-            console.log(".loadCandidate" + num)
             $(".loadCandidate" + num).empty()
             $(".loadCandidate" + num).remove()
             if ((num - 1) == 0) {
@@ -112,9 +108,7 @@ const App = {
     submitForm: async () => {
         App.forms.checkValidity()
         App.forms.classList.add('was-validated')
-        console.log($(".was-validated:invalid").length)
         if ($(".was-validated:invalid").length == 0) {
-            console.log("Total Candidate: " + App.totalCandidate)
             if (App.totalCandidate > 1) {
                 var allCandidates = []
                 var index = 0;
@@ -125,7 +119,6 @@ const App = {
                     allCandidates[index] = $("#age" + i).val()
                     index++;
                     allCandidates[index] = $("input[type='radio'][name='gender" + i + "']:checked").val()
-                    console.log(allCandidates[index]);
                     index++;
                     allCandidates[index] = $("#partyName" + i).val()
                     index++;
@@ -148,14 +141,13 @@ const App = {
                         })
                     )
                 } catch (e) {
-                    console.log(e)
                     globalFunc.customMsg(false, "Election creation failed.")
                 }
 
                 // way of receive emitted event from contract
-                await App.contract.once("electionInfo", (e, c) => {
-                    console.log(e + " ==== " + c)
-                })
+                // await App.contract.once("electionInfo", (e, c) => {
+                //     console.log(e + " ==== " + c)
+                // })
             } else {
                 App.txnModal.show()
                 globalFunc.customMsg(false, "Must have more than 1 candidate for an election")

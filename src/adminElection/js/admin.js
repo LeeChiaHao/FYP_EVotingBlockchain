@@ -10,7 +10,6 @@ const App = {
     checkAuth: async () => {
         App.contract = await globalFunc.getElectionsContract()
         App.address = await globalFunc.getVoterAddress()
-        console.log(await App.contract.admin())
         if (App.address == await App.contract.admin()) {
             return true
         } else {

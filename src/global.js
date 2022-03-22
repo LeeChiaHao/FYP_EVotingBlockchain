@@ -20,14 +20,10 @@ export async function setSignature(signer) {
         ["string"],
         [msg])
     // var shamsg = sha256(msg)
-    console.log(shamsg);
     let signing = arrayify(shamsg)
-    console.log(signing);
     var signature = await signer.signMessage(signing)
-    console.log("Signature: " + signature)
     window.localStorage.setItem("Signature", signature)
     verify = ethers.utils.verifyMessage(signing, signature)
-    console.log("Verify: " + verify)
 }
 
 export function oriMsg() {
@@ -42,7 +38,6 @@ export function verifySignature(signature, address) {
     var msg = arrayify(oriMsg())
     try {
         var verify = ethers.utils.verifyMessage(msg, signature)
-        console.log("Verify: " + verify);
         return verify == address
     } catch (e) {
         return false
@@ -87,6 +82,10 @@ export async function getVotersContract() {
             localStorage.clear()
             window.location.replace("/")
         })
+        ethereum.on("chainChanged", function () {
+            localStorage.clear()
+            window.location.replace("/")
+        })
         const networkId = provider.provider.networkVersion
         const signer = provider.getSigner()
         const abi = votersJSON.abi
@@ -104,6 +103,10 @@ export async function getElectionsContract() {
         const provider = new ethers.providers.Web3Provider(window.ethereum, "any")
         await provider.send("eth_requestAccounts", []);
         ethereum.on("accountsChanged", function () {
+            localStorage.clear()
+            window.location.replace("/")
+        })
+        ethereum.on("chainChanged", function () {
             localStorage.clear()
             window.location.replace("/")
         })
@@ -135,7 +138,6 @@ export async function getElectionAddress() {
 // check if the current user address is registered, if not then cannot access some pages
 export async function isAuth(user) {
     var contract = await getVotersContract()
-    console.log(await contract.isRegister(user))
     await menuClick(user)
     if (await contract.isRegister(user)) {
         return true
@@ -147,7 +149,6 @@ export async function isAuth(user) {
 // set the localStorage, so we know if this user has the right to access certain pages
 // need to click the menu to access, typing address may have problem
 export async function menuClick(address) {
-    console.log("AddressL " + address);
     let sign = await getSignature(address)
     $(".logo").on("click", async function () {
         window.onbeforeunload = function () {
@@ -274,7 +275,6 @@ export function caretOnClick(choice) {
     $(".btn-collapse").on("click", function () {
         var target = "." + $(this).attr("aria-controls")
         for (var x in object) {
-            console.log(object[x]);
             if (object[x] != target) {
                 $(object[x]).removeClass("show")
                 $(object2[x]).find(".caret").addClass("left")
@@ -324,7 +324,6 @@ export async function countWinner(candidates) {
             App.winner[e] = max
         }
     }
-    console.log(1 in App.winner);
 }
 
 // load the layout of the the election result, later will load data inside
@@ -362,7 +361,6 @@ export async function loadContentData() {
     for (var x = 0; x < App.totalCandidate; x++) {
         await App.contract.electionCandidate(App.electionID, x).then((val) => {
             var candidate = ".candidate" + x
-            console.log(candidate);
             if (x in App.winner) {
                 $(candidate).find(".card").addClass("winnerCard")
             }
@@ -392,7 +390,6 @@ export async function calculate() {
     setTimeout(function () {
         $('.modalTitle').text("Vote Result")
         var zeroV = ""
-        console.log(Object.values(App.winner));
         if (Object.values(App.winner).pop() == 0) {
             zeroV = "<p class='reqAlert'>*No voters vote in this election. Thus all candidates are winner automatically</p>"
         }
@@ -434,7 +431,6 @@ export async function loadView(id, able) {
             len++
         })
     }
-    console.log("Length: " + len);
 
     for (var x = 0; x < len; x++) {
         var isVote = false
@@ -443,7 +439,6 @@ export async function loadView(id, able) {
         }
         var voter = await voters.voters(address[x])
         var className = ".tableRow" + x
-        console.log(className);
         $(className).find(".num").text(x + 1)
         $(className).find(".address").text(voter.account)
         $(className).find(".name").text(voter.name)

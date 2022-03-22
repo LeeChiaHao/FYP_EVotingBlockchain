@@ -1,10 +1,5 @@
 const HDWalletProvider = require('@truffle/hdwallet-provider');
 require('dotenv').config();
-//
-// const fs = require('fs');
-// const mnemonic = fs.readFileSync(".secret").toString().trim();
-// console.log(process.env.Infura_Key)
-// console.log(process.env.MNENOMIC)
 module.exports = {
   networks: {
     development: {
@@ -18,9 +13,11 @@ module.exports = {
       },
       network_id: 3, // Ropsten Network ID
       networkCheckTimeout: 1000000,
-      gas: 3000000,
-      gasPrice: 10000000000
-    }
+      gas: 8000000,
+      gasPrice: 24000000000,
+      skipDryRun: true,
+      timeoutBlocks: 200
+    },
   },
   // Configure your compilers
   compilers: {

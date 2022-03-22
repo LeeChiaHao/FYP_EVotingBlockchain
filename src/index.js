@@ -26,7 +26,6 @@ const App = {
         var sign = localStorage.getItem("Signature")
         if (sign != null) {
             if (verifySignature(sign, App.address)) {
-                console.log(App.isRegister);
                 if (App.isRegister) {
                     $(".logIn").addClass("d-none")
                     $("#header").removeClass("d-none")
@@ -66,12 +65,12 @@ const App = {
     validating: async () => {
         App.loadModal.show()
         txnLoad("Validating Identity")
-        console.log(setTimeout(function () {
+        setTimeout(function () {
             App.loadModal.hide()
             $(".logIn").addClass("d-none")
             $("#header").removeClass("d-none")
             $("main").show()
-        }, 2000))
+        }, 2000)
     },
 
     linkClick: async () => {

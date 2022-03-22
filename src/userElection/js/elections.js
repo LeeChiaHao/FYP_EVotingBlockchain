@@ -48,7 +48,6 @@ const App = {
         var className = "col-lg-5 col-9 border-0 my-4 electionCard"
         var elections = []
         for (var x = 0; x < total; x++) {
-            console.log("Total" + total)
             var election = await App.contract.elections(x)
             if (election.status == 1) {
                 var append
@@ -56,7 +55,6 @@ const App = {
                 if (await globalFunc.getCanVote(App.address, x)) {
                     await App.contract.encryptedVerify(x, await globalFunc.getSignature(App.address)).then((val) => {
                         if (val != "") {
-                            console.log("Value: " + val)
                             append = ".voted"
                         } else {
                             append = ".noVote"
@@ -72,16 +70,13 @@ const App = {
                 }
             }
         }
-        console.log(elections)
         await App.loadTitle(elections)
     },
 
     // Then, load the data to the layout
     loadTitle: async (e) => {
         for (var x = 0; x < e.length; x++) {
-            console.log("election" + e[x])
             $(".election" + e[x]).on("click", function () {
-                console.log($(this).attr("id"))
                 localStorage.setItem("election", $(this).attr("id"))
                 window.location.assign("candidates.html")
             })

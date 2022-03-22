@@ -35,14 +35,10 @@ const App = {
     loadElection: async (total) => {
         var className = "col-lg-4 col-9 border-0 mb-5 electionCard"
         for (var x = 0; x < total; x++) {
-            console.log("Total" + total)
             if (await globalFunc.getCanVote(App.address, x)) {
                 var election = await App.contract.elections(x)
                 if (election.status == 2) {
-                    console.log(election);
                     var time = globalFunc.bigNumberToNumber(election.endD)
-                    console.log("End time: " + time);
-                    console.log(typeof (time));
                     App.timestamp.push(time)
                     App.timeId[time] = x;
                 }
@@ -51,7 +47,6 @@ const App = {
         }
 
         App.timestamp.sort(function (a, b) { return b - a })
-        console.log(App.timestamp);
         var length = App.timestamp.length
         for (var x = 0; x < length; x++) {
             var id = App.timeId[App.timestamp[x]]
@@ -70,9 +65,7 @@ const App = {
         var len = App.timestamp.length
         for (var x = 0; x < len; x++) {
             var id = App.timeId[App.timestamp[x]]
-            console.log("election" + id)
             $(".election" + id).on("click", function () {
-                console.log($(this).attr("id"))
                 localStorage.setItem("election", $(this).attr("id"))
                 window.location.assign("results.html")
             })
